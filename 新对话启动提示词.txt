@@ -1,4 +1,4 @@
-我在学 AI Agent 开发，项目在 D:/AIAgent，请先阅读以下文件了解我的学习状态：
+我在学 AI Agent 开发，项目在 ai-agent-learning文件夹下，请先阅读以下文件了解我的学习状态：
 
 1. CLAUDE.md —— 项目规则（练习文件规范、LeetCode 模式、命名规范）
 2. LEARNING_TRACKER.md —— 完整学习路线和进度看板（checkbox 打勾 = 已完成）
