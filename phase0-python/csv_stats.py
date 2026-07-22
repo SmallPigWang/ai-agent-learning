@@ -12,6 +12,48 @@
 
 def csv_stats(filepath: str):
     """读取 CSV 文件，返回年龄和分数的统计数据"""
+    # with读取文件
+    try:
+        with open(filepath,"r",encoding='utf-8') as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        return None
+    # 判断文件是否为空，小于等于1行代表只存在表头
+    if len(lines) <= 1:
+        return None
+
+    # 逐行解析数据
+    ages = []
+    max_name = ""
+    max_score = -1
+
+    for line in lines[1:]:
+        line = line.strip() # 去除行尾的换行符
+        parts = line.split(",")
+
+        try:
+            name = parts[0]
+            age = int(parts[1])
+            score = float(parts[2])
+        except (ValueError, IndexError):
+            continue
+
+        ages.append(age)
+
+        if score > max_score:
+            max_score = score
+            max_name = name
+
+    if len(ages) == 0:
+        return None
+
+    avg_age = round(sum(ages)/len(ages), 1)
+
+    return {
+        "总人数":len(ages),
+        "平均年龄":avg_age,
+        "最高分":(max_name, max_score)
+    }
 
 
 # ============================================================
