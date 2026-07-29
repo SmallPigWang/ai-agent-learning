@@ -1,0 +1,50 @@
+# Day 1 — 2026-07-18
+
+## 今天学了什么
+- Python 基础语法：变量、条件判断（if/elif/else）、循环（while/for）
+- 四种数据结构：字符串、列表、字典、元组
+- 内置函数：sum()、max()、min()、len()、round()、float()
+- 字符串操作：.split() 切分、.strip() 去空格
+- try/except ValueError 异常处理
+- 卫语句（空值提前返回）、continue 跳过循环
+- conda 环境配置、pip 清华镜像加速
+- VS Code 设置：字体、自动补全、注释颜色、语义高亮
+- Git 基础：init / status / add / commit / remote add / push
+- GitHub 创建仓库 + 推送项目，理解 git 三区模型（工作区→暂存区→仓库）
+- .gitignore 配置（排除缓存、虚拟环境、IDE 配置）
+
+## 今天写了什么代码
+- guess_game.py — 猜数字游戏（while True + break + random）
+- calculator.py — 命令行计算器（split + float + if/elif + 四则运算）
+- list_stats.py — 列表统计（sum/max/min/len + 字典返回）
+- score_parser.py — 成绩解析（双重 split + try/except + 元组）
+- csv_stats.py — CSV 数据统计（文件读写 + 异常处理）—— 函数骨架已出，练习中
+- .gitignore — 配置 Git 忽略规则
+- 整个项目推到 GitHub: https://github.com/SmallPigWang/ai-agent-learning
+
+## 今天踩了什么坑
+- CMD 里长命令被截断，~~ 用配置文件代替命令行解决
+- Pylance 自动补全不弹窗，排查半天发现是 editor.quickSuggestions 被关了
+- Python 缩进报错 IndentationError——顶层代码不能有空格
+- 练习函数里变量名 max/min 盖掉了内置函数
+- conda channels 原始源和清华镜像混装
+- git push 国内连 GitHub 慢，正常现象，项目小可以接受
+- 第一次 git push 需要浏览器授权登录 GitHub
+
+## 今天的一个收获
+- 建立了 LeetCode 核心代码模式：函数 + 测试用例，保存即验证，效率极高
+- 把 Cursor 彻底删了，PATH 指向 VS Code 干净了
+- 整个项目结构和学习追踪体系搭好了
+- Git 三区模型：工作区(git add)→暂存区(git commit)→本地仓库→(git push)远程仓库
+- 项目推上 GitHub 后可以两台电脑同步学习：开始前 pull、结束后 push
+
+## 明天计划
+- 完成 csv_stats.py 练习（文件读写 + 异常处理）
+- 另一台电脑配置 Git + clone 项目
+- 复习今天四个练习的代码
+- 推进到 Phase 0.5（面向对象基础）
+
+## 自我评分 (1-5)
+- 理解程度: 4
+- 完成度: 5
+- 投入度: 5
