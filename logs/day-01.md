@@ -20,7 +20,7 @@
 - score_parser.py — 成绩解析（双重 split + try/except + 元组）
 - csv_stats.py — CSV 数据统计（文件读写 + 异常处理）—— 函数骨架已出，练习中
 - .gitignore — 配置 Git 忽略规则
-- 整个项目推到 GitHub: https://github.com/SmallPigWang/ai-agent-learning
+- 整个项目推到 GitHub: <https://github.com/SmallPigWang/ai-agent-learning>
 
 ## 今天踩了什么坑
 - CMD 里长命令被截断，~~ 用配置文件代替命令行解决

@@ -25,18 +25,53 @@
 #     add_skill(self, skill: str) → 添加技能到列表，无返回值
 #     __repr__(self) → "name (emp_id) - Developer | ¥salary/月 | skills: [skill1, skill2]"
 # ============================================================
+from typing import Optional
 
 class Employee:
     """基类: 普通员工"""
+    def __init__(self, name: str, emp_id: str, salary: float):
+        self.name = name
+        self.emp_id = emp_id
+        self.salary = salary
 
+    def get_bonus(self):
+        return self.salary * 0.1
+
+    def __repr__(self):
+        return f"{self.name} ({self.emp_id}) - ¥{self.salary:.0f}/月"
 
 class Manager(Employee):
     """经理，继承 Employee"""
+    def __init__(self, name: str, emp_id: str, salary: float, team_size: int = 0):
+        super().__init__(name = name, emp_id=emp_id, salary=salary)
+        self.team_size = team_size
 
+    def get_bonus(self):
+        return self.salary * 0.2 + self.team_size * 1000
 
+    def add_team_member(self):
+        self.team_size += 1
+
+    def __repr__(self):
+        return f"{self.name} ({self.emp_id}) - Manager | ¥{self.salary:.0f}/月 | team: {self.team_size}人"
+    
 class Developer(Employee):
     """开发者，继承 Employee"""
+    def __init__(self, name: str, emp_id: str, salary: float, skills: Optional[list[str]]= None):
+        super().__init__(name, emp_id, salary)
+        if skills is not None:
+            self.skills = skills
+        else:
+            self.skills = []
 
+    def get_bonus(self):
+        return self.salary * 0.15 + len(self.skills) * 2000
+
+    def add_skill(self, skill: str):
+        self.skills.append(skill)
+
+    def __repr__(self):
+        return f"{self.name} ({self.emp_id}) - Developer | ¥{self.salary:.0f}/月 | skills: [{", ".join(self.skills)}]"
 
 # ============================================================
 # 测试用例

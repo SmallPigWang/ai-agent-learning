@@ -9,7 +9,7 @@
 ## 📊 总览
 
 ```
-阶段 0: 编程起步        [░░░░░░░░░░░░░░░░░░░░]   0%  (0/7 模块)
+阶段 0: 编程起步        [████████████████████] 100%  (5/5 模块) ✅
 阶段 1: LLM 基础        [░░░░░░░░░░░░░░░░░░░░]   0%  (0/6 模块)
 阶段 2: Agent 核心      [░░░░░░░░░░░░░░░░░░░░]   0%  (0/6 模块)
 阶段 3: RAG 专题        [░░░░░░░░░░░░░░░░░░░░]   0%  (0/7 模块)
@@ -18,7 +18,7 @@
 阶段 6: 进阶专题        [░░░░░░░░░░░░░░░░░░░░]   0%  (选学)
 阶段 7: 元能力          [░░░░░░░░░░░░░░░░░░░░]   0%  (持续)
 ──────────────────────────────────────────────────────────
-总体进度               [░░░░░░░░░░░░░░░░░░░░]   0%
+总体进度               [██░░░░░░░░░░░░░░░░░░]  13%
 ```
 
 ## 📅 本周学习日历
@@ -38,58 +38,58 @@
 ## 🏁 阶段 0: 编程起步 (预计 3-4 周)
 
 ### 0.1 编程思维入门（3-4天）
-- [ ] 理解什么是编程语言
-- [ ] 变量、数据类型、条件判断、循环、函数
-- [ ] 会使用终端/命令行
-- [ ] 🔧 练习：猜数字游戏
-- [ ] 🔧 练习：简单计算器
-- [ ] ✅ 检验：能独立写 30 行的终端小程序
+- [x] 理解什么是编程语言
+- [x] 变量、数据类型、条件判断、循环、函数
+- [x] 会使用终端/命令行
+- [x] 🔧 练习：猜数字游戏
+- [x] 🔧 练习：简单计算器
+- [x] ✅ 检验：能独立写 30 行的终端小程序
 
 ### 0.2 Python 基础语法（5-7天）
-- [ ] 字符串操作（拼接、切片、f-string）
-- [ ] list / tuple / dict / set 四种数据结构
-- [ ] 文件读写 open/read/write
-- [ ] 异常处理 try/except
-- [ ] 模块导入 import
-- [ ] pip 包管理器
-- [ ] venv 虚拟环境
-- [ ] 🔧 练习：待办事项命令行程序
-- [ ] 🔧 练习：CSV 数据统计
-- [ ] 🔧 练习：调用天气 API
-- [ ] ✅ 检验：独立写 100 行 Python 脚本
+- [x] 字符串操作（拼接、切片、f-string）
+- [x] list / tuple / dict / set 四种数据结构
+- [x] 文件读写 open/read/write
+- [x] 异常处理 try/except
+- [x] 模块导入 import
+- [x] pip 包管理器（conda 环境已掌握）
+- [x] venv 虚拟环境（conda 环境已掌握）
+- [x] 🔧 练习：待办事项命令行程序（score_parser 替代）
+- [x] 🔧 练习：CSV 数据统计
+- [x] 🔧 练习：调用天气 API（合并到阶段 1.3）
+- [x] ✅ 检验：独立写 100 行 Python 脚本（library_system + employee_system 远超 100 行）
 
 ### 0.3 Git 与命令行（2-3天）
-- [ ] 终端基本操作 cd/ls/mkdir/rm/pwd
-- [ ] Git 概念理解
-- [ ] git init / add / commit / status / log
-- [ ] GitHub 使用
-- [ ] push / pull / clone
-- [ ] .gitignore
-- [ ] 🔧 练习：所有代码推到 GitHub
-- [ ] ✅ 检验：能用 Git 管理代码版本
+- [x] 终端基本操作 cd/ls/mkdir/rm/pwd
+- [x] Git 概念理解
+- [x] git init / add / commit / status / log
+- [x] GitHub 使用
+- [x] push / pull / clone
+- [x] .gitignore
+- [x] 🔧 练习：所有代码推到 GitHub
+- [x] ✅ 检验：能用 Git 管理代码版本
 
 ### 0.4 开发环境搭建（1天）
-- [ ] VS Code 安装与配置
-- [ ] 必装插件：Python, Pylance, GitLens
-- [ ] 终端集成
-- [ ] 调试器使用（断点、单步执行）
-- [ ] ✅ 检验：在 VS Code 里跑通一个 Python 脚本
+- [x] VS Code 安装与配置
+- [x] 必装插件：Python, Pylance, GitLens
+- [x] 终端集成
+- [x] 调试器使用（断点、单步执行）
+- [x] ✅ 检验：在 VS Code 里跑通一个 Python 脚本
 
 ### 0.5 面向对象基础（2-3天）
-- [ ] 类与对象概念
-- [ ] __init__ 构造函数
-- [ ] 实例方法 vs 静态方法
-- [ ] 继承
-- [ ] dataclass
-- [ ] Type hints 类型注解
-- [ ] 🔧 练习：图书馆管理系统
-- [ ] ✅ 检验：理解类与对象的关系
+- [x] 类与对象概念
+- [x] __init__ 构造函数
+- [x] 实例方法 vs 静态方法
+- [x] 继承
+- [x] dataclass
+- [x] Type hints 类型注解
+- [x] 🔧 练习：图书馆管理系统
+- [x] ✅ 检验：理解类与对象的关系
 
 ### 阶段 0 全部完成标志 🏁
-- [ ] 所有子模块 ✅
-- [ ] GitHub 上有 ≥ 5 个练习项目
-- [ ] 能独立搭建 Python 开发环境
-- [ ] 能阅读中等复杂度的 Python 代码
+- [x] 所有子模块 ✅
+- [x] GitHub 上有 ≥ 5 个练习项目（guess_game, calculator, list_stats, score_parser, csv_stats, library_system, employee_system, task_manager）
+- [x] 能独立搭建 Python 开发环境（VS Code + conda + Git）
+- [x] 能阅读中等复杂度的 Python 代码（继承链、dataclass、类型标注）
 
 ---
 
@@ -114,15 +114,15 @@
 - [ ] ✅ 检验：知道什么场景选什么模型
 
 ### 1.3 第一次 API 调用（2-3天）
-- [ ] HTTP 请求基础（GET/POST/Header/Body/JSON）
-- [ ] API Key 安全（环境变量 .env）
-- [ ] Messages API 结构
+- [x] HTTP 请求基础（GET/POST/Header/Body/JSON）
+- [x] API Key 安全（环境变量 .env）
+- [x] Messages API 结构
 - [ ] system/user/assistant/tool 四个角色
-- [ ] max_tokens、temperature 参数
-- [ ] 读取返回结果和 usage
-- [ ] 🔧 练习：第一个 API 调用脚本
-- [ ] 🔧 练习：多轮对话脚本
-- [ ] 🔧 练习：API Key 放 .env
+- [x] max_tokens、temperature 参数
+- [x] 读取返回结果和 usage
+- [x] 🔧 练习：第一个 API 调用脚本
+- [x] 🔧 练习：多轮对话脚本
+- [x] 🔧 练习：API Key 放 .env
 - [ ] ✅ 检验：用代码完成 3 轮以上对话
 
 ### 1.4 Streaming 流式输出（1-2天）
@@ -407,7 +407,7 @@
 
 | 里程 | 阶段 | 标志 | 预计日期 | 状态 |
 |------|------|------|----------|------|
-| M1 🟢 | 0 完成 | 能独立写 Python 脚本 | ___ | ⬜ |
+| M1 🟢 | 0 完成 | 能独立写 Python 脚本 | 2026-07-31 | ✅ |
 | M2 🔵 | 1 完成 | 第一次 API 调用成功 | ___ | ⬜ |
 | M3 🟡 | 1 完成 | 流式聊天机器人 | ___ | ⬜ |
 | M4 🟠 | 2 完成 | 手写 Agent 循环 | ___ | ⬜ |
