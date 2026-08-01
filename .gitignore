@@ -29,3 +29,5 @@ _test_*.csv
 # OS
 .DS_Store
 Thumbs.db
+
+# 其他

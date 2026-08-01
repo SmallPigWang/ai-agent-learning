@@ -10,7 +10,7 @@
 
 ```
 阶段 0: 编程起步        [████████████████████] 100%  (5/5 模块) ✅
-阶段 1: LLM 基础        [░░░░░░░░░░░░░░░░░░░░]   0%  (0/6 模块)
+阶段 1: LLM 基础        [████████████████████] 100%  (6/6 模块) ✅
 阶段 2: Agent 核心      [░░░░░░░░░░░░░░░░░░░░]   0%  (0/6 模块)
 阶段 3: RAG 专题        [░░░░░░░░░░░░░░░░░░░░]   0%  (0/7 模块)
 阶段 4: 框架实战        [░░░░░░░░░░░░░░░░░░░░]   0%  (0/5 模块)
@@ -18,20 +18,22 @@
 阶段 6: 进阶专题        [░░░░░░░░░░░░░░░░░░░░]   0%  (选学)
 阶段 7: 元能力          [░░░░░░░░░░░░░░░░░░░░]   0%  (持续)
 ──────────────────────────────────────────────────────────
-总体进度               [██░░░░░░░░░░░░░░░░░░]  13%
+总体进度               [█████████░░░░░░░░░░░]  32%
 ```
 
-## 📅 本周学习日历
+## 📅 学习日历
 
-> 每周一更新本周计划
+> 记录每个学习日，点击跳转到详细日志
 
-| 时段 | 周一 | 周二 | 周三 | 周四 | 周五 | 周六 | 周日 |
-|------|------|------|------|------|------|------|------|
-| 上午 | — | — | — | — | — | — | — |
-| 下午 | — | — | — | — | — | — | — |
-| 晚上 | — | — | — | — | — | — | — |
+| Day | 日期 | 时间段 | 核心内容 | 日志 |
+|-----|------|--------|---------|------|
+| 1 | 07-18 | — | Python 基础 + Git 入门 | [📝](logs/day-01.md) |
+| 2 | 07-22 | — | 文件读写 + OOP 入门 | [📝](logs/day-02.md) |
+| 3 | 07-31 | 08:00-09:10 | 继承 + dataclass + API 调用 | [📝](logs/day-03.md) |
+| 4 | 08-01 | 06:00-11:05 | 阶段 1 全部通关 🏁 | [📝](logs/day-04.md) |
+| 5 | — | — | 阶段 2: Tool Calling | — |
 
-**本周目标**: ___________________________
+**下一目标**: 阶段 2.1 Tool Calling 深入
 
 ---
 
@@ -41,8 +43,8 @@
 - [x] 理解什么是编程语言
 - [x] 变量、数据类型、条件判断、循环、函数
 - [x] 会使用终端/命令行
-- [x] 🔧 练习：猜数字游戏
-- [x] 🔧 练习：简单计算器
+- [x] 🔧 练习：猜数字游戏 📎 `guess_game.py`
+- [x] 🔧 练习：简单计算器 📎 `calculator.py`
 - [x] ✅ 检验：能独立写 30 行的终端小程序
 
 ### 0.2 Python 基础语法（5-7天）
@@ -53,10 +55,10 @@
 - [x] 模块导入 import
 - [x] pip 包管理器（conda 环境已掌握）
 - [x] venv 虚拟环境（conda 环境已掌握）
-- [x] 🔧 练习：待办事项命令行程序（score_parser 替代）
-- [x] 🔧 练习：CSV 数据统计
+- [x] 🔧 练习：待办事项命令行程序（score_parser 替代） 📎 `score_parser.py`
+- [x] 🔧 练习：CSV 数据统计 📎 `csv_stats.py`
 - [x] 🔧 练习：调用天气 API（合并到阶段 1.3）
-- [x] ✅ 检验：独立写 100 行 Python 脚本（library_system + employee_system 远超 100 行）
+- [x] ✅ 检验：独立写 100 行 Python 脚本 📎 `library_system.py` `employee_system.py`
 
 ### 0.3 Git 与命令行（2-3天）
 - [x] 终端基本操作 cd/ls/mkdir/rm/pwd
@@ -82,7 +84,7 @@
 - [x] 继承
 - [x] dataclass
 - [x] Type hints 类型注解
-- [x] 🔧 练习：图书馆管理系统
+- [x] 🔧 练习：图书馆管理系统 📎 `library_system.py`
 - [x] ✅ 检验：理解类与对象的关系
 
 ### 阶段 0 全部完成标志 🏁
@@ -96,64 +98,64 @@
 ## 🤖 阶段 1: LLM 基础 (预计 3 周)
 
 ### 1.1 AI/ML/LLM 概念扫盲（2天）
-- [ ] AI → ML → DL → LLM → Agent 的层级关系
-- [ ] Token 概念理解
-- [ ] 参数（7B/70B）是什么
-- [ ] 上下文窗口概念
-- [ ] 幻觉是什么
-- [ ] 训练 vs 推理
-- [ ] 🔧 练习：在 Tokenizer 工具上实验
-- [ ] 🔧 练习：用不同 LLM 对比同一个问题
-- [ ] ✅ 检验：能用通俗语言解释 LLM 是什么
+- [x] AI → ML → DL → LLM → Agent 的层级关系
+- [x] Token 概念理解
+- [x] 参数（7B/70B）是什么
+- [x] 上下文窗口概念
+- [x] 幻觉是什么
+- [x] 训练 vs 推理
+- [x] 🔧 练习：在 Tokenizer 工具上实验 📎 `test_jiekou.py`（token 计数）
+- [x] 🔧 练习：用不同 LLM 对比同一个问题 📎 `compare_models.py`
+- [x] ✅ 检验：能用通俗语言解释 LLM 是什么
 
 ### 1.2 主流模型全景图（1天）
-- [ ] Claude / GPT / Gemini / Llama / DeepSeek / Qwen 对比
-- [ ] 注册 Anthropic Console
-- [ ] 注册 OpenAI Platform
-- [ ] 拿到第一把 API Key
-- [ ] ✅ 检验：知道什么场景选什么模型
+- [x] Claude / GPT / Gemini / Llama / DeepSeek / Qwen 对比
+- [x] 注册 Anthropic Console
+- [ ] 注册 OpenAI Platform（可选——DeepSeek+Claude 已够用）
+- [x] 拿到第一把 API Key
+- [x] ✅ 检验：知道什么场景选什么模型
 
 ### 1.3 第一次 API 调用（2-3天）
 - [x] HTTP 请求基础（GET/POST/Header/Body/JSON）
 - [x] API Key 安全（环境变量 .env）
 - [x] Messages API 结构
-- [ ] system/user/assistant/tool 四个角色
+- [x] system/user/assistant/tool 四个角色
 - [x] max_tokens、temperature 参数
 - [x] 读取返回结果和 usage
-- [x] 🔧 练习：第一个 API 调用脚本
-- [x] 🔧 练习：多轮对话脚本
+- [x] 🔧 练习：第一个 API 调用脚本 📎 `first_api_call.py`
+- [x] 🔧 练习：多轮对话脚本 📎 `multi_turn_chat.py`
 - [x] 🔧 练习：API Key 放 .env
-- [ ] ✅ 检验：用代码完成 3 轮以上对话
+- [x] ✅ 检验：用代码完成 3 轮以上对话 📎 `message_roles.py`
 
 ### 1.4 Streaming 流式输出（1-2天）
-- [ ] 为什么需要流式输出
-- [ ] SSE 原理
-- [ ] stream=True 用法
-- [ ] 🔧 练习：流式聊天机器人
-- [ ] ✅ 检验：实现逐字输出效果
+- [x] 为什么需要流式输出
+- [x] SSE 原理
+- [x] stream=True 用法
+- [x] 🔧 练习：流式聊天机器人 📎 `stream_chat.py`
+- [x] ✅ 检验：实现逐字输出效果
 
 ### 1.5 Prompt Engineering（3-4天）
-- [ ] System Prompt 设计四法则
-- [ ] Zero-shot / Few-shot / CoT
-- [ ] 结构化 Prompt（XML 标签）
-- [ ] 🔧 练习：同一任务，3 种 prompt 对比
-- [ ] 🔧 练习：角色扮演实验
-- [ ] 🔧 练习：格式控制（强制 JSON 输出）
-- [ ] 📝 建立个人 Prompt 库
-- [ ] ✅ 检验：能稳定控制 LLM 输出格式
+- [x] System Prompt 设计四法则
+- [x] Zero-shot / Few-shot / CoT
+- [x] 结构化 Prompt（XML 标签）
+- [x] 🔧 练习：同一任务，3 种 prompt 对比 📎 `prompt_engineering.py`
+- [x] 🔧 练习：角色扮演实验 📎 `prompt_xml_role.py`
+- [x] 🔧 练习：格式控制（强制 JSON 输出）📎 `prompt_engineering.py`
+- [x] 📝 建立个人 Prompt 库 📎 `prompt_library.py`
+- [x] ✅ 检验：能稳定控制 LLM 输出格式
 
 ### 1.6 Structured Output（1-2天）
-- [ ] JSON Mode 原理
-- [ ] Pydantic 定义数据结构
-- [ ] 约束 LLM 按 Schema 输出
-- [ ] 🔧 练习：让 LLM 输出结构化菜谱
-- [ ] ✅ 检验：LLM 输出可被代码安全消费
+- [x] JSON Mode 原理
+- [x] Pydantic 定义数据结构
+- [x] 约束 LLM 按 Schema 输出
+- [x] 🔧 练习：让 LLM 输出结构化菜谱 📎 `structured_output.py`
+- [x] ✅ 检验：LLM 输出可被代码安全消费
 
 ### 阶段 1 全部完成标志 🏁
-- [ ] 所有子模块 ✅
-- [ ] 能用代码调用至少 2 个不同厂商的 API
-- [ ] 有个人 Prompt 库
-- [ ] 能设计 System Prompt 让 LLM 扮演专业角色
+- [x] 所有子模块 ✅
+- [x] 能用代码调用至少 2 个不同厂商的 API
+- [x] 有个人 Prompt 库
+- [x] 能设计 System Prompt 让 LLM 扮演专业角色
 
 ---
 
@@ -408,8 +410,8 @@
 | 里程 | 阶段 | 标志 | 预计日期 | 状态 |
 |------|------|------|----------|------|
 | M1 🟢 | 0 完成 | 能独立写 Python 脚本 | 2026-07-31 | ✅ |
-| M2 🔵 | 1 完成 | 第一次 API 调用成功 | ___ | ⬜ |
-| M3 🟡 | 1 完成 | 流式聊天机器人 | ___ | ⬜ |
+| M2 🔵 | 1 完成 | 第一次 API 调用成功 | 2026-08-01 | ✅ |
+| M3 🟡 | 1 完成 | 流式聊天机器人 | 2026-08-01 | ✅ |
 | M4 🟠 | 2 完成 | 手写 Agent 循环 | ___ | ⬜ |
 | M5 🟣 | 2 完成 | 有记忆的 Agent | ___ | ⬜ |
 | M6 📗 | 3 完成 | 最简 RAG 系统 | ___ | ⬜ |

@@ -1,8 +1,8 @@
 我在学 AI Agent 开发，项目在 ai-agent-learning文件夹下，请先阅读以下文件了解我的学习状态：
 
-1. CLAUDE.md —— 项目规则（练习文件规范、LeetCode 模式、命名规范）
-2. LEARNING_TRACKER.md —— 完整学习路线和进度看板（checkbox 打勾 = 已完成）
-3. 每日学习日志.md —— 每天的学习记录、踩坑和收获
+1. CLAUDE.md —— 项目规则（练习文件规范、LeetCode 模式、命名规范、日志联动规则）
+2. LEARNING_TRACKER.md —— 完整学习路线和进度看板（checkbox 打勾 = 已完成，📎 = 代码文件）
+3. 每日学习日志.md —— 每天的学习记录导航
 
 然后告诉我：
 - 当前学到哪个阶段、进度百分比
