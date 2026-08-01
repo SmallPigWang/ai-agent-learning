@@ -118,9 +118,6 @@
 - API 是通用的：同一个 messages 结构、同一个请求模式，换 URL 就能调不同模型
 - `setx PYTHONUTF8 1` 只加一个环境变量，不可能弄坏 conda；VS Code 路径转义问题是 Git Bash 的老毛病
 
-## 明天计划
-- 1.5 Prompt Engineering（System Prompt 设计、Zero-shot/Few-shot/CoT、结构化输出）
-
 ## 自我评分 (1-5)
 - 理解程度: 5
 - 完成度: 5

@@ -32,12 +32,6 @@
 - 找 bug 不再靠猜，靠跑测试 + 读报错堆栈，效率和信心都上来了
 - 同一个坑不踩两次：缩进问题、遍历前判空、异常名写对，今天都内化了
 
-## 明天计划
-- 完成 employee_system.py（继承 + super() + 方法覆盖）
-- 推进到 dataclass 或 Type hints
-- 更新 LEARNING_TRACKER.md checkbox
-- 记得 git add / commit / push
-
 ## 自我评分 (1-5)
 - 理解程度: 4
 - 完成度: 4
