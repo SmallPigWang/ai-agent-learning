@@ -19,6 +19,8 @@
 #   generate_recipe(dish, key) — LLM 生成菜谱 → Pydantic 校验 → 返回 Recipe 对象
 #
 # ============================================================
+# 知识点: Pydantic BaseModel | Field(description) | Recipe(**dict) 解包 | LLM→JSON→类型安全对象（Agent 底座）
+# ============================================================
 
 import os
 import json as _json

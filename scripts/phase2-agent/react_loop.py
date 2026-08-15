@@ -17,6 +17,8 @@
 #   react_loop(prompt, tools, key) — 支持多轮工具调用的 Agent 循环
 #   关键: while 循环 + 终止条件
 # ============================================================
+# 知识点: ReAct 思考-行动循环 | 动态 N 轮工具调用 | 终止条件（max_iterations + consecutive_errors） | body 每次重建
+# ============================================================
 
 import os
 import json as _json

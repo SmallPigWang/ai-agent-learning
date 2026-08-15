@@ -25,6 +25,8 @@
 #     add_skill(self, skill: str) → 添加技能到列表，无返回值
 #     __repr__(self) → "name (emp_id) - Developer | ¥salary/月 | skills: [skill1, skill2]"
 # ============================================================
+# 知识点: 继承 class A(B) | super().__init__ | 方法覆盖 | 可变默认参数 None 处理 | join 拼接列表
+# ============================================================
 from typing import Optional
 
 class Employee:

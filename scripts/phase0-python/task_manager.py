@@ -29,6 +29,8 @@
 #       把 priority 从 int 改成 Literal[1, 2, 3, 4, 5] 限制范围
 #
 # ============================================================
+# 知识点: @dataclass | field(default_factory=list) | 可变默认参数陷阱 | Optional | Literal | 类型注解 vs 赋值
+# ============================================================
 
 from dataclasses import dataclass, field
 from typing import Optional, Literal

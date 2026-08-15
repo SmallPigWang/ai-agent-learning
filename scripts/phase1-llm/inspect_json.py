@@ -1,4 +1,5 @@
 """抓取 DeepSeek 和 Claude 的原始 JSON 返回结构"""
+# 知识点: OpenAI 兼容返回骨架 id/object/model/choices/usage | DeepSeek reasoning_content | 诊断类脚本
 import os, json, requests
 from dotenv import load_dotenv
 

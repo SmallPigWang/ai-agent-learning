@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧭 知识学习路径图 — AI Agent 学习</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f6f7;
+    --panel: #ffffff;
+    --border: #e9ebee;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: "Inter", "SF Pro Text", -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); display: flex;
+  }
+
+  /* ── 侧边栏 ── */
+  #sidebar {
+    width: 284px; min-width: 284px; height: 100vh; overflow-y: auto;
+    background: var(--panel); border-right: 1px solid var(--border);
+    padding: 16px 14px; display: flex; flex-direction: column; gap: 14px;
+  }  #sidebar h1 { font-size: 16.5px; line-height: 1.35; font-weight: 600; letter-spacing: -.1px; }
+  #sidebar h1 small { display: block; font-weight: normal; color: var(--muted); font-size: 11.5px; margin-top: 3px; }
+  .sec-title { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 6px; }
+  #stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  #stats .cell {
+    background: #f6f7f9; border: 1px solid var(--border); border-radius: 8px; padding: 7px 4px; text-align: center;
+  }
+  #stats .cell b { display: block; font-size: 15px; }
+  #stats .cell span { font-size: 10.5px; color: var(--muted); }
+  #search {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13px; outline: none; background: #fff; color: var(--text);
+  }
+  #search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+  #stage-filter label {
+    display: flex; align-items: center; gap: 7px; padding: 4px 2px;
+    font-size: 12.5px; cursor: pointer; user-select: none;
+  }
+  #stage-filter label:hover { background: #f8fafc; border-radius: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+  #stage-actions { display: flex; gap: 6px; }
+  #stage-actions button, #toolbar button {
+    flex: 1; padding: 5px 8px; font-size: 11.5px; border: 1px solid var(--border);
+    background: #fff; border-radius: 7px; cursor: pointer; color: var(--text);
+  }
+  #stage-actions button:hover, #toolbar button:hover { border-color: var(--accent); color: var(--accent); background: #f6f7f9; }
+  #toolbar { display: flex; gap: 6px; }
+  #legend { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
+  #legend .row { display: flex; align-items: center; gap: 8px; }
+  .lg-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid; background: transparent; flex: none; }
+  .lg-line { width: 18px; height: 0; border-top: 2px solid; flex: none; }
+  .lg-line.dash { border-top-style: dashed; }
+  .lg-line.dotted { border-top-style: dotted; }
+  #sidebar .foot {
+    margin-top: auto; font-size: 11px; color: var(--muted); line-height: 1.6;
+    border-top: 1px dashed var(--border); padding-top: 10px;
+  }
+  #sidebar .foot code { background: #f1f5f9; padding: 1px 4px; border-radius: 4px; font-size: 10.5px; }
+
+  /* ── 画布（左）── */
+  #stage-wrap { flex: 1; display: flex; position: relative; min-width: 0; }
+  #canvas-holder { flex: 1; position: relative; min-width: 0; }
+  #canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+  #hint {
+    position: absolute; left: 14px; bottom: 12px; font-size: 11.5px; color: var(--muted);
+    background: rgba(255,255,255,.92); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 14px; pointer-events: none;
+  }
+
+  /* ── 详情面板（右）── */
+  #detail {
+    width: 340px; min-width: 340px; height: 100%;
+    overflow-y: auto; background: var(--panel); border-left: 1px solid var(--border);
+    padding: 18px 16px; position: relative; z-index: 5;
+  }
+  #detail .placeholder {
+    color: var(--muted); font-size: 12.5px; line-height: 1.9; padding-top: 8px;
+  }
+  #detail .placeholder .ph-title { color: var(--text); font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+  #detail .placeholder .ph-tip {
+    background: #f5f6f7; border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; font-size: 11.5px; margin-top: 10px; line-height: 1.8;
+  }
+  #detail .close {
+    float: right; border: none; background: none; font-size: 16px; color: var(--muted);
+    cursor: pointer; padding: 2px 6px; border-radius: 6px;
+  }
+  #detail .close:hover { background: #f1f5f9; }
+  #detail .badge {
+    display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 999px;
+    color: #fff; margin-bottom: 8px;
+  }
+  #detail h2 { font-size: 16px; margin-bottom: 6px; line-height: 1.4; }
+  #detail .meta { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; }
+  #detail .block { margin-bottom: 10px; }
+  #detail .block h3 {
+    font-size: 11.5px; color: var(--muted); letter-spacing: .5px; margin-bottom: 4px;
+  }
+  #detail .block p, #detail .block li { font-size: 12.5px; line-height: 1.65; }
+  #detail .block ul { list-style: none; }
+  #detail .block li { padding: 2px 0; }
+  #detail a.link {
+    color: #2563eb; text-decoration: none; cursor: pointer; border-bottom: 1px dashed transparent;
+  }
+  #detail a.link:hover { border-bottom-color: #2563eb; }
+  #tt {
+    position: absolute; z-index: 20; display: none; pointer-events: none;
+    background: #fff; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; font-size: 11.5px; line-height: 1.6; color: var(--text);
+    box-shadow: 0 4px 14px rgba(15,23,42,.1); max-width: 260px;
+  }
+</style>
+</head>
+<body>
+  <aside id="sidebar">
+    <h1>🧭 知识学习路径图
+      <small>AI Agent 学习 · 核心内容直接关联</small>
+    </h1>
+
+    <div>
+      <div class="sec-title">📊 统计</div>
+      <div id="stats"></div>
+    </div>
+
+    <div>
+      <div class="sec-title">🔍 搜索</div>
+      <input id="search" type="text" placeholder="搜索知识点 / 踩坑 / 模块…">
+    </div>
+
+    <div>
+      <div class="sec-title">🗂 阶段筛选</div>
+      <div id="stage-filter"></div>
+      <div id="stage-actions">
+        <button id="btn-all">全选</button>
+        <button id="btn-none">全不选</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title">🔧 视图</div>
+      <div id="toolbar">
+        <button id="btn-fit">适应窗口</button>
+        <button id="btn-relayout">重置视图</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title">🎨 图例</div>
+      <div id="legend">
+        <div class="row"><span class="lg-dot" style="border-color:#f59e0b"></span>阶段里程碑（浅→深 黄橙系列）</div>
+        <div class="row"><span class="lg-dot" style="border-color:#ca8a04"></span>模块芯片（主脊线上，阶段色描边）</div>
+        <div class="row"><span class="lg-dot" style="border-color:#10b981"></span>✅ 已学知识点（阶段色边+绿点）</div>
+        <div class="row"><span class="lg-dot" style="border-color:#cbd2d9"></span>⏳ 未学知识点（灰虚线边）</div>
+        <div class="row"><span class="lg-dot" style="border-color:#9ca3af"></span>待补充</div>
+        <div class="row"><span class="lg-line" style="border-color:#d7dce2"></span>主脊线（自上而下学习顺序）</div>
+        <div class="row"><span class="lg-line dash" style="border-color:#10b981"></span>直接关联（关键词标签）</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      📎 数据由 <code>scripts/knowledge-graph/gen_knowledge_graph.py</code> 自动解析
+      KNOWLEDGE_BASE.md / PITFALLS.md / logs/ 生成。<br>
+      学完新内容后重跑：<code>python scripts/knowledge-graph/gen_knowledge_graph.py</code>
+    </div>
+  </aside>
+
+  <div id="stage-wrap">
+    <div id="canvas-holder">
+      <canvas id="canvas"></canvas>
+      <div id="hint">🖱 点击查看详情 · 点模块芯片聚焦该节 · 点空白或 Esc 退出 · 滚轮缩放 · 拖空白平移</div>
+    </div>
+    <aside id="detail"></aside>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

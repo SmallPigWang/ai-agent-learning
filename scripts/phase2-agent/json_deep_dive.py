@@ -14,6 +14,8 @@
 #   3. build_messages() — 动态拼接消息数组
 #   4. parse_tool_arguments() — 安全解析工具参数
 # ============================================================
+# 知识点: safe_get 逐层安全取值 | Schema 校验（安检闸门） | json.loads 安全解析 | JSON 序列化
+# ============================================================
 
 import json as _json
 from typing import Any

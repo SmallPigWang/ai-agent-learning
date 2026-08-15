@@ -26,6 +26,8 @@
 #   响应: response.json()["choices"][0]["message"]["content"]
 #
 # ============================================================
+# 知识点: HTTP POST | headers/body | requests | .env 环境变量 | API Key 安全 | messages 结构
+# ============================================================
 
 import os
 from typing import Optional

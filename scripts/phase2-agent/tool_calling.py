@@ -13,6 +13,8 @@
 #   2. tool_loop(prompt, tools, schemas, key) — 一轮工具调用循环
 #
 # ============================================================
+# 知识点: 工具=函数+JSON Schema | tool_use→execute→tool_result 循环 | 消息回填顺序 | tool_call_id
+# ============================================================
 
 import os
 import json as _json

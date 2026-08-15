@@ -1,0 +1,30 @@
+# ============================================================
+# AI Agent 学习项目依赖清单
+# 安装: pip install -r requirements.txt
+# 环境: VSCode 使用 conda 环境 aiagent（Python 3.12.13）
+#       终端 base 环境为 Python 3.14.6，两边包已同步，以 aiagent 为准
+# ============================================================
+
+# ---- 基础（阶段 1-2，当前必需）----
+requests>=2.34
+python-dotenv>=1.2
+pydantic>=2.13
+
+# ---- 阶段 3: RAG 专题（到时取消注释安装）----
+# chromadb>=1.5          # 本地向量库（3.3）
+# langchain-text-splitters  # 文档分块（3.2）
+# ragas                   # RAG 评估（3.7）
+
+# ---- 阶段 4: 框架实战 ----
+# openai>=1.0            # OpenAI 兼容 SDK（4.1）
+# langgraph>=1.2         # 图式 Agent（4.2）
+# mcp                    # MCP 协议（4.3）
+
+# ---- 阶段 5: 工程化 ----
+# fastapi                 # API 服务（5.5）
+# uvicorn                 # ASGI 服务器（5.5）
+# promptfoo               # Prompt 回归测试（5.1/5.3）
+
+# ---- 注意事项 ----
+# - Embedding 优先用 API（如硅基流动/OpenAI），避免本地装 torch
+# - 若某库安装失败，用 conda 建 py312 环境: conda create -n agent312 python=3.12

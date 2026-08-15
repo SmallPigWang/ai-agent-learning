@@ -1,4 +1,5 @@
 """测试 jiekou.vip Claude API Key 是否可用"""
+# 知识点: 中转平台 | OpenAI 兼容格式 | .env 读取 Key | 连通性验证脚本
 import os
 import requests
 from dotenv import load_dotenv
