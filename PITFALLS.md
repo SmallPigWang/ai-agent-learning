@@ -30,6 +30,7 @@
 | 14 | 返回了 API Key 而不是回复 | 变量名写错（deepseek_key vs deepseek_reply） | 命名语义化，返回前核对 |
 | 15 | 奖金算错 | 手误（0.25 vs 需求 0.15） | 写完对照需求注释复查数字 |
 | 16 | 容器属性报"不能遍历" | 初始化为 None | 容器属性初始化为空列表 `[]` |
+| 38 | 窗口保留条数不对 | 切片边界算错（用 keep_count 而不是 len-rest） | 用 `len(rest)-keep_count` 作为切点 |
 
 ## 3. 类型与 Pylance
 
@@ -43,6 +44,9 @@
 | 22 | return False 报类型不匹配 | 函数签名是 `-> tuple` | 按签名返回 (False, 错误消息) |
 | 23 | 变量名 max/min 行为诡异 | 盖掉了内置函数 | 别用内置函数名做变量名 |
 | 24 | Pylance 标红但运行正常 | 类型定义未声明的方法 | 类型标注 ≠ 运行时行为，`basic` 模式减噪 |
+| 39 | `merged + recent_messages[1:]` 报错 | dict 不能直接和 list 相加 | 用 `[merged] + recent_messages[1:]` 包成列表再拼接 |
+| 40 | 摘要为空时返回 None | 测试期望空字符串 | 无旧消息时返回 `""` |
+| 41 | 新建 system 消息 role 写成 recent | 把列表变量当角色名 | 固定写 `"system"` |
 
 ## 4. API 调用
 
@@ -91,3 +95,8 @@
 ```
 - [ ] 日期: 错误表现 | 原因 | 正确做法
 ```
+
+- [x] 2026-08-16: 窗口保留条数不对 | 切片边界算错 | 用 `len(rest)-keep_count`
+- [x] 2026-08-16: `merged + list` 报错 | dict 不能直接和 list 相加 | 用 `[merged] + list`
+- [x] 2026-08-16: 摘要为空返回 None | 测试期望空字符串 | 返回 `""`
+- [x] 2026-08-16: role 写成 recent | 把列表当角色名 | 固定写 `"system"`

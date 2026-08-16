@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-08-15 08:34:02",
+ "generatedAt": "2026-08-16 17:51:55",
  "nodes": [
   {
    "id": "s:0",
@@ -20,7 +20,7 @@ window.KB_DATA = {
    "type": "stage",
    "name": "2. Agent 核心",
    "code": "2",
-   "progress": 29
+   "progress": 35
   },
   {
    "id": "m:0.1",
@@ -102,14 +102,14 @@ window.KB_DATA = {
   {
    "id": "m:2.2",
    "type": "module",
-   "name": "2.2 JSON 实战",
+   "name": "2.2 Agent 循环手写（ReAct）",
    "code": "2.2",
    "stage": "2"
   },
   {
    "id": "m:2.3",
    "type": "module",
-   "name": "2.3 ReAct 循环",
+   "name": "2.3 记忆系统",
    "code": "2.3",
    "stage": "2"
   },
@@ -167,11 +167,18 @@ window.KB_DATA = {
    "desc": "list（有序可变）/ tuple（有序不可变）/ dict（键值对）/ set（去重）",
    "module": "0.1",
    "stage": "0",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 39,
+     "err": "`merged + recent_messages[1:]` 报错",
+     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    }
+   ],
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    6
    ]
   },
   {
@@ -927,7 +934,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    6
    ]
   },
   {
@@ -1066,11 +1074,18 @@ window.KB_DATA = {
    "desc": "字典解包成 Pydantic 对象（Agent 底座：代码可安全消费 LLM 输出）",
    "module": "1.6",
    "stage": "1",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 39,
+     "err": "`merged + recent_messages[1:]` 报错",
+     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    }
+   ],
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    6
    ]
   },
   {
@@ -1181,11 +1196,11 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.2:safe_get()",
+   "id": "k:2.1:safe_get()",
    "type": "knowledge",
    "name": "safe_get()",
    "desc": "逐层 isinstance + key in dict 检查，缺层返回 default",
-   "module": "2.2",
+   "module": "2.1",
    "stage": "2",
    "pitfalls": [
     {
@@ -1201,11 +1216,11 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.2:安检闸门模式",
+   "id": "k:2.1:安检闸门模式",
    "type": "knowledge",
    "name": "安检闸门模式",
    "desc": "逐条件 return False，全过才 True",
-   "module": "2.2",
+   "module": "2.1",
    "stage": "2",
    "pitfalls": [
     {
@@ -1227,31 +1242,37 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.2:parse_tool_arguments()",
+   "id": "k:2.1:parse_tool_arguments()",
    "type": "knowledge",
    "name": "parse_tool_arguments()",
    "desc": "dict 直接用；字符串 try json.loads；失败返回 None",
-   "module": "2.2",
+   "module": "2.1",
    "stage": "2",
    "pitfalls": [
     {
      "num": 13,
      "err": "json.loads 崩溃",
      "fix": "`text = text[6:]`"
+    },
+    {
+     "num": 40,
+     "err": "摘要为空时返回 None",
+     "fix": "无旧消息时返回 `\"\"`"
     }
    ],
    "learned": true,
    "days": [
     5,
-    4
+    4,
+    6
    ]
   },
   {
-   "id": "k:2.3:ReAct 原理",
+   "id": "k:2.2:ReAct 原理",
    "type": "knowledge",
    "name": "ReAct 原理",
    "desc": "Reasoning + Acting 交替：思考→行动→观察→再思考→完成",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -1260,11 +1281,11 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:tool_loop vs ReAct",
+   "id": "k:2.2:tool_loop vs ReAct",
    "type": "knowledge",
    "name": "tool_loop vs ReAct",
    "desc": "固定 1 轮 vs 动态 N 轮（for/while 包住整段）",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -1273,11 +1294,11 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:body 重建",
+   "id": "k:2.2:body 重建",
    "type": "knowledge",
    "name": "body 重建",
    "desc": "每轮 messages 变了，body 必须重新构造",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -1287,11 +1308,11 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:终止条件",
+   "id": "k:2.2:终止条件",
    "type": "knowledge",
    "name": "终止条件",
    "desc": "max_iterations 上限 + consecutive_errors ≥ 3 连续错误终止",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -1300,11 +1321,11 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:AgentState",
+   "id": "k:2.2:AgentState",
    "type": "knowledge",
    "name": "AgentState",
    "desc": "@dataclass 记录 messages/iteration/tool_calls_made/consecutive_errors",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -1314,56 +1335,157 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:路径沙箱",
+   "id": "k:2.2:路径沙箱",
    "type": "knowledge",
    "name": "路径沙箱",
    "desc": "_safe_path() 限制工具只能访问白名单目录",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
    "days": [
     5
+   ]
+  },
+  {
+   "id": "k:2.3:滑动窗口",
+   "type": "knowledge",
+   "name": "滑动窗口",
+   "desc": "只保留 system + 最近 N 轮，旧消息丢弃，省空间",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:system 常驻豁免",
+   "type": "knowledge",
+   "name": "system 常驻豁免",
+   "desc": "system 是“宪法”，永远保留且在最前",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 41,
+     "err": "新建 system 消息 role 写成 recent",
+     "fix": "固定写 `\"system\"`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:轮（turn）",
+   "type": "knowledge",
+   "name": "轮（turn）",
+   "desc": "1 轮 = 1 user + 1 assistant，裁剪按“轮”不按“条”",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:摘要压缩",
+   "type": "knowledge",
+   "name": "摘要压缩",
+   "desc": "旧消息压成一段摘要，保留要点，不直接丢光",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:摘要合并进 system",
+   "type": "knowledge",
+   "name": "摘要合并进 system",
+   "desc": "把摘要拼进 system 内容，让 LLM 每轮都能看到旧要点",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 41,
+     "err": "新建 system 消息 role 写成 recent",
+     "fix": "固定写 `\"system\"`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    6,
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:混合策略",
+   "type": "knowledge",
+   "name": "混合策略",
+   "desc": "旧对话用摘要，新对话用窗口，兼顾省空间和记忆",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:token 粗估",
+   "type": "knowledge",
+   "name": "token 粗估",
+   "desc": "role + content 字符数相加，粗略判断离上下文上限多远",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4
    ]
   },
   {
    "id": "x:0",
    "type": "planned",
-   "name": "2.3 记忆系统（滑动窗口 / 摘要压缩 / 向量存储）",
+   "name": "2.4 任务规划（Plan-and-Execute）",
    "stage": "2"
   },
   {
    "id": "x:1",
    "type": "planned",
-   "name": "2.4 任务规划（Plan-and-Execute）",
+   "name": "2.5 Reflection（生成→自评→改进）",
    "stage": "2"
   },
   {
    "id": "x:2",
    "type": "planned",
-   "name": "2.5 Reflection（生成→自评→改进）",
+   "name": "2.6 安全护栏",
    "stage": "2"
   },
   {
    "id": "x:3",
    "type": "planned",
-   "name": "2.6 安全护栏",
-   "stage": "2"
-  },
-  {
-   "id": "x:4",
-   "type": "planned",
    "name": "阶段 3：RAG 全流程",
    "stage": null
   },
   {
-   "id": "x:5",
+   "id": "x:4",
    "type": "planned",
    "name": "阶段 4：框架（SDK / LangGraph / MCP / 多 Agent）",
    "stage": null
   },
   {
-   "id": "x:6",
+   "id": "x:5",
    "type": "planned",
    "name": "阶段 5：工程化（评估 / 可观测 / CI/CD / 部署）",
    "stage": null
@@ -1786,48 +1908,83 @@ window.KB_DATA = {
    "type": "contain"
   },
   {
-   "source": "m:2.2",
-   "target": "k:2.2:safe_get()",
+   "source": "m:2.1",
+   "target": "k:2.1:safe_get()",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.1",
+   "target": "k:2.1:安检闸门模式",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.1",
+   "target": "k:2.1:parse_tool_arguments()",
    "type": "contain"
   },
   {
    "source": "m:2.2",
-   "target": "k:2.2:安检闸门模式",
+   "target": "k:2.2:ReAct 原理",
    "type": "contain"
   },
   {
    "source": "m:2.2",
-   "target": "k:2.2:parse_tool_arguments()",
+   "target": "k:2.2:tool_loop vs ReAct",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.2",
+   "target": "k:2.2:body 重建",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.2",
+   "target": "k:2.2:终止条件",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.2",
+   "target": "k:2.2:AgentState",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.2",
+   "target": "k:2.2:路径沙箱",
    "type": "contain"
   },
   {
    "source": "m:2.3",
-   "target": "k:2.3:ReAct 原理",
+   "target": "k:2.3:滑动窗口",
    "type": "contain"
   },
   {
    "source": "m:2.3",
-   "target": "k:2.3:tool_loop vs ReAct",
+   "target": "k:2.3:system 常驻豁免",
    "type": "contain"
   },
   {
    "source": "m:2.3",
-   "target": "k:2.3:body 重建",
+   "target": "k:2.3:轮（turn）",
    "type": "contain"
   },
   {
    "source": "m:2.3",
-   "target": "k:2.3:终止条件",
+   "target": "k:2.3:摘要压缩",
    "type": "contain"
   },
   {
    "source": "m:2.3",
-   "target": "k:2.3:AgentState",
+   "target": "k:2.3:摘要合并进 system",
    "type": "contain"
   },
   {
    "source": "m:2.3",
-   "target": "k:2.3:路径沙箱",
+   "target": "k:2.3:混合策略",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:token 粗估",
    "type": "contain"
   },
   {
@@ -2177,51 +2334,86 @@ window.KB_DATA = {
   },
   {
    "source": "k:2.1:Schema 设计",
-   "target": "k:2.2:safe_get()",
+   "target": "k:2.1:safe_get()",
    "type": "path"
   },
   {
-   "source": "k:2.2:safe_get()",
-   "target": "k:2.2:安检闸门模式",
+   "source": "k:2.1:safe_get()",
+   "target": "k:2.1:安检闸门模式",
    "type": "path"
   },
   {
-   "source": "k:2.2:安检闸门模式",
-   "target": "k:2.2:parse_tool_arguments()",
+   "source": "k:2.1:安检闸门模式",
+   "target": "k:2.1:parse_tool_arguments()",
    "type": "path"
   },
   {
-   "source": "k:2.2:parse_tool_arguments()",
-   "target": "k:2.3:ReAct 原理",
+   "source": "k:2.1:parse_tool_arguments()",
+   "target": "k:2.2:ReAct 原理",
    "type": "path"
   },
   {
-   "source": "k:2.3:ReAct 原理",
-   "target": "k:2.3:tool_loop vs ReAct",
+   "source": "k:2.2:ReAct 原理",
+   "target": "k:2.2:tool_loop vs ReAct",
    "type": "path"
   },
   {
-   "source": "k:2.3:tool_loop vs ReAct",
-   "target": "k:2.3:body 重建",
+   "source": "k:2.2:tool_loop vs ReAct",
+   "target": "k:2.2:body 重建",
    "type": "path"
   },
   {
-   "source": "k:2.3:body 重建",
-   "target": "k:2.3:终止条件",
+   "source": "k:2.2:body 重建",
+   "target": "k:2.2:终止条件",
    "type": "path"
   },
   {
-   "source": "k:2.3:终止条件",
-   "target": "k:2.3:AgentState",
+   "source": "k:2.2:终止条件",
+   "target": "k:2.2:AgentState",
    "type": "path"
   },
   {
-   "source": "k:2.3:AgentState",
-   "target": "k:2.3:路径沙箱",
+   "source": "k:2.2:AgentState",
+   "target": "k:2.2:路径沙箱",
    "type": "path"
   },
   {
-   "source": "k:2.3:路径沙箱",
+   "source": "k:2.2:路径沙箱",
+   "target": "k:2.3:滑动窗口",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:滑动窗口",
+   "target": "k:2.3:system 常驻豁免",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:system 常驻豁免",
+   "target": "k:2.3:轮（turn）",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:轮（turn）",
+   "target": "k:2.3:摘要压缩",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:摘要压缩",
+   "target": "k:2.3:摘要合并进 system",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:摘要合并进 system",
+   "target": "k:2.3:混合策略",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:混合策略",
+   "target": "k:2.3:token 粗估",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:token 粗估",
    "target": "x:0",
    "type": "path"
   },
@@ -2251,11 +2443,6 @@ window.KB_DATA = {
    "type": "path"
   },
   {
-   "source": "x:5",
-   "target": "x:6",
-   "type": "path"
-  },
-  {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
    "type": "related",
@@ -2271,13 +2458,19 @@ window.KB_DATA = {
    "source": "k:1.3:四角色",
    "target": "k:2.1:消息顺序",
    "type": "related",
-   "label": "tool"
+   "label": "user"
+  },
+  {
+   "source": "k:2.3:system 常驻豁免",
+   "target": "k:2.3:摘要合并进 system",
+   "type": "related",
+   "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
    "type": "related",
-   "label": "try"
+   "label": "except"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -2295,11 +2488,53 @@ window.KB_DATA = {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
    "type": "related",
-   "label": "llm"
+   "label": "agent"
   },
   {
    "source": "k:1.1:Token",
    "target": "k:1.3:usage",
+   "type": "related",
+   "label": "token"
+  },
+  {
+   "source": "k:1.1:Token",
+   "target": "k:2.3:token 粗估",
+   "type": "related",
+   "label": "token"
+  },
+  {
+   "source": "k:1.3:四角色",
+   "target": "k:2.3:轮（turn）",
+   "type": "related",
+   "label": "user"
+  },
+  {
+   "source": "k:1.3:usage",
+   "target": "k:2.3:token 粗估",
+   "type": "related",
+   "label": "token"
+  },
+  {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.3:system 常驻豁免",
+   "type": "related",
+   "label": "system"
+  },
+  {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.3:摘要合并进 system",
+   "type": "related",
+   "label": "system"
+  },
+  {
+   "source": "k:2.1:消息顺序",
+   "target": "k:2.3:轮（turn）",
+   "type": "related",
+   "label": "user"
+  },
+  {
+   "source": "k:1.1:上下文窗口",
+   "target": "k:2.3:token 粗估",
    "type": "related",
    "label": "token"
   },
@@ -2317,11 +2552,6 @@ window.KB_DATA = {
    "source": "s:2",
    "target": "x:2",
    "type": "planned"
-  },
-  {
-   "source": "s:2",
-   "target": "x:3",
-   "type": "planned"
   }
  ],
  "stages": [
@@ -2338,7 +2568,7 @@ window.KB_DATA = {
   {
    "code": "2",
    "name": "2. Agent 核心",
-   "progress": 29
+   "progress": 35
   }
  ],
  "modules": [
@@ -2497,32 +2727,39 @@ window.KB_DATA = {
     "k:2.1:消息顺序",
     "k:2.1:tool_call_id",
     "k:2.1:并行调用",
-    "k:2.1:Schema 设计"
+    "k:2.1:Schema 设计",
+    "k:2.1:safe_get()",
+    "k:2.1:安检闸门模式",
+    "k:2.1:parse_tool_arguments()"
    ]
   },
   {
    "id": "m:2.2",
    "code": "2.2",
-   "name": "JSON 实战",
+   "name": "Agent 循环手写（ReAct）",
    "stage": "2",
    "points": [
-    "k:2.2:safe_get()",
-    "k:2.2:安检闸门模式",
-    "k:2.2:parse_tool_arguments()"
+    "k:2.2:ReAct 原理",
+    "k:2.2:tool_loop vs ReAct",
+    "k:2.2:body 重建",
+    "k:2.2:终止条件",
+    "k:2.2:AgentState",
+    "k:2.2:路径沙箱"
    ]
   },
   {
    "id": "m:2.3",
    "code": "2.3",
-   "name": "ReAct 循环",
+   "name": "记忆系统",
    "stage": "2",
    "points": [
-    "k:2.3:ReAct 原理",
-    "k:2.3:tool_loop vs ReAct",
-    "k:2.3:body 重建",
-    "k:2.3:终止条件",
-    "k:2.3:AgentState",
-    "k:2.3:路径沙箱"
+    "k:2.3:滑动窗口",
+    "k:2.3:system 常驻豁免",
+    "k:2.3:轮（turn）",
+    "k:2.3:摘要压缩",
+    "k:2.3:摘要合并进 system",
+    "k:2.3:混合策略",
+    "k:2.3:token 粗估"
    ]
   }
  ],
@@ -2577,11 +2814,18 @@ window.KB_DATA = {
    "desc": "list（有序可变）/ tuple（有序不可变）/ dict（键值对）/ set（去重）",
    "module": "0.1",
    "stage": "0",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 39,
+     "err": "`merged + recent_messages[1:]` 报错",
+     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    }
+   ],
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    6
    ]
   },
   {
@@ -3288,7 +3532,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    6
    ]
   },
   {
@@ -3417,11 +3662,18 @@ window.KB_DATA = {
    "desc": "字典解包成 Pydantic 对象（Agent 底座：代码可安全消费 LLM 输出）",
    "module": "1.6",
    "stage": "1",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 39,
+     "err": "`merged + recent_messages[1:]` 报错",
+     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    }
+   ],
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    6
    ]
   },
   {
@@ -3525,10 +3777,10 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.2:safe_get()",
+   "id": "k:2.1:safe_get()",
    "name": "safe_get()",
    "desc": "逐层 isinstance + key in dict 检查，缺层返回 default",
-   "module": "2.2",
+   "module": "2.1",
    "stage": "2",
    "pitfalls": [
     {
@@ -3544,10 +3796,10 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.2:安检闸门模式",
+   "id": "k:2.1:安检闸门模式",
    "name": "安检闸门模式",
    "desc": "逐条件 return False，全过才 True",
-   "module": "2.2",
+   "module": "2.1",
    "stage": "2",
    "pitfalls": [
     {
@@ -3569,29 +3821,35 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.2:parse_tool_arguments()",
+   "id": "k:2.1:parse_tool_arguments()",
    "name": "parse_tool_arguments()",
    "desc": "dict 直接用；字符串 try json.loads；失败返回 None",
-   "module": "2.2",
+   "module": "2.1",
    "stage": "2",
    "pitfalls": [
     {
      "num": 13,
      "err": "json.loads 崩溃",
      "fix": "`text = text[6:]`"
+    },
+    {
+     "num": 40,
+     "err": "摘要为空时返回 None",
+     "fix": "无旧消息时返回 `\"\"`"
     }
    ],
    "learned": true,
    "days": [
     5,
-    4
+    4,
+    6
    ]
   },
   {
-   "id": "k:2.3:ReAct 原理",
+   "id": "k:2.2:ReAct 原理",
    "name": "ReAct 原理",
    "desc": "Reasoning + Acting 交替：思考→行动→观察→再思考→完成",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -3600,10 +3858,10 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:tool_loop vs ReAct",
+   "id": "k:2.2:tool_loop vs ReAct",
    "name": "tool_loop vs ReAct",
    "desc": "固定 1 轮 vs 动态 N 轮（for/while 包住整段）",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -3612,10 +3870,10 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:body 重建",
+   "id": "k:2.2:body 重建",
    "name": "body 重建",
    "desc": "每轮 messages 变了，body 必须重新构造",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -3625,10 +3883,10 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:终止条件",
+   "id": "k:2.2:终止条件",
    "name": "终止条件",
    "desc": "max_iterations 上限 + consecutive_errors ≥ 3 连续错误终止",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -3637,10 +3895,10 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:AgentState",
+   "id": "k:2.2:AgentState",
    "name": "AgentState",
    "desc": "@dataclass 记录 messages/iteration/tool_calls_made/consecutive_errors",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
@@ -3650,51 +3908,146 @@ window.KB_DATA = {
    ]
   },
   {
-   "id": "k:2.3:路径沙箱",
+   "id": "k:2.2:路径沙箱",
    "name": "路径沙箱",
    "desc": "_safe_path() 限制工具只能访问白名单目录",
-   "module": "2.3",
+   "module": "2.2",
    "stage": "2",
    "pitfalls": [],
    "learned": true,
    "days": [
     5
+   ]
+  },
+  {
+   "id": "k:2.3:滑动窗口",
+   "name": "滑动窗口",
+   "desc": "只保留 system + 最近 N 轮，旧消息丢弃，省空间",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:system 常驻豁免",
+   "name": "system 常驻豁免",
+   "desc": "system 是“宪法”，永远保留且在最前",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 41,
+     "err": "新建 system 消息 role 写成 recent",
+     "fix": "固定写 `\"system\"`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:轮（turn）",
+   "name": "轮（turn）",
+   "desc": "1 轮 = 1 user + 1 assistant，裁剪按“轮”不按“条”",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:摘要压缩",
+   "name": "摘要压缩",
+   "desc": "旧消息压成一段摘要，保留要点，不直接丢光",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:摘要合并进 system",
+   "name": "摘要合并进 system",
+   "desc": "把摘要拼进 system 内容，让 LLM 每轮都能看到旧要点",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 41,
+     "err": "新建 system 消息 role 写成 recent",
+     "fix": "固定写 `\"system\"`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    6,
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:混合策略",
+   "name": "混合策略",
+   "desc": "旧对话用摘要，新对话用窗口，兼顾省空间和记忆",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:token 粗估",
+   "name": "token 粗估",
+   "desc": "role + content 字符数相加，粗略判断离上下文上限多远",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4
    ]
   }
  ],
  "planned": [
   {
    "id": "x:0",
-   "name": "2.3 记忆系统（滑动窗口 / 摘要压缩 / 向量存储）",
-   "stage": "2"
-  },
-  {
-   "id": "x:1",
    "name": "2.4 任务规划（Plan-and-Execute）",
    "stage": "2"
   },
   {
-   "id": "x:2",
+   "id": "x:1",
    "name": "2.5 Reflection（生成→自评→改进）",
    "stage": "2"
   },
   {
-   "id": "x:3",
+   "id": "x:2",
    "name": "2.6 安全护栏",
    "stage": "2"
   },
   {
-   "id": "x:4",
+   "id": "x:3",
    "name": "阶段 3：RAG 全流程",
    "stage": null
   },
   {
-   "id": "x:5",
+   "id": "x:4",
    "name": "阶段 4：框架（SDK / LangGraph / MCP / 多 Agent）",
    "stage": null
   },
   {
-   "id": "x:6",
+   "id": "x:5",
    "name": "阶段 5：工程化（评估 / 可观测 / CI/CD / 部署）",
    "stage": null
   }
@@ -3770,22 +4123,28 @@ window.KB_DATA = {
   "k:2.1:tool_call_id",
   "k:2.1:并行调用",
   "k:2.1:Schema 设计",
-  "k:2.2:safe_get()",
-  "k:2.2:安检闸门模式",
-  "k:2.2:parse_tool_arguments()",
-  "k:2.3:ReAct 原理",
-  "k:2.3:tool_loop vs ReAct",
-  "k:2.3:body 重建",
-  "k:2.3:终止条件",
-  "k:2.3:AgentState",
-  "k:2.3:路径沙箱",
+  "k:2.1:safe_get()",
+  "k:2.1:安检闸门模式",
+  "k:2.1:parse_tool_arguments()",
+  "k:2.2:ReAct 原理",
+  "k:2.2:tool_loop vs ReAct",
+  "k:2.2:body 重建",
+  "k:2.2:终止条件",
+  "k:2.2:AgentState",
+  "k:2.2:路径沙箱",
+  "k:2.3:滑动窗口",
+  "k:2.3:system 常驻豁免",
+  "k:2.3:轮（turn）",
+  "k:2.3:摘要压缩",
+  "k:2.3:摘要合并进 system",
+  "k:2.3:混合策略",
+  "k:2.3:token 粗估",
   "x:0",
   "x:1",
   "x:2",
   "x:3",
   "x:4",
-  "x:5",
-  "x:6"
+  "x:5"
  ],
  "related": [
   {
@@ -3801,12 +4160,17 @@ window.KB_DATA = {
   {
    "source": "k:1.3:四角色",
    "target": "k:2.1:消息顺序",
-   "label": "tool"
+   "label": "user"
+  },
+  {
+   "source": "k:2.3:system 常驻豁免",
+   "target": "k:2.3:摘要合并进 system",
+   "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
-   "label": "try"
+   "label": "except"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -3821,11 +4185,46 @@ window.KB_DATA = {
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
-   "label": "llm"
+   "label": "agent"
   },
   {
    "source": "k:1.1:Token",
    "target": "k:1.3:usage",
+   "label": "token"
+  },
+  {
+   "source": "k:1.1:Token",
+   "target": "k:2.3:token 粗估",
+   "label": "token"
+  },
+  {
+   "source": "k:1.3:四角色",
+   "target": "k:2.3:轮（turn）",
+   "label": "user"
+  },
+  {
+   "source": "k:1.3:usage",
+   "target": "k:2.3:token 粗估",
+   "label": "token"
+  },
+  {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.3:system 常驻豁免",
+   "label": "system"
+  },
+  {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.3:摘要合并进 system",
+   "label": "system"
+  },
+  {
+   "source": "k:2.1:消息顺序",
+   "target": "k:2.3:轮（turn）",
+   "label": "user"
+  },
+  {
+   "source": "k:1.1:上下文窗口",
+   "target": "k:2.3:token 粗估",
    "label": "token"
   }
  ],
@@ -3854,14 +4253,19 @@ window.KB_DATA = {
    "num": 5,
    "date": "2026-08-09",
    "title": "2026-08-09（Tool Calling 深入 + JSON 实战"
+  },
+  {
+   "num": 6,
+   "date": "2026-08-16",
+   "title": "2026-08-16（复习 + 2.3 记忆系统"
   }
  ],
  "stats": {
   "stages": 3,
   "modules": 13,
-  "knowledge": 79,
-  "pitfalls": 37,
-  "planned": 7,
-  "related": 8
+  "knowledge": 86,
+  "pitfalls": 41,
+  "planned": 6,
+  "related": 16
  }
 };

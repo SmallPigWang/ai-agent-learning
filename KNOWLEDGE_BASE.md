@@ -1,7 +1,7 @@
 # 📚 知识点总库（KNOWLEDGE_BASE）
 
 > 按模块汇总所有已学知识点，复习时 5 分钟扫一遍。
-> 来源：`logs/day-01.md` ~ `day-05.md`；配套踩坑清单见 `PITFALLS.md`。
+> 来源：`logs/day-01.md` ~ `day-06.md`；配套踩坑清单见 `PITFALLS.md`。
 > 更新规则：每完成一个新模块，在此追加一节。
 
 ---
@@ -130,15 +130,11 @@
 | tool_call_id | 回填 tool 消息时必须带上，一一对应 |
 | 并行调用 | `for tc in tool_calls` 逐个执行+回填多条 tool 消息 |
 | Schema 设计 | type→function→name/parameters/properties 层级 |
-
-### 2.2 JSON 实战
-| 知识点 | 一句话说明 |
-|--------|-----------|
 | safe_get() | 逐层 isinstance + key in dict 检查，缺层返回 default |
 | 安检闸门模式 | 逐条件 return False，全过才 True |
 | parse_tool_arguments() | dict 直接用；字符串 try json.loads；失败返回 None |
 
-### 2.3 ReAct 循环
+### 2.2 Agent 循环手写（ReAct）
 | 知识点 | 一句话说明 |
 |--------|-----------|
 | ReAct 原理 | Reasoning + Acting 交替：思考→行动→观察→再思考→完成 |
@@ -148,10 +144,20 @@
 | AgentState | @dataclass 记录 messages/iteration/tool_calls_made/consecutive_errors |
 | 路径沙箱 | _safe_path() 限制工具只能访问白名单目录 |
 
+### 2.3 记忆系统
+| 知识点 | 一句话说明 |
+|--------|-----------|
+| 滑动窗口 | 只保留 system + 最近 N 轮，旧消息丢弃，省空间 |
+| system 常驻豁免 | system 是“宪法”，永远保留且在最前 |
+| 轮（turn） | 1 轮 = 1 user + 1 assistant，裁剪按“轮”不按“条” |
+| 摘要压缩 | 旧消息压成一段摘要，保留要点，不直接丢光 |
+| 摘要合并进 system | 把摘要拼进 system 内容，让 LLM 每轮都能看到旧要点 |
+| 混合策略 | 旧对话用摘要，新对话用窗口，兼顾省空间和记忆 |
+| token 粗估 | role + content 字符数相加，粗略判断离上下文上限多远 |
+
 ---
 
 ## 🔜 待补充模块
-- 2.3 记忆系统（滑动窗口 / 摘要压缩 / 向量存储）
 - 2.4 任务规划（Plan-and-Execute）
 - 2.5 Reflection（生成→自评→改进）
 - 2.6 安全护栏

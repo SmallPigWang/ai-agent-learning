@@ -34,19 +34,45 @@ def trim_history(messages, max_turns):
     只保留 system 消息 + 最近 max_turns 轮对话
     1 轮 = 1 条 user + 1 条 assistant
     """
-    
+    system_msg = None
+    rest = messages
+
+    # 剔除system信息单独拿出
+    if messages and messages[0].get("role") == 'system':
+        system_msg = messages[0]
+        rest = messages[1:]
+
+    # 最近的max_turn轮信息
+    recent = rest[-2 * max_turns:]
+
+    if system_msg is not None:
+        return [system_msg] + recent
+
+    return recent
+
 
 def add_turn(messages, user_text, assistant_text, max_turns):
     """
     添加一轮对话（user + assistant），并裁剪到窗口大小
     返回新的消息列表
     """
+    new_messages = messages + [
+        {"role": "user", "content": user_text},
+        {"role": "assistant", "content":assistant_text},
+    ]
+
+    return trim_history(new_messages,max_turns)
 
 def estimate_tokens(messages):
     """
     估算总 token 数: role 字段 + content 字段的字符数总和
     1 字符 ≈ 1 token（粗略估算）
     """
+    total = 0
+    for msg in messages:
+        total += len(msg["role"])
+        total += len(msg["content"])
+    return total
 
 
 if __name__ == "__main__":
