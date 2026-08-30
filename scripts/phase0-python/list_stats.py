@@ -9,24 +9,21 @@
 # 知识点: 内置函数 sum/max/min/len | 空列表卫语句 | round 保留小数 | 字典返回
 # ============================================================
 
-def stats(numbers: list):
+
+def stats(numbers: list[float]) -> dict[str, float] | None:
     """输入数字列表，返回统计字典"""
     # 列表为空
     if not numbers:
         return None
-    
+
     n = len(numbers)
     total = sum(numbers)
     max_val = max(numbers)
     min_val = min(numbers)
-    
-    avg = total / n
-    
-    return {"sum": total, "avg":round(avg,2),"max":max_val,"min":min_val}
-    
-    
 
-    
+    avg = total / n
+
+    return {"sum": total, "avg": round(avg, 2), "max": max_val, "min": min_val}
 
 
 # ============================================================

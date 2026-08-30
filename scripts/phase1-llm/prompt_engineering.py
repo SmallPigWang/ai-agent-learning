@@ -20,10 +20,13 @@
 # ============================================================
 
 import os
+import sys
+
 import requests
 from dotenv import load_dotenv
 
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     load_dotenv()
@@ -44,6 +47,7 @@ def call_ds(prompt: str, key: str) -> str:
 
 
 # ---------- 待实现 ----------
+
 
 def prompt_zero_shot(task: str, key: str) -> str:
     """
@@ -81,7 +85,9 @@ def prompt_cot(question: str, key: str) -> str:
       1. 在 question 后面追加 "让我们一步步思考。先分析问题，再给出答案。"
       2. 调 API 返回结果
     """
-    return call_ds(prompt=question+ "让我们一步步思考。先分析问题，再给出答案。", key=key)
+    return call_ds(
+        prompt=question + "让我们一步步思考。先分析问题，再给出答案。", key=key
+    )
 
 
 # ============================================================
@@ -92,7 +98,7 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: Zero-shot — 翻译
     r1 = prompt_zero_shot("把 'Good morning' 翻译成中文", key)
@@ -102,7 +108,9 @@ if __name__ == "__main__":
     # 测试2: Few-shot — 翻译（给例子锚定格式）
     examples = [("Hello", "你好"), ("Thank you", "谢谢")]
     r2 = prompt_few_shot(examples, "Goodbye", key)
-    print(f"{'PASS' if '再见' in r2 or 'bye' in r2.lower() else 'FAIL'} Few-shot -> {r2!r}")
+    print(
+        f"{'PASS' if '再见' in r2 or 'bye' in r2.lower() else 'FAIL'} Few-shot -> {r2!r}"
+    )
     all_pass = all_pass and ("再见" in r2 or "bye" in r2.lower())
 
     # 测试3: Zero-shot vs CoT — 同一个推理题
@@ -122,17 +130,18 @@ if __name__ == "__main__":
     r4 = prompt_zero_shot(
         "列出 3 种水果，用 JSON 数组返回，每个元素有 name 和 emoji 字段。"
         "只输出纯 JSON，不要用 ``` 包裹，不要加任何解释。",
-        key
+        key,
     )
     import json as _json
     import re as _re
+
     try:
         # 兜底：如果 AI 还是加了代码块，自动剥掉
         clean = _re.sub(r"^```(?:json)?\s*\n?", "", r4.strip())
         clean = _re.sub(r"\n?```\s*$", "", clean)
         parsed = _json.loads(clean)
         r4_pass = isinstance(parsed, list) and len(parsed) == 3
-    except Exception:
+    except Exception:  # noqa: BLE001
         r4_pass = False
     print(f"{'PASS' if r4_pass else 'FAIL'} JSON格式控制 -> {r4[:80]!r}...")
     all_pass = all_pass and r4_pass

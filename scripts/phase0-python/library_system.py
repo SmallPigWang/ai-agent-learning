@@ -22,8 +22,10 @@
 # 知识点: class 定义 | __init__ 构造 | self 含义 | __repr__ 魔法方法 | 布尔状态管理 | 对象列表遍历
 # ============================================================
 
+
 class Book:
     """一本书"""
+
     def __init__(self, title: str, author: str, isbn: str):
         self.title = title
         self.author = author
@@ -37,26 +39,27 @@ class Book:
 
 class Library:
     """一个图书馆"""
+
     def __init__(self, name: str):
         self.name = name
-        self.books = []
+        self.books: list[Book] = []
 
     # 添加一本书
-    def add_book(self, book: Book):
+    def add_book(self, book: Book) -> None:
         for b in self.books:
             if b.isbn == book.isbn:
-                return 
+                return
         self.books.append(book)
 
     # 移除指定的书
-    def remove_book(self, isbn: str):
+    def remove_book(self, isbn: str) -> Book | None:
         for i, b in enumerate(self.books):
             if b.isbn == isbn:
-                return self.books.pop(i) # 栈顶弹出
+                return self.books.pop(i)  # 栈顶弹出
         return None
 
     # 按照关键词找书
-    def search_by_title(self, keyword: str):
+    def search_by_title(self, keyword: str) -> list[Book]:
         result = []
         for b in self.books:
             if keyword.lower() in b.title.lower():
@@ -64,18 +67,18 @@ class Library:
         return result
 
     # 借书
-    def borrow_book(self, isbn: str):
+    def borrow_book(self, isbn: str) -> bool:
         for b in self.books:
             if b.isbn == isbn:
                 if b.available:
                     b.available = False
                     return True
                 return False
-            
+
         return False
 
     # 还书
-    def return_book(self, isbn: str):
+    def return_book(self, isbn: str) -> bool:
         for b in self.books:
             if b.isbn == isbn:
                 if not b.available:
@@ -86,18 +89,18 @@ class Library:
         return False
 
     # 图书馆状态查询
-    def get_stats(self):
+    def get_stats(self) -> dict[str, str | int]:
         avail = 0
         for b in self.books:
-            if b.available == True:
+            if b.available:
                 avail += 1
 
-        return {"馆名": self.name, 
-                "总藏书": len(self.books), 
-                "可借": avail, 
-                "已借出": len(self.books) - avail
+        return {
+            "馆名": self.name,
+            "总藏书": len(self.books),
+            "可借": avail,
+            "已借出": len(self.books) - avail,
         }
-
 
 
 # ============================================================
@@ -130,7 +133,7 @@ if __name__ == "__main__":
     # 测试2: ISBN 重复 → 不添加
     lib.add_book(Book("三体 duplicate", "未知", "978-7-5364-0001-0"))
     if lib.get_stats()["总藏书"] == 4:
-        print(f"PASS ISBN重复拒绝 -> 总藏书仍为 4")
+        print("PASS ISBN重复拒绝 -> 总藏书仍为 4")
     else:
         print(f"FAIL ISBN重复拒绝 -> 总藏书 {lib.get_stats()['总藏书']} | expected: 4")
         all_pass = False
@@ -145,15 +148,15 @@ if __name__ == "__main__":
 
     results = lib.search_by_title("西游记")
     if len(results) == 0:
-        print(f"PASS 搜索'西游记'(无结果) -> 找到 0 本")
+        print("PASS 搜索'西游记'(无结果) -> 找到 0 本")
     else:
         print(f"FAIL 搜索'西游记' -> {len(results)} 本 | expected: 0")
         all_pass = False
 
     # 测试4: 借阅
     ok = lib.borrow_book("978-7-5364-0001-0")
-    if ok == True:
-        print(f"PASS 借阅'三体' -> True")
+    if ok:
+        print("PASS 借阅'三体' -> True")
     else:
         print(f"FAIL 借阅'三体' -> {ok} | expected: True")
         all_pass = False
@@ -161,46 +164,46 @@ if __name__ == "__main__":
     # 确认已借出
     stats = lib.get_stats()
     if stats["已借出"] == 1 and stats["可借"] == 3:
-        print(f"PASS 借阅后统计 -> 可借3, 已借出1")
+        print("PASS 借阅后统计 -> 可借3, 已借出1")
     else:
         print(f"FAIL 借阅后统计 -> {stats} | expected: 可借3, 已借出1")
         all_pass = False
 
     # 测试5: 借阅不存在的书
     ok = lib.borrow_book("999-9-9999-9999-9")
-    if ok == False:
-        print(f"PASS 借阅不存在的书 -> False")
+    if not ok:
+        print("PASS 借阅不存在的书 -> False")
     else:
         print(f"FAIL 借阅不存在的书 -> {ok} | expected: False")
         all_pass = False
 
     # 测试6: 借阅已借出的书
     ok = lib.borrow_book("978-7-5364-0001-0")
-    if ok == False:
-        print(f"PASS 重复借阅已借出的书 -> False")
+    if not ok:
+        print("PASS 重复借阅已借出的书 -> False")
     else:
         print(f"FAIL 重复借阅已借出的书 -> {ok} | expected: False")
         all_pass = False
 
     # 测试7: 归还
     ok = lib.return_book("978-7-5364-0001-0")
-    if ok == True:
-        print(f"PASS 归还'三体' -> True")
+    if ok:
+        print("PASS 归还'三体' -> True")
     else:
         print(f"FAIL 归还'三体' -> {ok} | expected: True")
         all_pass = False
 
     stats = lib.get_stats()
     if stats["已借出"] == 0 and stats["可借"] == 4:
-        print(f"PASS 归还后统计 -> 可借4, 已借出0")
+        print("PASS 归还后统计 -> 可借4, 已借出0")
     else:
         print(f"FAIL 归还后统计 -> {stats} | expected: 可借4, 已借出0")
         all_pass = False
 
     # 测试8: 归还不存在的书
     ok = lib.return_book("999-9-9999-9999-9")
-    if ok == False:
-        print(f"PASS 归还不存在的书 -> False")
+    if not ok:
+        print("PASS 归还不存在的书 -> False")
     else:
         print(f"FAIL 归还不存在的书 -> {ok} | expected: False")
         all_pass = False
@@ -208,22 +211,24 @@ if __name__ == "__main__":
     # 测试9: 删除书籍
     removed = lib.remove_book("978-7-5302-0002-7")
     if isinstance(removed, Book) and removed.isbn == "978-7-5302-0002-7":
-        print(f"PASS 删除'活着' -> {repr(removed)}")
+        print(f"PASS 删除'活着' -> {removed!r}")
     else:
         print(f"FAIL 删除'活着' -> {removed} | expected: Book对象")
         all_pass = False
 
     if lib.get_stats()["总藏书"] == 3:
-        print(f"PASS 删除后总藏书 -> 3")
+        print("PASS 删除后总藏书 -> 3")
     else:
         print(f"FAIL 删除后总藏书 -> {lib.get_stats()['总藏书']} | expected: 3")
         all_pass = False
 
     # 测试10: __repr__
     if repr(b1) == "《三体》- 刘慈欣 (978-7-5364-0001-0)":
-        print(f"PASS __repr__ -> {repr(b1)}")
+        print(f"PASS __repr__ -> {b1!r}")
     else:
-        print(f"FAIL __repr__ -> {repr(b1)} | expected: 《三体》- 刘慈欣 (978-7-5364-0001-0)")
+        print(
+            f"FAIL __repr__ -> {b1!r} | expected: 《三体》- 刘慈欣 (978-7-5364-0001-0)"
+        )
         all_pass = False
 
     # 测试11: 大小写不敏感（新建一个英文书的 Library 独立测试）
@@ -231,7 +236,7 @@ if __name__ == "__main__":
     lib2.add_book(Book("Clean Code", "Robert Martin", "978-0-1323-5088-4"))
     results = lib2.search_by_title("CLEAN code")  # 混合大小写
     if len(results) == 1:
-        print(f"PASS 搜索'CLEAN code'(大小写不敏感) -> 找到 1 本")
+        print("PASS 搜索'CLEAN code'(大小写不敏感) -> 找到 1 本")
     else:
         print(f"FAIL 搜索'CLEAN code' -> {len(results)} 本 | expected: 1")
         all_pass = False

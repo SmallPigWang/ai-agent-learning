@@ -20,15 +20,16 @@
 # 知识点: ReAct 思考-行动循环 | 动态 N 轮工具调用 | 终止条件（max_iterations + consecutive_errors） | body 每次重建
 # ============================================================
 
-import os
 import json as _json
-import requests
-from dotenv import load_dotenv
-from typing import Any
+import os
+import sys
 from datetime import datetime
 
+import requests
+from dotenv import load_dotenv
 
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     load_dotenv()
@@ -37,20 +38,21 @@ def load_api_key(key_name: str) -> str | None:
 
 # ---------- 工具函数（复用 + 新增）----------
 
+
 def calculator(expression: str) -> str:
     """安全计算数学表达式"""
     allowed = set("0123456789+-*/().% ")
     if not all(c in allowed for c in expression):
-        return f"Error: 非法字符"
+        return "Error: 非法字符"
     try:
         return str(eval(expression))
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"Error: {e}"
 
 
 def get_current_time() -> str:
     """获取当前时间"""
-    return datetime.now().strftime("%H:%M:%S")
+    return datetime.now().strftime("%H:%M:%S")  # noqa: DTZ005
 
 
 def get_weather(city: str) -> str:
@@ -79,12 +81,12 @@ CALCULATOR_SCHEMA = {
             "properties": {
                 "expression": {
                     "type": "string",
-                    "description": "数学表达式，如 '1+2*3'"
+                    "description": "数学表达式，如 '1+2*3'",
                 }
             },
-            "required": ["expression"]
-        }
-    }
+            "required": ["expression"],
+        },
+    },
 }
 
 TIME_SCHEMA = {
@@ -92,8 +94,8 @@ TIME_SCHEMA = {
     "function": {
         "name": "get_current_time",
         "description": "获取当前北京时间",
-        "parameters": {"type": "object", "properties": {}}
-    }
+        "parameters": {"type": "object", "properties": {}},
+    },
 }
 
 WEATHER_SCHEMA = {
@@ -104,14 +106,11 @@ WEATHER_SCHEMA = {
         "parameters": {
             "type": "object",
             "properties": {
-                "city": {
-                    "type": "string",
-                    "description": "城市名称，如 '北京'"
-                }
+                "city": {"type": "string", "description": "城市名称，如 '北京'"}
             },
-            "required": ["city"]
-        }
-    }
+            "required": ["city"],
+        },
+    },
 }
 
 
@@ -128,8 +127,10 @@ ALL_TOOLS = [CALCULATOR_SCHEMA, TIME_SCHEMA, WEATHER_SCHEMA]
 
 # ---------- 待实现：ReAct 循环 ----------
 
-def react_loop(prompt: str, tools: list[dict], key: str,
-               max_iterations: int = 10) -> str:
+
+def react_loop(
+    prompt: str, tools: list[dict], key: str, max_iterations: int = 10
+) -> str:
     """
     多轮工具调用循环。和 parallel_tool_loop 的区别:
       - 不是调一次工具就结束，而是持续循环
@@ -169,18 +170,13 @@ def react_loop(prompt: str, tools: list[dict], key: str,
     messages = [{"role": "user", "content": prompt}]
 
     URL = "https://api.deepseek.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {key}", 
-        "Content-Type": "application/json"
-    }
-
-
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
 
     for _ in range(max_iterations):
         body = {
-            "model":"deepseek-chat",
-            "messages":messages,
-            "tools":tools,
+            "model": "deepseek-chat",
+            "messages": messages,
+            "tools": tools,
         }
         resp = requests.post(url=URL, json=body, headers=headers)
         msg = resp.json()["choices"][0]["message"]
@@ -193,15 +189,18 @@ def react_loop(prompt: str, tools: list[dict], key: str,
                 tool_name = tc["function"]["name"]
                 args = _json.loads(tc["function"]["arguments"])
                 result = TOOL_MAP[tool_name](**args)
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": tc["id"],
-                    "content": result,  
-                })
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tc["id"],
+                        "content": result,
+                    }
+                )
         else:
             return msg["content"]
-        
+
     return "Error:超过最大迭代次数"
+
 
 # ============================================================
 # 测试用例
@@ -211,7 +210,7 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: 单步任务 — 简单计算，1轮搞定
     r1 = react_loop("1+2+3+4+5等于多少？", ALL_TOOLS, key)
@@ -222,32 +221,36 @@ if __name__ == "__main__":
     # 测试2: 多步任务 ★ — 查天气→根据结果计算
     r2 = react_loop(
         "帮我查一下北京天气。如果是晴天，就算 365*24 等于多少；如果不是，就算 365*12。把天气和计算结果都告诉我。",
-        ALL_TOOLS, key
+        ALL_TOOLS,
+        key,
     )
     r2_has_weather = "北京" in r2 and ("晴" in r2 or "25" in r2)
     r2_has_calc = "8760" in r2
     r2_pass = r2_has_weather and r2_has_calc
     print(f"{'PASS' if r2_pass else 'FAIL'} react(天气+条件计算) -> {r2!r}")
-    print(f"    天气: {'OK' if r2_has_weather else 'MISS'}, 计算: {'OK' if r2_has_calc else 'MISS'}")
+    print(
+        f"    天气: {'OK' if r2_has_weather else 'MISS'}, 计算: {'OK' if r2_has_calc else 'MISS'}"
+    )
     all_pass = all_pass and r2_pass
 
     # 测试3: 多步任务 — 查两个城市天气 + 计算时间差
-    r3 = react_loop(
-        "帮我查北京和深圳的天气。然后告诉我现在几点。",
-        ALL_TOOLS, key
-    )
+    r3 = react_loop("帮我查北京和深圳的天气。然后告诉我现在几点。", ALL_TOOLS, key)
     r3_has_bj = "北京" in r3 and ("晴" in r3 or "25" in r3)
     r3_has_sz = "深圳" in r3 and ("雨" in r3 or "22" in r3)
     r3_has_time = ":" in r3 or "点" in r3
     r3_pass = r3_has_bj and r3_has_sz and r3_has_time
     print(f"{'PASS' if r3_pass else 'FAIL'} react(双天气+时间) -> {r3!r}")
-    print(f"    北京: {'OK' if r3_has_bj else 'MISS'}, 深圳: {'OK' if r3_has_sz else 'MISS'}, 时间: {'OK' if r3_has_time else 'MISS'}")
+    print(
+        f"    北京: {'OK' if r3_has_bj else 'MISS'}, 深圳: {'OK' if r3_has_sz else 'MISS'}, 时间: {'OK' if r3_has_time else 'MISS'}"
+    )
     all_pass = all_pass and r3_pass
 
     # 测试4: 闲聊 — 不需要工具，0轮直接回答
     r4 = react_loop("你好，介绍一下你自己", ALL_TOOLS, key)
     r4_pass = r4 is not None and len(r4) > 0
-    print(f"{'PASS' if r4_pass else 'FAIL'} react(闲聊) -> {r4[:60]!r}... | expected: 正常回答")
+    print(
+        f"{'PASS' if r4_pass else 'FAIL'} react(闲聊) -> {r4[:60]!r}... | expected: 正常回答"
+    )
     all_pass = all_pass and r4_pass
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

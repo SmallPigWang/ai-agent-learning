@@ -213,19 +213,20 @@
 - [x] ✅ 检验：Agent 不会无限循环，能处理工具失败
 
 ### 2.3 记忆系统（3-4天）
-- [ ] 三种记忆分工（短期/长期/工作）
+- [x] 三种记忆分工（短期/长期/工作）
 - [x] 滑动窗口 vs 摘要压缩 vs 混合策略
 - [x] 🔧 练习：实现滑动窗口记忆 📎 `sliding_window_memory.py`
 - [x] 🔧 练习：实现摘要压缩记忆 📎 `summary_compression_memory.py`
-- [ ] 🔧 练习：对比两种策略的效果
-- [ ] ✅ 检验：Agent 能跨对话记住用户偏好
+- [x] 🔧 练习：对比两种策略的效果 📎 `memory_strategy_compare.py`
+- [x] ✅ 检验：Agent 能跨对话记住用户偏好 📎 `preference_memory.py`
+- [x] 🧩 独立挑战题：多用户记忆金库 📎 `memory_vault.py`
 - [ ] ⏭️ 向量长期记忆 → 挪到 3.3 学完 Embedding 后回来升级 StudyNote
-- [ ] 📖 阅读: Anthropic《Effective context engineering for AI agents》
+- [x] 📖 阅读: Anthropic《Effective context engineering for AI agents》
 
 ### 2.4 任务规划与分解（2-3天）
 - [ ] Plan-and-Execute 模式
 - [ ] 动态重规划
-- [ ] 🔧 练习：Agent 先规划再执行
+- [ ] 🔧 练习：Agent 先规划再执行 📎 `plan_and_execute.py`
 - [ ] 🔧 练习：测试执行中受阻→自动调整
 - [ ] ✅ 检验：复杂任务能被正确分解执行
 - [ ] 📖 阅读: Anthropic《Building Effective Agents》（Plan-and-Execute 部分）

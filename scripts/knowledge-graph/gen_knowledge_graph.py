@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """知识图谱生成器 —— 力导向图形式：核心知识点节点 + 直接关联。
 
 数据源（只读，不修改）:
@@ -22,7 +21,7 @@
 
 import json
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 
@@ -34,13 +33,33 @@ VER_RE = re.compile(r"\d+\.\d+")
 CJK_RE = re.compile(r"[\u4e00-\u9fff]+")
 
 STOP = {
-    "the", "and", "for", "with", "from", "that", "this", "you", "are", "not",
-    "def", "import", "your", "can", "how", "use", "get", "set", "all", "our",
+    "the",
+    "and",
+    "for",
+    "with",
+    "from",
+    "that",
+    "this",
+    "you",
+    "are",
+    "not",
+    "def",
+    "import",
+    "your",
+    "can",
+    "how",
+    "use",
+    "get",
+    "set",
+    "all",
+    "our",
 }
 
 
-def tokenize(text, weight=1.0, cjk_weight=0.35):
-    out = defaultdict(float)
+def tokenize(
+    text: str, weight: float = 1.0, cjk_weight: float = 0.35
+) -> defaultdict[str, float]:
+    out: defaultdict[str, float] = defaultdict(float)
     for m in ID_RE.finditer(text):
         w = m.group(0).lower()
         if len(w) >= 3 and w not in STOP:
@@ -54,16 +73,16 @@ def tokenize(text, weight=1.0, cjk_weight=0.35):
     return out
 
 
-def add_tokens(dst, src):
+def add_tokens(dst: dict[str, float], src: dict[str, float]) -> None:
     for t, v in src.items():
         dst[t] = dst.get(t, 0) + v
 
 
-def overlap(a, b):
+def overlap(a: dict[str, float], b: dict[str, float]) -> float:
     return sum(min(a[t], b[t]) for t in set(a) & set(b))
 
 
-def guess_planned_code(item):
+def guess_planned_code(item: str) -> dict[str, str]:
     m = re.match(r"^阶段\s*(\d+)", item)
     if m:
         return {"stage": m.group(1)}
@@ -73,7 +92,7 @@ def guess_planned_code(item):
     return {}
 
 
-def prettify(tok):
+def prettify(tok: str) -> str:
     if tok.startswith("c:"):
         return tok[2:]
     return tok[:14]
@@ -81,8 +100,12 @@ def prettify(tok):
 
 # ---------- 解析 KNOWLEDGE_BASE.md ----------
 
-def parse_kb(text):
-    stages, modules, knowledge, planned = [], [], [], []
+
+def parse_kb(text: str) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+    stages: list[dict] = []
+    modules: list[dict] = []
+    knowledge: list[dict] = []
+    planned: list[dict] = []
     stage, module, in_pending, header_seen = None, None, False, False
     for raw in text.splitlines():
         line = raw.strip()
@@ -104,13 +127,19 @@ def parse_kb(text):
                 continue
             m = re.match(r"^(\d+\.\d+)\s+(.+)$", line[4:].strip())
             if m and stage is not None:
-                module = {"code": m.group(1), "name": m.group(2),
-                          "stage": stage["code"], "knowledge": []}
+                module = {
+                    "code": m.group(1),
+                    "name": m.group(2),
+                    "stage": stage["code"],
+                    "knowledge": [],
+                }
                 stage["modules"].append(module)
                 modules.append(module)
             continue
         if in_pending and line.startswith("- "):
-            planned.append({"text": line[2:].strip(), "code": guess_planned_code(line[2:].strip())})
+            planned.append(
+                {"text": line[2:].strip(), "code": guess_planned_code(line[2:].strip())}
+            )
             continue
         if line.startswith("|") and line.endswith("|"):
             cells = [c.strip() for c in line.strip("|").split("|")]
@@ -120,9 +149,13 @@ def parse_kb(text):
                 header_seen = "知识点" in cells[0]
                 continue
             if len(cells) == 2 and cells[0] and cells[1] and set(cells[0]) != {"-"}:
-                k = {"name": cells[0], "desc": cells[1],
-                     "module": module["code"], "stage": stage["code"],
-                     "pitfalls": []}
+                k = {
+                    "name": cells[0],
+                    "desc": cells[1],
+                    "module": module["code"],
+                    "stage": stage["code"],
+                    "pitfalls": [],
+                }
                 module["knowledge"].append(k)
                 knowledge.append(k)
     return stages, modules, knowledge, planned
@@ -130,8 +163,10 @@ def parse_kb(text):
 
 # ---------- 解析 PITFALLS.md ----------
 
-def parse_pitfalls(text):
-    pitfalls, category = [], None
+
+def parse_pitfalls(text: str) -> list[dict]:
+    pitfalls: list[dict] = []
+    category: str | None = None
     for raw in text.splitlines():
         line = raw.strip()
         if line.startswith("## "):
@@ -142,15 +177,23 @@ def parse_pitfalls(text):
             cells = [c.strip() for c in line.strip("|").split("|")]
             if len(cells) != 4 or not re.match(r"^\d+$", cells[0]):
                 continue
-            pitfalls.append({"num": int(cells[0]), "category": category,
-                             "err": cells[1], "why": cells[2], "fix": cells[3]})
+            pitfalls.append(
+                {
+                    "num": int(cells[0]),
+                    "category": category,
+                    "err": cells[1],
+                    "why": cells[2],
+                    "fix": cells[3],
+                }
+            )
     return pitfalls
 
 
 # ---------- 解析 LEARNING_TRACKER.md 的阶段进度 ----------
 
-def parse_progress(text):
-    out = {}
+
+def parse_progress(text: str) -> dict[str, int]:
+    out: dict[str, int] = {}
     for m in re.finditer(r"阶段\s*(\d+)\s*:\s*(.+?)\[.*?\]\s*(\d+)%", text):
         out[m.group(1)] = int(m.group(3))
     return out
@@ -158,23 +201,32 @@ def parse_progress(text):
 
 # ---------- 解析 logs/day-XX.md ----------
 
-def parse_days(logs_dir):
-    days = []
+
+def parse_days(logs_dir: Path) -> list[dict]:
+    days: list[dict] = []
     for f in sorted(logs_dir.glob("day-*.md")):
         m = re.match(r"day-(\d+)\.md$", f.name)
         if not m:
             continue
         text = f.read_text(encoding="utf-8")
-        first = next((l for l in text.splitlines() if l.strip().startswith("# ")), "")
+        first = next(
+            (line for line in text.splitlines() if line.strip().startswith("# ")), ""
+        )
         dm = re.search(r"(\d{4}-\d{2}-\d{2})", first)
         title = re.sub(r"^#\s*Day\s*\d+\s*[—\-–]*\s*", "", first).strip()
         title = title.strip("（）() ")
-        days.append({"num": int(m.group(1)), "date": dm.group(1) if dm else "",
-                     "title": title, "text": text})
+        days.append(
+            {
+                "num": int(m.group(1)),
+                "date": dm.group(1) if dm else "",
+                "title": title,
+                "text": text,
+            }
+        )
     return days
 
 
-def parse_checked(text):
+def parse_checked(text: str) -> defaultdict[str, str]:
     """LEARNING_TRACKER 中每个模块的已勾选行文本: {'0.1': '变量 数据类型 ...'}"""
     out = defaultdict(str)
     cur = None
@@ -192,22 +244,35 @@ def parse_checked(text):
     return out
 
 
-def name_variants(name):
+def name_variants(name: str) -> tuple[str, str, list[str], list[str], list[str]]:
     """拆出知识点名称的匹配变体：核心名 / 去虚词名 / 标识符 / 中文四字组 / 数字字母串"""
     full = name.replace("`", "")
     core = re.sub(r"[（(].*?[)）]", "", full).strip()
     compact = re.sub(r"[的了与和及、\s]", "", core)
-    ids = [t.lower() for t in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", full) if len(t) >= 3]
+    ids = [
+        t.lower() for t in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", full) if len(t) >= 3
+    ]
     grams = [full[i : i + 4] for i in range(len(full) - 3)] if len(full) >= 4 else []
     nums = [t.lower() for t in re.findall(r"\d+[A-Za-z]+\d*", full)]
     return core.lower(), compact.lower(), ids, grams, nums
 
 
-def match_name(core, compact, ids, grams, nums, text):
+def match_name(
+    core: str,
+    compact: str,
+    ids: list[str],
+    grams: list[str],
+    nums: list[str],
+    text: str,
+) -> bool:
     """名称是否出现在某段文本中：
     核心名（≥3 字，或 2 字纯中文） / 去虚词名（≥4 字） / 全部标识符 / 任一四字组 / 数字字母串
     """
-    if core and (len(core) >= 3 or (len(core) == 2 and re.search(r"[\u4e00-\u9fff]", core))) and core in text:
+    if (
+        core
+        and (len(core) >= 3 or (len(core) == 2 and re.search(r"[\u4e00-\u9fff]", core)))
+        and core in text
+    ):
         return True
     if compact and len(compact) >= 4 and compact in text:
         return True
@@ -215,12 +280,10 @@ def match_name(core, compact, ids, grams, nums, text):
         return True
     if grams and any(g in text for g in grams):
         return True
-    if nums and any(n in text for n in nums):
-        return True
-    return False
+    return bool(nums and any(n in text for n in nums))
 
 
-def desc_hits(desc, text):
+def desc_hits(desc: str, text: str) -> bool:
     """说明中的长标识符（≥5 字符）出现在文本中 → 视为学过"""
     for t in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", desc):
         if len(t) >= 5 and t.lower() in text:
@@ -228,13 +291,14 @@ def desc_hits(desc, text):
     return False
 
 
-def kid(k):
-    return "k:%s:%s" % (k["module"], k["name"])
+def kid(k: dict) -> str:
+    return f"k:{k['module']}:{k['name']}"
 
 
 # ---------- 组装图 ----------
 
-def build():
+
+def build() -> dict:
     kb = (ROOT / "KNOWLEDGE_BASE.md").read_text(encoding="utf-8")
     pf = (ROOT / "PITFALLS.md").read_text(encoding="utf-8")
     tr = (ROOT / "LEARNING_TRACKER.md").read_text(encoding="utf-8")
@@ -272,7 +336,9 @@ def build():
         shared = set(ktok[a["name"]]) & set(ktok[b["name"]])
         label = ""
         if shared:
-            label = prettify(max(shared, key=lambda t: min(ktok[a["name"]][t], ktok[b["name"]][t])))
+            label = prettify(
+                max(shared, key=lambda t: min(ktok[a["name"]][t], ktok[b["name"]][t]))
+            )
         related.append({"source": kid(a), "target": kid(b), "label": label})
 
     # 踩坑 -> 知识点 归属
@@ -316,10 +382,13 @@ def build():
     out_planned = []
     for i, pl in enumerate(planned):
         sc = pl["code"].get("stage") or (pl["code"].get("module", "")[:1])
-        out_planned.append({
-            "id": "x:%d" % i, "name": pl["text"],
-            "stage": sc if sc in stage_codes else None,
-        })
+        out_planned.append(
+            {
+                "id": f"x:{i}",
+                "name": pl["text"],
+                "stage": sc if sc in stage_codes else None,
+            }
+        )
 
     # 学习主线顺序：阶段 → 模块 → 知识点，规划项接在所属阶段之后
     path = []
@@ -337,25 +406,54 @@ def build():
     # ---- 节点 ----
     nodes = []
     for s in stages:
-        nodes.append({"id": "s:" + s["code"], "type": "stage", "name": s["name"],
-                      "code": s["code"], "progress": progress.get(s["code"])})
+        nodes.append(
+            {
+                "id": "s:" + s["code"],
+                "type": "stage",
+                "name": s["name"],
+                "code": s["code"],
+                "progress": progress.get(s["code"]),
+            }
+        )
     for m in modules:
-        nodes.append({"id": "m:" + m["code"], "type": "module",
-                      "name": m["code"] + " " + m["name"],
-                      "code": m["code"], "stage": m["stage"]})
+        nodes.append(
+            {
+                "id": "m:" + m["code"],
+                "type": "module",
+                "name": m["code"] + " " + m["name"],
+                "code": m["code"],
+                "stage": m["stage"],
+            }
+        )
     for k in knowledge:
-        nodes.append({"id": kid(k), "type": "knowledge", "name": k["name"],
-                      "desc": k["desc"], "module": k["module"], "stage": k["stage"],
-                      "pitfalls": k["pitfalls"], "learned": k["learned"], "days": k["days"]})
+        nodes.append(
+            {
+                "id": kid(k),
+                "type": "knowledge",
+                "name": k["name"],
+                "desc": k["desc"],
+                "module": k["module"],
+                "stage": k["stage"],
+                "pitfalls": k["pitfalls"],
+                "learned": k["learned"],
+                "days": k["days"],
+            }
+        )
     for pl in out_planned:
-        nodes.append({"id": pl["id"], "type": "planned", "name": pl["name"],
-                      "stage": pl["stage"]})
+        nodes.append(
+            {
+                "id": pl["id"],
+                "type": "planned",
+                "name": pl["name"],
+                "stage": pl["stage"],
+            }
+        )
 
     # ---- 边 ----
     edges = []
     edge_seen = set()
 
-    def edge(s, t, e):
+    def edge(s: str, t: str, e: str) -> None:
         key = (s, t, e)
         if key not in edge_seen:
             edge_seen.add(key)
@@ -376,29 +474,51 @@ def build():
             edge("s:" + pl["stage"], pl["id"], "planned")
 
     # 给 related 边补充 label（边字典与 related 列表对应）
-    edge_by_pair = {(e["source"], e["target"]): e for e in edges if e["type"] == "related"}
+    edge_by_pair = {
+        (e["source"], e["target"]): e for e in edges if e["type"] == "related"
+    }
     for e in related:
         key = (e["source"], e["target"])
         if key in edge_by_pair:
             edge_by_pair[key]["label"] = e["label"]
 
     return {
-        "generatedAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "generatedAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # noqa: DTZ005
         "nodes": nodes,
         "edges": edges,
-        "stages": [{"code": s["code"], "name": s["name"],
-                    "progress": progress.get(s["code"])} for s in stages],
-        "modules": [{"id": "m:" + m["code"], "code": m["code"], "name": m["name"],
-                     "stage": m["stage"],
-                     "points": [kid(k) for k in m["knowledge"]]} for m in modules],
-        "points": [{"id": kid(k), "name": k["name"], "desc": k["desc"],
-                    "module": k["module"], "stage": k["stage"],
-                    "pitfalls": k["pitfalls"], "learned": k["learned"],
-                    "days": k["days"]} for k in knowledge],
+        "stages": [
+            {"code": s["code"], "name": s["name"], "progress": progress.get(s["code"])}
+            for s in stages
+        ],
+        "modules": [
+            {
+                "id": "m:" + m["code"],
+                "code": m["code"],
+                "name": m["name"],
+                "stage": m["stage"],
+                "points": [kid(k) for k in m["knowledge"]],
+            }
+            for m in modules
+        ],
+        "points": [
+            {
+                "id": kid(k),
+                "name": k["name"],
+                "desc": k["desc"],
+                "module": k["module"],
+                "stage": k["stage"],
+                "pitfalls": k["pitfalls"],
+                "learned": k["learned"],
+                "days": k["days"],
+            }
+            for k in knowledge
+        ],
         "planned": out_planned,
         "path": path,
         "related": related,
-        "days": [{"num": d["num"], "date": d["date"], "title": d["title"]} for d in days],
+        "days": [
+            {"num": d["num"], "date": d["date"], "title": d["title"]} for d in days
+        ],
         "stats": {
             "stages": len(stages),
             "modules": len(modules),
@@ -410,7 +530,7 @@ def build():
     }
 
 
-def main():
+def main() -> None:
     data = build()
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(
@@ -419,7 +539,6 @@ def main():
     )
     print(f"✅ 已生成 {OUT.relative_to(ROOT)}")
     print(f"   统计: {data['stats']}")
-    from collections import Counter
     print(f"   节点: {dict(Counter(n['type'] for n in data['nodes']))}")
     print(f"   连线: {dict(Counter(e['type'] for e in data['edges']))}")
 

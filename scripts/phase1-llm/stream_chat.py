@@ -38,11 +38,14 @@
 
 import json
 import os
-from typing import Iterator
+import sys
+from collections.abc import Iterator
+
 import requests
 from dotenv import load_dotenv
 
 # ---------- 复用（从 message_roles.py 搬过来）----------
+
 
 def load_api_key() -> str | None:
     """从 .env 文件加载 API Key"""
@@ -51,6 +54,7 @@ def load_api_key() -> str | None:
 
 
 # ---------- 待实现 ----------
+
 
 def stream_chat(messages: list[dict], api_key: str) -> Iterator[str]:
     """
@@ -69,10 +73,7 @@ def stream_chat(messages: list[dict], api_key: str) -> Iterator[str]:
               （注意: 有的 delta 没有 content 字段，要跳过）
     """
     url = "https://api.deepseek.com/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     body = {
         "model": "deepseek-v4-flash",
         "messages": messages,
@@ -109,6 +110,7 @@ def stream_chat(messages: list[dict], api_key: str) -> Iterator[str]:
         if content:
             yield content
 
+
 # ============================================================
 # 测试用例
 # ============================================================
@@ -117,7 +119,7 @@ if __name__ == "__main__":
     key = load_api_key()
     if not key or "你的" in key:
         print("请先在 .env 文件中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: 逐字输出效果（先看效果，再验证）
     messages = [{"role": "user", "content": "用一句话介绍你自己"}]
@@ -125,7 +127,7 @@ if __name__ == "__main__":
     print("AI: ", end="", flush=True)
     for chunk in stream_chat(messages, key):
         chunks.append(chunk)
-        print(chunk, end="", flush=True)   # end="" 不换行, flush=True 立即显示
+        print(chunk, end="", flush=True)  # end="" 不换行, flush=True 立即显示
     print()
 
     # 测试2: 真的流式了吗? — 分块数 > 1 才算流式
@@ -145,7 +147,9 @@ if __name__ == "__main__":
         {"role": "assistant", "content": "你好小红！"},
     ]
     full4 = ""
-    for chunk in stream_chat(history + [{"role": "user", "content": "我叫什么？"}], key):
+    for chunk in stream_chat(
+        history + [{"role": "user", "content": "我叫什么？"}], key
+    ):
         full4 += chunk
     r4 = "小红" in full4
     print(f"{'PASS' if r4 else 'FAIL'} 多轮+流式 -> {full4!r} | expected: 含 小红")

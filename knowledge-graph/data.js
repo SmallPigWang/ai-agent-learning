@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-08-16 17:51:55",
+ "generatedAt": "2026-08-30 11:34:11",
  "nodes": [
   {
    "id": "s:0",
@@ -1025,11 +1025,6 @@ window.KB_DATA = {
    "stage": "1",
    "pitfalls": [
     {
-     "num": 13,
-     "err": "json.loads 崩溃",
-     "fix": "`text = text[6:]`"
-    },
-    {
      "num": 29,
      "err": "提示词要求 JSON 仍带代码块",
      "fix": "正则 re.sub 剥壳兜底"
@@ -1414,13 +1409,7 @@ window.KB_DATA = {
    "desc": "把摘要拼进 system 内容，让 LLM 每轮都能看到旧要点",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [
-    {
-     "num": 41,
-     "err": "新建 system 消息 role 写成 recent",
-     "fix": "固定写 `\"system\"`"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     6,
@@ -1451,6 +1440,329 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:三种记忆分工",
+   "type": "knowledge",
+   "name": "三种记忆分工",
+   "desc": "短期=对话内 messages；长期=跨对话落盘档案；工作=AgentState 任务状态",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6,
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:对比实验设计",
+   "type": "knowledge",
+   "name": "对比实验设计",
+   "desc": "控制变量（同数据同窗口）+ 固定指标（token 占用/信息保留率）+ 基线对照",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:埋事实测记忆",
+   "type": "knowledge",
+   "name": "埋事实测记忆",
+   "desc": "数据里预埋\"关键事实\"，裁剪后数还剩几条 → 记忆力变成 0~1 数字",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:回调函数注入",
+   "type": "knowledge",
+   "name": "回调函数注入",
+   "desc": "summarize 等作为参数传入，测试传离线 fake、生产传 LLM，接口不变",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:长期记忆闭环",
+   "type": "knowledge",
+   "name": "长期记忆闭环",
+   "desc": "抽取 → 入档 → 落盘 → 新对话读盘 → 注入 system",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:抽取",
+   "type": "knowledge",
+   "name": "抽取",
+   "desc": "人话（非结构化）→ 表格（结构化），长期记忆的第一环",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:规则抽取 vs LLM 抽取",
+   "type": "knowledge",
+   "name": "规则抽取 vs LLM 抽取",
+   "desc": "写死的 if 免费/死板；LLM 什么话都懂但花钱联网，接口相同时可互换",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:system 注入点",
+   "type": "knowledge",
+   "name": "system 注入点",
+   "desc": "记忆拼进 system（常驻第一条），比拼 user 消息更稳",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 41,
+     "err": "新建 system 消息 role 写成 recent",
+     "fix": "固定写 `\"system\"`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    6,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:json 落盘",
+   "type": "knowledge",
+   "name": "json 落盘",
+   "desc": "dict ↔ 文件往返：dump/load 吃文件，dumps/loads 吃字符串（d 写 l 读，带 s 换字符串）",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 13,
+     "err": "json.loads 崩溃",
+     "fix": "`text = text[6:]`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:ensure_ascii=False + indent=2",
+   "type": "knowledge",
+   "name": "ensure_ascii=False + indent=2",
+   "desc": "json 中文原样落盘 + 缩进可读",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 11,
+     "err": "找到第一条就 return False",
+     "fix": "循环结束后再 return 结果"
+    },
+    {
+     "num": 22,
+     "err": "return False 报类型不匹配",
+     "fix": "按签名返回 (False, 错误消息)"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:容错兜底",
+   "type": "knowledge",
+   "name": "容错兜底",
+   "desc": "FileNotFoundError / JSONDecodeError 都返回空档案，坏一块不崩全部",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.3:不可变更新",
+   "type": "knowledge",
+   "name": "不可变更新",
+   "desc": "dict(old) 复印后改复印件，原件留快照、无副作用",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:表驱动",
+   "type": "knowledge",
+   "name": "表驱动",
+   "desc": "(前缀, 键名) 规则卡 + 循环，加规则只加数据不改逻辑",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:startswith()",
+   "type": "knowledge",
+   "name": "startswith()",
+   "desc": "前缀判断，替代手数长度的切片比较（新规范点名）",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.3:assert 断言收窄",
+   "type": "knowledge",
+   "name": "assert 断言收窄",
+   "desc": "assert x is not None 让类型检查器确认\"此处不为 None\"，修 Pylance 报错",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 19,
+     "err": "`self.books = None` 后遍历报错",
+     "fix": "初始化为 `[]`"
+    },
+    {
+     "num": 21,
+     "err": "Pylance 类型缩窄告警",
+     "fix": "调一次存变量 `para = fn.get(...)`"
+    },
+    {
+     "num": 24,
+     "err": "Pylance 标红但运行正常",
+     "fix": "类型标注 ≠ 运行时行为，`basic` 模式减噪"
+    },
+    {
+     "num": 40,
+     "err": "摘要为空时返回 None",
+     "fix": "无旧消息时返回 `\"\"`"
+    },
+    {
+     "num": 34,
+     "err": "Pylance 自动补全不弹窗",
+     "fix": "检查 VS Code 设置"
+    }
+   ],
+   "learned": true,
+   "days": [
+    3,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:过严断言",
+   "type": "knowledge",
+   "name": "过严断言",
+   "desc": "测试只验证意图（startswith+in），不耦合与目标无关的格式细节（如全半角标点）",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:浅拷贝陷阱",
+   "type": "knowledge",
+   "name": "浅拷贝陷阱",
+   "desc": "dict(vault) 只复印外层，内层档案仍是原件——两层结构要两层都复印",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:{**d, k: v} 合并",
+   "type": "knowledge",
+   "name": "{**d, k: v} 合并",
+   "desc": "字典解包合并：老库倒进新库+替换一个键，一行完成外层复印",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:dict 保持插入顺序",
+   "type": "knowledge",
+   "name": "dict 保持插入顺序",
+   "desc": "Python 3.7+ 字典键按插入顺序存放，next(iter(d)) = 最旧的键",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:FIFO 淘汰",
+   "type": "knowledge",
+   "name": "FIFO 淘汰",
+   "desc": "容量满时踢掉最先进入的条目（LRU 缓存的雏形），覆盖不算新条目",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:del 语句",
+   "type": "knowledge",
+   "name": "del 语句",
+   "desc": "del d[key] 删除字典的键，d[k]=v 的反面",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.3:卫语句双条件",
+   "type": "knowledge",
+   "name": "卫语句双条件",
+   "desc": "user not in vault or key not in vault[user]——两种\"不用干活\"提前返回",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": [
+    5,
     4
    ]
   },
@@ -1988,6 +2300,116 @@ window.KB_DATA = {
    "type": "contain"
   },
   {
+   "source": "m:2.3",
+   "target": "k:2.3:三种记忆分工",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:对比实验设计",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:埋事实测记忆",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:回调函数注入",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:长期记忆闭环",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:抽取",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:规则抽取 vs LLM 抽取",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:system 注入点",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:json 落盘",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:ensure_ascii=False + indent=2",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:容错兜底",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:不可变更新",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:表驱动",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:startswith()",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:assert 断言收窄",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:过严断言",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:浅拷贝陷阱",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:{**d, k: v} 合并",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:dict 保持插入顺序",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:FIFO 淘汰",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:del 语句",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.3",
+   "target": "k:2.3:卫语句双条件",
+   "type": "contain"
+  },
+  {
    "source": "k:0.1:变量与数据类型",
    "target": "k:0.1:条件判断",
    "type": "path"
@@ -2414,6 +2836,116 @@ window.KB_DATA = {
   },
   {
    "source": "k:2.3:token 粗估",
+   "target": "k:2.3:三种记忆分工",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:三种记忆分工",
+   "target": "k:2.3:对比实验设计",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:对比实验设计",
+   "target": "k:2.3:埋事实测记忆",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:埋事实测记忆",
+   "target": "k:2.3:回调函数注入",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:回调函数注入",
+   "target": "k:2.3:长期记忆闭环",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:长期记忆闭环",
+   "target": "k:2.3:抽取",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:抽取",
+   "target": "k:2.3:规则抽取 vs LLM 抽取",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.3:system 注入点",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:system 注入点",
+   "target": "k:2.3:json 落盘",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:json 落盘",
+   "target": "k:2.3:ensure_ascii=False + indent=2",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:ensure_ascii=False + indent=2",
+   "target": "k:2.3:容错兜底",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:容错兜底",
+   "target": "k:2.3:不可变更新",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:不可变更新",
+   "target": "k:2.3:表驱动",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:表驱动",
+   "target": "k:2.3:startswith()",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:startswith()",
+   "target": "k:2.3:assert 断言收窄",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:assert 断言收窄",
+   "target": "k:2.3:过严断言",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:过严断言",
+   "target": "k:2.3:浅拷贝陷阱",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:浅拷贝陷阱",
+   "target": "k:2.3:{**d, k: v} 合并",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:{**d, k: v} 合并",
+   "target": "k:2.3:dict 保持插入顺序",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:dict 保持插入顺序",
+   "target": "k:2.3:FIFO 淘汰",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:FIFO 淘汰",
+   "target": "k:2.3:del 语句",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:del 语句",
+   "target": "k:2.3:卫语句双条件",
+   "type": "path"
+  },
+  {
+   "source": "k:2.3:卫语句双条件",
    "target": "x:0",
    "type": "path"
   },
@@ -2446,7 +2978,13 @@ window.KB_DATA = {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
    "type": "related",
-   "label": "deepseek"
+   "label": "claude"
+  },
+  {
+   "source": "k:2.1:parse_tool_arguments()",
+   "target": "k:2.3:json 落盘",
+   "type": "related",
+   "label": "json"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -2462,7 +3000,25 @@ window.KB_DATA = {
   },
   {
    "source": "k:2.3:system 常驻豁免",
+   "target": "k:2.3:system 注入点",
+   "type": "related",
+   "label": "system"
+  },
+  {
+   "source": "k:2.3:摘要合并进 system",
+   "target": "k:2.3:system 注入点",
+   "type": "related",
+   "label": "system"
+  },
+  {
+   "source": "k:2.3:system 常驻豁免",
    "target": "k:2.3:摘要合并进 system",
+   "type": "related",
+   "label": "system"
+  },
+  {
+   "source": "k:1.3:四角色",
+   "target": "k:2.3:system 注入点",
    "type": "related",
    "label": "system"
   },
@@ -2470,7 +3026,13 @@ window.KB_DATA = {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
    "type": "related",
-   "label": "except"
+   "label": "try"
+  },
+  {
+   "source": "k:1.6:`Recipe(**dict)`",
+   "target": "k:2.3:dict 保持插入顺序",
+   "type": "related",
+   "label": "dict"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -2489,6 +3051,12 @@ window.KB_DATA = {
    "target": "k:1.6:`Recipe(**dict)`",
    "type": "related",
    "label": "agent"
+  },
+  {
+   "source": "k:1.1:AI→ML→DL→LLM→Agent",
+   "target": "k:2.3:规则抽取 vs LLM 抽取",
+   "type": "related",
+   "label": "llm"
   },
   {
    "source": "k:1.1:Token",
@@ -2527,16 +3095,46 @@ window.KB_DATA = {
    "label": "system"
   },
   {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.3:system 注入点",
+   "type": "related",
+   "label": "system"
+  },
+  {
+   "source": "k:1.5:JSON 剥壳",
+   "target": "k:2.3:json 落盘",
+   "type": "related",
+   "label": "json"
+  },
+  {
    "source": "k:2.1:消息顺序",
    "target": "k:2.3:轮（turn）",
    "type": "related",
    "label": "user"
   },
   {
+   "source": "k:2.2:AgentState",
+   "target": "k:2.3:三种记忆分工",
+   "type": "related",
+   "label": "messages"
+  },
+  {
+   "source": "k:0.1:四种数据结构",
+   "target": "k:2.3:不可变更新",
+   "type": "related",
+   "label": "dict"
+  },
+  {
    "source": "k:1.1:上下文窗口",
    "target": "k:2.3:token 粗估",
    "type": "related",
    "label": "token"
+  },
+  {
+   "source": "k:1.3:跨轮记忆",
+   "target": "k:2.3:三种记忆分工",
+   "type": "related",
+   "label": "messages"
   },
   {
    "source": "s:2",
@@ -2759,7 +3357,29 @@ window.KB_DATA = {
     "k:2.3:摘要压缩",
     "k:2.3:摘要合并进 system",
     "k:2.3:混合策略",
-    "k:2.3:token 粗估"
+    "k:2.3:token 粗估",
+    "k:2.3:三种记忆分工",
+    "k:2.3:对比实验设计",
+    "k:2.3:埋事实测记忆",
+    "k:2.3:回调函数注入",
+    "k:2.3:长期记忆闭环",
+    "k:2.3:抽取",
+    "k:2.3:规则抽取 vs LLM 抽取",
+    "k:2.3:system 注入点",
+    "k:2.3:json 落盘",
+    "k:2.3:ensure_ascii=False + indent=2",
+    "k:2.3:容错兜底",
+    "k:2.3:不可变更新",
+    "k:2.3:表驱动",
+    "k:2.3:startswith()",
+    "k:2.3:assert 断言收窄",
+    "k:2.3:过严断言",
+    "k:2.3:浅拷贝陷阱",
+    "k:2.3:{**d, k: v} 合并",
+    "k:2.3:dict 保持插入顺序",
+    "k:2.3:FIFO 淘汰",
+    "k:2.3:del 语句",
+    "k:2.3:卫语句双条件"
    ]
   }
  ],
@@ -3616,11 +4236,6 @@ window.KB_DATA = {
    "stage": "1",
    "pitfalls": [
     {
-     "num": 13,
-     "err": "json.loads 崩溃",
-     "fix": "`text = text[6:]`"
-    },
-    {
      "num": 29,
      "err": "提示词要求 JSON 仍带代码块",
      "fix": "正则 re.sub 剥壳兜底"
@@ -3981,13 +4596,7 @@ window.KB_DATA = {
    "desc": "把摘要拼进 system 内容，让 LLM 每轮都能看到旧要点",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [
-    {
-     "num": 41,
-     "err": "新建 system 消息 role 写成 recent",
-     "fix": "固定写 `\"system\"`"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     6,
@@ -4016,6 +4625,307 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:三种记忆分工",
+   "name": "三种记忆分工",
+   "desc": "短期=对话内 messages；长期=跨对话落盘档案；工作=AgentState 任务状态",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6,
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:对比实验设计",
+   "name": "对比实验设计",
+   "desc": "控制变量（同数据同窗口）+ 固定指标（token 占用/信息保留率）+ 基线对照",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:埋事实测记忆",
+   "name": "埋事实测记忆",
+   "desc": "数据里预埋\"关键事实\"，裁剪后数还剩几条 → 记忆力变成 0~1 数字",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:回调函数注入",
+   "name": "回调函数注入",
+   "desc": "summarize 等作为参数传入，测试传离线 fake、生产传 LLM，接口不变",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:长期记忆闭环",
+   "name": "长期记忆闭环",
+   "desc": "抽取 → 入档 → 落盘 → 新对话读盘 → 注入 system",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    6
+   ]
+  },
+  {
+   "id": "k:2.3:抽取",
+   "name": "抽取",
+   "desc": "人话（非结构化）→ 表格（结构化），长期记忆的第一环",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:规则抽取 vs LLM 抽取",
+   "name": "规则抽取 vs LLM 抽取",
+   "desc": "写死的 if 免费/死板；LLM 什么话都懂但花钱联网，接口相同时可互换",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:system 注入点",
+   "name": "system 注入点",
+   "desc": "记忆拼进 system（常驻第一条），比拼 user 消息更稳",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 41,
+     "err": "新建 system 消息 role 写成 recent",
+     "fix": "固定写 `\"system\"`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    6,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:json 落盘",
+   "name": "json 落盘",
+   "desc": "dict ↔ 文件往返：dump/load 吃文件，dumps/loads 吃字符串（d 写 l 读，带 s 换字符串）",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 13,
+     "err": "json.loads 崩溃",
+     "fix": "`text = text[6:]`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:ensure_ascii=False + indent=2",
+   "name": "ensure_ascii=False + indent=2",
+   "desc": "json 中文原样落盘 + 缩进可读",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 11,
+     "err": "找到第一条就 return False",
+     "fix": "循环结束后再 return 结果"
+    },
+    {
+     "num": 22,
+     "err": "return False 报类型不匹配",
+     "fix": "按签名返回 (False, 错误消息)"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:容错兜底",
+   "name": "容错兜底",
+   "desc": "FileNotFoundError / JSONDecodeError 都返回空档案，坏一块不崩全部",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.3:不可变更新",
+   "name": "不可变更新",
+   "desc": "dict(old) 复印后改复印件，原件留快照、无副作用",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:表驱动",
+   "name": "表驱动",
+   "desc": "(前缀, 键名) 规则卡 + 循环，加规则只加数据不改逻辑",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:startswith()",
+   "name": "startswith()",
+   "desc": "前缀判断，替代手数长度的切片比较（新规范点名）",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.3:assert 断言收窄",
+   "name": "assert 断言收窄",
+   "desc": "assert x is not None 让类型检查器确认\"此处不为 None\"，修 Pylance 报错",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 19,
+     "err": "`self.books = None` 后遍历报错",
+     "fix": "初始化为 `[]`"
+    },
+    {
+     "num": 21,
+     "err": "Pylance 类型缩窄告警",
+     "fix": "调一次存变量 `para = fn.get(...)`"
+    },
+    {
+     "num": 24,
+     "err": "Pylance 标红但运行正常",
+     "fix": "类型标注 ≠ 运行时行为，`basic` 模式减噪"
+    },
+    {
+     "num": 40,
+     "err": "摘要为空时返回 None",
+     "fix": "无旧消息时返回 `\"\"`"
+    },
+    {
+     "num": 34,
+     "err": "Pylance 自动补全不弹窗",
+     "fix": "检查 VS Code 设置"
+    }
+   ],
+   "learned": true,
+   "days": [
+    3,
+    5
+   ]
+  },
+  {
+   "id": "k:2.3:过严断言",
+   "name": "过严断言",
+   "desc": "测试只验证意图（startswith+in），不耦合与目标无关的格式细节（如全半角标点）",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:浅拷贝陷阱",
+   "name": "浅拷贝陷阱",
+   "desc": "dict(vault) 只复印外层，内层档案仍是原件——两层结构要两层都复印",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:{**d, k: v} 合并",
+   "name": "{**d, k: v} 合并",
+   "desc": "字典解包合并：老库倒进新库+替换一个键，一行完成外层复印",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:dict 保持插入顺序",
+   "name": "dict 保持插入顺序",
+   "desc": "Python 3.7+ 字典键按插入顺序存放，next(iter(d)) = 最旧的键",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.3:FIFO 淘汰",
+   "name": "FIFO 淘汰",
+   "desc": "容量满时踢掉最先进入的条目（LRU 缓存的雏形），覆盖不算新条目",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.3:del 语句",
+   "name": "del 语句",
+   "desc": "del d[key] 删除字典的键，d[k]=v 的反面",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.3:卫语句双条件",
+   "name": "卫语句双条件",
+   "desc": "user not in vault or key not in vault[user]——两种\"不用干活\"提前返回",
+   "module": "2.3",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": [
+    5,
     4
    ]
   }
@@ -4139,6 +5049,28 @@ window.KB_DATA = {
   "k:2.3:摘要合并进 system",
   "k:2.3:混合策略",
   "k:2.3:token 粗估",
+  "k:2.3:三种记忆分工",
+  "k:2.3:对比实验设计",
+  "k:2.3:埋事实测记忆",
+  "k:2.3:回调函数注入",
+  "k:2.3:长期记忆闭环",
+  "k:2.3:抽取",
+  "k:2.3:规则抽取 vs LLM 抽取",
+  "k:2.3:system 注入点",
+  "k:2.3:json 落盘",
+  "k:2.3:ensure_ascii=False + indent=2",
+  "k:2.3:容错兜底",
+  "k:2.3:不可变更新",
+  "k:2.3:表驱动",
+  "k:2.3:startswith()",
+  "k:2.3:assert 断言收窄",
+  "k:2.3:过严断言",
+  "k:2.3:浅拷贝陷阱",
+  "k:2.3:{**d, k: v} 合并",
+  "k:2.3:dict 保持插入顺序",
+  "k:2.3:FIFO 淘汰",
+  "k:2.3:del 语句",
+  "k:2.3:卫语句双条件",
   "x:0",
   "x:1",
   "x:2",
@@ -4150,7 +5082,12 @@ window.KB_DATA = {
   {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
-   "label": "deepseek"
+   "label": "claude"
+  },
+  {
+   "source": "k:2.1:parse_tool_arguments()",
+   "target": "k:2.3:json 落盘",
+   "label": "json"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -4164,13 +5101,33 @@ window.KB_DATA = {
   },
   {
    "source": "k:2.3:system 常驻豁免",
+   "target": "k:2.3:system 注入点",
+   "label": "system"
+  },
+  {
+   "source": "k:2.3:摘要合并进 system",
+   "target": "k:2.3:system 注入点",
+   "label": "system"
+  },
+  {
+   "source": "k:2.3:system 常驻豁免",
    "target": "k:2.3:摘要合并进 system",
+   "label": "system"
+  },
+  {
+   "source": "k:1.3:四角色",
+   "target": "k:2.3:system 注入点",
    "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
-   "label": "except"
+   "label": "try"
+  },
+  {
+   "source": "k:1.6:`Recipe(**dict)`",
+   "target": "k:2.3:dict 保持插入顺序",
+   "label": "dict"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -4186,6 +5143,11 @@ window.KB_DATA = {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
    "label": "agent"
+  },
+  {
+   "source": "k:1.1:AI→ML→DL→LLM→Agent",
+   "target": "k:2.3:规则抽取 vs LLM 抽取",
+   "label": "llm"
   },
   {
    "source": "k:1.1:Token",
@@ -4218,14 +5180,39 @@ window.KB_DATA = {
    "label": "system"
   },
   {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.3:system 注入点",
+   "label": "system"
+  },
+  {
+   "source": "k:1.5:JSON 剥壳",
+   "target": "k:2.3:json 落盘",
+   "label": "json"
+  },
+  {
    "source": "k:2.1:消息顺序",
    "target": "k:2.3:轮（turn）",
    "label": "user"
   },
   {
+   "source": "k:2.2:AgentState",
+   "target": "k:2.3:三种记忆分工",
+   "label": "messages"
+  },
+  {
+   "source": "k:0.1:四种数据结构",
+   "target": "k:2.3:不可变更新",
+   "label": "dict"
+  },
+  {
    "source": "k:1.1:上下文窗口",
    "target": "k:2.3:token 粗估",
    "label": "token"
+  },
+  {
+   "source": "k:1.3:跨轮记忆",
+   "target": "k:2.3:三种记忆分工",
+   "label": "messages"
   }
  ],
  "days": [
@@ -4263,9 +5250,9 @@ window.KB_DATA = {
  "stats": {
   "stages": 3,
   "modules": 13,
-  "knowledge": 86,
+  "knowledge": 108,
   "pitfalls": 41,
   "planned": 6,
-  "related": 16
+  "related": 27
  }
 };

@@ -16,14 +16,16 @@
 # 知识点: 工具=函数+JSON Schema | tool_use→execute→tool_result 循环 | 消息回填顺序 | tool_call_id
 # ============================================================
 
-import os
 import json as _json
-import requests
-from dotenv import load_dotenv
-from typing import Any
+import os
+import sys
 from datetime import datetime
 
+import requests
+from dotenv import load_dotenv
+
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     load_dotenv()
@@ -31,6 +33,7 @@ def load_api_key(key_name: str) -> str | None:
 
 
 # ---------- 待实现：工具函数 ----------
+
 
 def calculator(expression: str) -> str:
     """
@@ -40,11 +43,11 @@ def calculator(expression: str) -> str:
     # 安全防护: 只允许数字、运算符、空格、小数点
     allowed = set("0123456789+-*/().% ")
     if not all(c in allowed for c in expression):
-        return f"Error: 非法字符"
+        return "Error: 非法字符"
     try:
         result = eval(expression)
         return str(result)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"Error: {e}"
 
 
@@ -53,7 +56,7 @@ def get_current_time() -> str:
     获取当前时间（模拟，实际可用 datetime）
     提示: from datetime import datetime → datetime.now().strftime(...)
     """
-    return datetime.now().strftime("%H:%M:%S")
+    return datetime.now().strftime("%H:%M:%S")  # noqa: DTZ005
 
 
 # ---------- 待实现：JSON Schema ----------
@@ -68,12 +71,12 @@ CALCULATOR_SCHEMA = {
             "properties": {
                 "expression": {
                     "type": "string",
-                    "description": "数学表达式，如 '1+2*3'"
+                    "description": "数学表达式，如 '1+2*3'",
                 }
             },
-            "required": ["expression"]
-        }
-    }
+            "required": ["expression"],
+        },
+    },
 }
 
 # TODO: 参照 CALCULATOR_SCHEMA 写 TIME_SCHEMA
@@ -86,8 +89,8 @@ TIME_SCHEMA = {
         "parameters": {
             "type": "object",
             "properties": {},
-        }
-    }
+        },
+    },
 }
 
 
@@ -95,11 +98,12 @@ TIME_SCHEMA = {
 
 TOOL_MAP = {
     "calculator": calculator,
-    "get_current_time": get_current_time,  
+    "get_current_time": get_current_time,
 }
 
 
 # ---------- 待实现：工具调用循环 ----------
+
 
 def tool_loop(prompt: str, tools: list[dict], key: str) -> str:
     """
@@ -121,15 +125,12 @@ def tool_loop(prompt: str, tools: list[dict], key: str) -> str:
     """
     messages = [{"role": "user", "content": prompt}]
     body = {
-        "model":"deepseek-chat",
-        "messages":messages,
-        "tools":tools,
+        "model": "deepseek-chat",
+        "messages": messages,
+        "tools": tools,
     }
     URL = "https://api.deepseek.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {key}", 
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
 
     resp = requests.post(url=URL, json=body, headers=headers)
     msg = resp.json()["choices"][0]["message"]
@@ -146,11 +147,13 @@ def tool_loop(prompt: str, tools: list[dict], key: str) -> str:
 
     # 回填消息
     messages.append(msg)
-    messages.append({
-        "role": "tool",
-        "tool_call_id": tc["id"],
-        "content": result, 
-    })
+    messages.append(
+        {
+            "role": "tool",
+            "tool_call_id": tc["id"],
+            "content": result,
+        }
+    )
 
     # 第二次API调用
     body2 = {
@@ -161,9 +164,6 @@ def tool_loop(prompt: str, tools: list[dict], key: str) -> str:
     return resp2.json()["choices"][0]["message"]["content"]
 
 
-
-
-
 # ============================================================
 # 测试用例
 # ============================================================
@@ -172,46 +172,60 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: calculator 工具本身
     r1 = calculator("2+3*4")
-    print(f"{'PASS' if r1 == '14' else 'FAIL'} calculator(2+3*4) -> {r1} | expected: 14")
+    print(
+        f"{'PASS' if r1 == '14' else 'FAIL'} calculator(2+3*4) -> {r1} | expected: 14"
+    )
     all_pass = all_pass and r1 == "14"
 
     # 测试2: calculator 安全防护
     r2 = calculator("__import__('os').system('dir')")
-    print(f"{'PASS' if 'Error' in r2 else 'FAIL'} calculator(危险输入) -> {r2} | expected: Error")
+    print(
+        f"{'PASS' if 'Error' in r2 else 'FAIL'} calculator(危险输入) -> {r2} | expected: Error"
+    )
     all_pass = all_pass and "Error" in r2
 
     # 测试3: tool_loop — LLM 自动调 calculator
     r3 = tool_loop("1+2+3+4+5等于多少？", [CALCULATOR_SCHEMA], key)
     r3_pass = "15" in r3
-    print(f"{'PASS' if r3_pass else 'FAIL'} tool_loop(1+2+3+4+5) -> {r3!r} | expected: 含 15")
+    print(
+        f"{'PASS' if r3_pass else 'FAIL'} tool_loop(1+2+3+4+5) -> {r3!r} | expected: 含 15"
+    )
     all_pass = all_pass and r3_pass
 
     # 测试4: tool_loop — 不需要工具的问题
     r4 = tool_loop("你好，用一句话介绍你自己", [CALCULATOR_SCHEMA], key)
     r4_pass = r4 and "calculator" not in r4.lower()[:50]
-    print(f"{'PASS' if r4_pass else 'FAIL'} tool_loop(闲聊) -> {r4[:60]!r}... | expected: 不调工具直接回答")
+    print(
+        f"{'PASS' if r4_pass else 'FAIL'} tool_loop(闲聊) -> {r4[:60]!r}... | expected: 不调工具直接回答"
+    )
     all_pass = all_pass and r4_pass
 
     # 测试5: tool_loop — 单工具：问时间→自动调 get_current_time
     r5 = tool_loop("现在北京时间几点？", [TIME_SCHEMA], key)
     r5_pass = ":" in r5
-    print(f"{'PASS' if r5_pass else 'FAIL'} tool_loop(问时间, 单工具) -> {r5!r} | expected: 含时间")
+    print(
+        f"{'PASS' if r5_pass else 'FAIL'} tool_loop(问时间, 单工具) -> {r5!r} | expected: 含时间"
+    )
     all_pass = all_pass and r5_pass
 
     # 测试6: tool_loop — 双工具：问数学→LLM 应选 calculator 而非 get_current_time
     r6 = tool_loop("帮我算 100*50", [CALCULATOR_SCHEMA, TIME_SCHEMA], key)
     r6_pass = "5000" in r6
-    print(f"{'PASS' if r6_pass else 'FAIL'} tool_loop(算100*50, 双工具) -> {r6!r} | expected: 含5000")
+    print(
+        f"{'PASS' if r6_pass else 'FAIL'} tool_loop(算100*50, 双工具) -> {r6!r} | expected: 含5000"
+    )
     all_pass = all_pass and r6_pass
 
     # 测试7: tool_loop — 双工具：问时间→LLM 应选 get_current_time 而非 calculator
     r7 = tool_loop("现在几点了？", [CALCULATOR_SCHEMA, TIME_SCHEMA], key)
     r7_pass = ":" in r7 or "点" in r7
-    print(f"{'PASS' if r7_pass else 'FAIL'} tool_loop(问时间, 双工具) -> {r7!r} | expected: 含时间")
+    print(
+        f"{'PASS' if r7_pass else 'FAIL'} tool_loop(问时间, 双工具) -> {r7!r} | expected: 含时间"
+    )
     all_pass = all_pass and r7_pass
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

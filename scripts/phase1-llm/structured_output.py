@@ -22,24 +22,28 @@
 # 知识点: Pydantic BaseModel | Field(description) | Recipe(**dict) 解包 | LLM→JSON→类型安全对象（Agent 底座）
 # ============================================================
 
-import os
 import json as _json
+import os
 import re as _re
+import sys
+
 import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
-
 # ---------- Schema 定义 ----------
+
 
 class Ingredient(BaseModel):
     """食材"""
+
     name: str = Field(description="食材名称")
     amount: str = Field(description="用量，如 '200g'、'2个'")
 
 
 class Recipe(BaseModel):
     """菜谱"""
+
     dish_name: str = Field(description="菜名")
     cooking_time: str = Field(description="烹饪时间，如 '30分钟'")
     difficulty: str = Field(description="难度: 简单/中等/困难")
@@ -48,6 +52,7 @@ class Recipe(BaseModel):
 
 
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     load_dotenv()
@@ -67,6 +72,7 @@ def call_ds(prompt: str, key: str, system: str = "") -> str:
 
 
 # ---------- 待实现 ----------
+
 
 def generate_recipe(dish: str, key: str) -> Recipe | None:
     """
@@ -110,8 +116,6 @@ def generate_recipe(dish: str, key: str) -> Recipe | None:
     return Recipe(**data)
 
 
-
-
 # ============================================================
 # 测试用例
 # ============================================================
@@ -120,7 +124,7 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: 生成菜谱 → Pydantic 校验通过
     recipe = generate_recipe("番茄炒蛋", key)
@@ -130,32 +134,42 @@ if __name__ == "__main__":
 
     if recipe:
         # 测试2: 字段类型校验
-        r2_pass = (isinstance(recipe.dish_name, str) and
-                   isinstance(recipe.cooking_time, str) and
-                   isinstance(recipe.difficulty, str) and
-                   isinstance(recipe.ingredients, list) and
-                   isinstance(recipe.steps, list))
-        print(f"{'PASS' if r2_pass else 'FAIL'} 字段类型 -> dish_name:{type(recipe.dish_name).__name__} "
-              f"ingredients:[{len(recipe.ingredients)}] steps:[{len(recipe.steps)}]")
+        r2_pass = (
+            isinstance(recipe.dish_name, str)
+            and isinstance(recipe.cooking_time, str)
+            and isinstance(recipe.difficulty, str)
+            and isinstance(recipe.ingredients, list)
+            and isinstance(recipe.steps, list)
+        )
+        print(
+            f"{'PASS' if r2_pass else 'FAIL'} 字段类型 -> dish_name:{type(recipe.dish_name).__name__} "
+            f"ingredients:[{len(recipe.ingredients)}] steps:[{len(recipe.steps)}]"
+        )
         all_pass = all_pass and r2_pass
 
         # 测试3: 第一个食材有 name 和 amount
         if recipe.ingredients:
             ing = recipe.ingredients[0]
             r3_pass = hasattr(ing, "name") and hasattr(ing, "amount")
-            print(f"{'PASS' if r3_pass else 'FAIL'} Ingredient字段 -> name={ing.name!r} amount={ing.amount!r}")
+            print(
+                f"{'PASS' if r3_pass else 'FAIL'} Ingredient字段 -> name={ing.name!r} amount={ing.amount!r}"
+            )
             all_pass = all_pass and r3_pass
 
         # 测试4: 必填字段不为空
-        r4_pass = all([
-            recipe.dish_name,
-            recipe.cooking_time,
-            recipe.difficulty in ("简单", "中等", "困难"),
-            len(recipe.ingredients) >= 2,
-            len(recipe.steps) >= 2,
-        ])
-        print(f"{'PASS' if r4_pass else 'FAIL'} 内容完整 -> "
-              f"难度={recipe.difficulty} 食材数={len(recipe.ingredients)} 步骤数={len(recipe.steps)}")
+        r4_pass = all(
+            [
+                recipe.dish_name,
+                recipe.cooking_time,
+                recipe.difficulty in ("简单", "中等", "困难"),
+                len(recipe.ingredients) >= 2,
+                len(recipe.steps) >= 2,
+            ]
+        )
+        print(
+            f"{'PASS' if r4_pass else 'FAIL'} 内容完整 -> "
+            f"难度={recipe.difficulty} 食材数={len(recipe.ingredients)} 步骤数={len(recipe.steps)}"
+        )
         all_pass = all_pass and r4_pass
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

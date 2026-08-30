@@ -30,14 +30,16 @@
 # ============================================================
 
 import os
-from typing import Optional
+import sys
+
 from dotenv import load_dotenv
 
 # ---------- 待实现 ----------
 
-def load_api_key() -> Optional[str]:
+
+def load_api_key() -> str | None:
     """从 .env 文件加载 DeepSeek API Key 并返回"""
-    load_dotenv() # 加载env内容
+    load_dotenv()  # 加载env内容
     return os.getenv("DEEPSEEK_API_KEY")
 
 
@@ -52,14 +54,11 @@ def call_deepseek(prompt: str, api_key: str) -> str:
       5. return response.json()["choices"][0]["message"]["content"]
     """
     url = "https://api.deepseek.com/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     body = {
         "model": "deepseek-chat",
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 1024
+        "max_tokens": 1024,
     }
     response = requests.post(url, headers=headers, json=body)
     return response.json()["choices"][0]["message"]["content"]
@@ -70,6 +69,7 @@ def call_deepseek(prompt: str, api_key: str) -> str:
 # ============================================================
 if __name__ == "__main__":
     import requests
+
     all_pass = True
 
     # 测试1: API Key 加载
@@ -78,15 +78,15 @@ if __name__ == "__main__":
         masked = key[:8] + "..." + key[-4:]
         print(f"PASS API Key加载 -> {masked}")
     else:
-        print(f"FAIL API Key未配置 -> 请编辑 .env 文件填入真实 DeepSeek Key")
-        exit(1)
+        print("FAIL API Key未配置 -> 请编辑 .env 文件填入真实 DeepSeek Key")
+        sys.exit(1)
 
     # 测试2: 模型连接性
     response = call_deepseek("你好，请用一句话介绍你自己", key)
     if response and len(response) > 5:
         print(f"PASS 模型连接 -> {response}")
     else:
-        print(f"FAIL 模型连接 -> 返回为空或太短: {repr(response)}")
+        print(f"FAIL 模型连接 -> 返回为空或太短: {response!r}")
         all_pass = False
 
     # 测试3: 复杂问题
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     if response2 and "2" in response2:
         print(f"PASS 复杂问题 -> {response2}")
     else:
-        print(f"FAIL 复杂问题 -> {repr(response2)}")
+        print(f"FAIL 复杂问题 -> {response2!r}")
         all_pass = False
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

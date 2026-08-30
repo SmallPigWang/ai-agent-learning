@@ -14,10 +14,13 @@
 # ============================================================
 
 import os
+import sys
+
 import requests
 from dotenv import load_dotenv
 
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     load_dotenv()
@@ -38,6 +41,7 @@ def call_ds(prompt: str, key: str, system: str = "") -> str:
 
 
 # ---------- 待实现 ----------
+
 
 def xml_translate(text: str, source: str, target: str, key: str) -> str:
     """
@@ -98,21 +102,21 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: XML 翻译 — 中译英
-    r1 = xml_translate("今天天气真好，我们出去玩吧！",
-                       source="中文", target="英文", key=key)
+    r1 = xml_translate(
+        "今天天气真好，我们出去玩吧！", source="中文", target="英文", key=key
+    )
     # 译文应该不包含中文字
-    has_chinese = any('一' <= c <= '鿿' for c in r1)
+    has_chinese = any("一" <= c <= "鿿" for c in r1)
     r1_pass = r1 and not has_chinese
     print(f"{'PASS' if r1_pass else 'FAIL'} XML翻译 -> {r1!r}")
     print(f"  {'✅ 纯译文' if not has_chinese else '❌ 混入中文'}")
     all_pass = all_pass and r1_pass
 
     # 测试2: XML 翻译 — 语气保留（感叹号保留）
-    r2 = xml_translate("救命啊！帮帮我！",
-                       source="中文", target="英文", key=key)
+    r2 = xml_translate("救命啊！帮帮我！", source="中文", target="英文", key=key)
     r2_pass = "！" not in r2 and ("!" in r2 or "help" in r2.lower())
     print(f"{'PASS' if r2_pass else 'FAIL'} XML翻译(语气) -> {r2!r}")
     all_pass = all_pass and r2_pass

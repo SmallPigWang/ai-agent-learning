@@ -19,10 +19,13 @@
 # ============================================================
 
 import os
+import sys
+
 import requests
 from dotenv import load_dotenv
 
 # ---------- 复用（从 first_api_call.py 搬过来）----------
+
 
 def load_api_key() -> str | None:
     """从 .env 文件加载 API Key"""
@@ -36,22 +39,16 @@ def chat_once(messages: list[dict], api_key: str) -> str:
     body 里只改 messages 字段，其他和 first_api_call.py 一样
     """
     url = "https://api.deepseek.com/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-    body = {
-        "model": "deepseek-chat",
-        "messages": messages,
-        "max_tokens": 1024
-    }
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    body = {"model": "deepseek-chat", "messages": messages, "max_tokens": 1024}
     response = requests.post(url, headers=headers, json=body)
     return response.json()["choices"][0]["message"]["content"]
 
 
 # ---------- 待实现 ----------
 
-def chat_loop(api_key: str):
+
+def chat_loop(api_key: str) -> None:
     """
     命令行多轮对话
     流程:
@@ -64,7 +61,7 @@ def chat_loop(api_key: str):
          e. 打印回复
          f. 把 {"role": "assistant", "content": 回复} append 到 messages
     """
-    messages = []
+    messages: list[dict] = []
     while True:
         user_input = input("You: ")
         if user_input == "quit":
@@ -74,6 +71,7 @@ def chat_loop(api_key: str):
         print(f"AI: {reply}")
         messages.append({"role": "assistant", "content": reply})
 
+
 # ============================================================
 # 测试用例
 # ============================================================
@@ -81,7 +79,7 @@ if __name__ == "__main__":
     key = load_api_key()
     if not key or "你的" in key:
         print("请先在 .env 文件中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 基础测试: 手动构造 messages 验证多轮记忆
     messages = []

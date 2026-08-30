@@ -20,7 +20,6 @@
 import json as _json
 from typing import Any
 
-
 # ============================================================
 # 任务1: safe_get() — 安全深层取值
 #
@@ -35,22 +34,22 @@ from typing import Any
 #   safe_get(data, "a", "b") → {"c": 42}  (非 dict 也正确返回)
 # ============================================================
 
+
 def safe_get(data: Any, *keys: str, default: Any = None) -> Any:
     """
     沿 *keys 路径逐层取值，中间任何一层失败返回 default。
     提示: 用 for 循环逐层 data = data.get(key)，用 try/except 兜底
     """
     for key in keys:
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return default
-        
+
         if key in data:
             data = data.get(key)
         else:
             return default
 
     return data
-
 
 
 # ============================================================
@@ -68,7 +67,8 @@ def safe_get(data: Any, *keys: str, default: Any = None) -> Any:
 # 提示: 安检闸门模式——逐条件查，不满足立即 return (False, "原因")
 # ============================================================
 
-def validate_tool_schema(schema: dict) -> tuple:
+
+def validate_tool_schema(schema: dict) -> tuple[bool, str]:
     """
     返回 (True, "OK") 或 (False, "具体错误描述")
     提示: schema.get("type") == "function" 开头
@@ -77,7 +77,7 @@ def validate_tool_schema(schema: dict) -> tuple:
         return False, "缺少 type 字段或 type 不是 function"
 
     fn = schema.get("function")
-    if not isinstance(fn,dict):
+    if not isinstance(fn, dict):
         return False, "function 必须是字典"
 
     if not isinstance(fn.get("name"), str):
@@ -87,16 +87,16 @@ def validate_tool_schema(schema: dict) -> tuple:
         return False, "缺少parameters字段"
 
     para = fn.get("parameters")
-    if not isinstance(para,dict):
-        return False,"parameters不是字典"
-    
+    if not isinstance(para, dict):
+        return False, "parameters不是字典"
+
     if para.get("type") != "object":
         return False, "parameters缺少 type:object"
 
-    if not isinstance(para.get("properties"),dict):
-        return False, "parameters缺少properties字段" 
+    if not isinstance(para.get("properties"), dict):
+        return False, "parameters缺少properties字段"
 
-    return True, "OK!"   
+    return True, "OK!"
 
 
 # ============================================================
@@ -116,6 +116,7 @@ def validate_tool_schema(schema: dict) -> tuple:
 # 提示: 参照你在 tool_calling.py 里拼的 messages 结构。
 # ============================================================
 
+
 def build_messages(system_prompt: str, user_content: str) -> list[dict]:
     """
     构造包含 system + user 的标准 messages 列表
@@ -125,7 +126,6 @@ def build_messages(system_prompt: str, user_content: str) -> list[dict]:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_content},
     ]
-    
 
 
 # ============================================================
@@ -141,6 +141,7 @@ def build_messages(system_prompt: str, user_content: str) -> list[dict]:
 #   - 已经是 dict → 直接返回
 # ============================================================
 
+
 def parse_tool_arguments(arguments: Any) -> dict | None:
     """
     安全解析工具参数，解析失败返回 None 而非抛异常
@@ -154,7 +155,7 @@ def parse_tool_arguments(arguments: Any) -> dict | None:
 
     try:
         return _json.loads(arguments)
-    except:
+    except (ValueError, TypeError):
         return None
 
 
@@ -171,16 +172,22 @@ if __name__ == "__main__":
     all_pass = all_pass and r1 == 42
 
     r2 = safe_get(data, "a", "x", "y")
-    print(f"{'PASS' if r2 is None else 'FAIL'} safe_get(缺失路径) → {r2!r} | expected: None")
+    print(
+        f"{'PASS' if r2 is None else 'FAIL'} safe_get(缺失路径) → {r2!r} | expected: None"
+    )
     all_pass = all_pass and r2 is None
 
     r3 = safe_get(data, "a", "x", "y", default="N/A")
-    print(f"{'PASS' if r3 == 'N/A' else 'FAIL'} safe_get(自定义默认值) → {r3!r} | expected: N/A")
+    print(
+        f"{'PASS' if r3 == 'N/A' else 'FAIL'} safe_get(自定义默认值) → {r3!r} | expected: N/A"
+    )
     all_pass = all_pass and r3 == "N/A"
 
     expected_r4 = {"c": 42}
     r4 = safe_get(data, "a", "b")
-    print(f"{'PASS' if r4 == expected_r4 else 'FAIL'} safe_get(中间层) → {r4!r} | expected: {expected_r4}")
+    print(
+        f"{'PASS' if r4 == expected_r4 else 'FAIL'} safe_get(中间层) → {r4!r} | expected: {expected_r4}"
+    )
     all_pass = all_pass and r4 == expected_r4
 
     # --- 测试 validate_tool_schema ---
@@ -192,66 +199,88 @@ if __name__ == "__main__":
             "parameters": {
                 "type": "object",
                 "properties": {"expression": {"type": "string"}},
-                "required": ["expression"]
-            }
-        }
+                "required": ["expression"],
+            },
+        },
     }
     ok, err = validate_tool_schema(valid_schema)
     print(f"{'PASS' if ok else 'FAIL'} validate(合法Schema) → {err!r} | expected: True")
     all_pass = all_pass and ok
 
-    bad_no_type = {"function": {"name": "f", "parameters": {"type": "object", "properties": {}}}}
+    bad_no_type = {
+        "function": {"name": "f", "parameters": {"type": "object", "properties": {}}}
+    }
     ok, err = validate_tool_schema(bad_no_type)
-    print(f"{'PASS' if not ok else 'FAIL'} validate(缺type) → {err!r} | expected: False")
+    print(
+        f"{'PASS' if not ok else 'FAIL'} validate(缺type) → {err!r} | expected: False"
+    )
     all_pass = all_pass and not ok
 
     bad_no_name = {
         "type": "function",
-        "function": {"parameters": {"type": "object", "properties": {}}}
+        "function": {"parameters": {"type": "object", "properties": {}}},
     }
     ok, err = validate_tool_schema(bad_no_name)
-    print(f"{'PASS' if not ok else 'FAIL'} validate(缺name) → {err!r} | expected: False")
+    print(
+        f"{'PASS' if not ok else 'FAIL'} validate(缺name) → {err!r} | expected: False"
+    )
     all_pass = all_pass and not ok
 
     bad_params_no_type = {
         "type": "function",
-        "function": {"name": "f", "parameters": {"properties": {}}}
+        "function": {"name": "f", "parameters": {"properties": {}}},
     }
     ok, err = validate_tool_schema(bad_params_no_type)
-    print(f"{'PASS' if not ok else 'FAIL'} validate(parameters缺type) → {err!r} | expected: False")
+    print(
+        f"{'PASS' if not ok else 'FAIL'} validate(parameters缺type) → {err!r} | expected: False"
+    )
     all_pass = all_pass and not ok
 
     # --- 测试 build_messages ---
     msgs = build_messages("你是翻译官", "hello")
     r9 = len(msgs) == 2
-    print(f"{'PASS' if r9 else 'FAIL'} build_messages(长度=2) → {len(msgs)} | expected: 2")
+    print(
+        f"{'PASS' if r9 else 'FAIL'} build_messages(长度=2) → {len(msgs)} | expected: 2"
+    )
     all_pass = all_pass and r9
 
     r10 = msgs[0] == {"role": "system", "content": "你是翻译官"}
-    print(f"{'PASS' if r10 else 'FAIL'} build_messages(system) → {msgs[0]!r} | expected: system消息")
+    print(
+        f"{'PASS' if r10 else 'FAIL'} build_messages(system) → {msgs[0]!r} | expected: system消息"
+    )
     all_pass = all_pass and r10
 
     r11 = msgs[1] == {"role": "user", "content": "hello"}
-    print(f"{'PASS' if r11 else 'FAIL'} build_messages(user) → {msgs[1]!r} | expected: user消息")
+    print(
+        f"{'PASS' if r11 else 'FAIL'} build_messages(user) → {msgs[1]!r} | expected: user消息"
+    )
     all_pass = all_pass and r11
 
     # --- 测试 parse_tool_arguments ---
     expected_r12 = {"expression": "1+2"}
     r12 = parse_tool_arguments('{"expression": "1+2"}')
-    print(f"{'PASS' if r12 == expected_r12 else 'FAIL'} parse(合法JSON) → {r12!r} | expected: {expected_r12}")
+    print(
+        f"{'PASS' if r12 == expected_r12 else 'FAIL'} parse(合法JSON) → {r12!r} | expected: {expected_r12}"
+    )
     all_pass = all_pass and r12 == expected_r12
 
     r13 = parse_tool_arguments("{这不是JSON}")
-    print(f"{'PASS' if r13 is None else 'FAIL'} parse(非法JSON) → {r13!r} | expected: None")
+    print(
+        f"{'PASS' if r13 is None else 'FAIL'} parse(非法JSON) → {r13!r} | expected: None"
+    )
     all_pass = all_pass and r13 is None
 
     r14 = parse_tool_arguments("")
-    print(f"{'PASS' if r14 is None else 'FAIL'} parse(空字符串) → {r14!r} | expected: None")
+    print(
+        f"{'PASS' if r14 is None else 'FAIL'} parse(空字符串) → {r14!r} | expected: None"
+    )
     all_pass = all_pass and r14 is None
 
     expected_r15 = {"already": "dict"}
     r15 = parse_tool_arguments({"already": "dict"})
-    print(f"{'PASS' if r15 == expected_r15 else 'FAIL'} parse(已是dict) → {r15!r} | expected: {expected_r15}")
+    print(
+        f"{'PASS' if r15 == expected_r15 else 'FAIL'} parse(已是dict) → {r15!r} | expected: {expected_r15}"
+    )
     all_pass = all_pass and r15 == expected_r15
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

@@ -30,32 +30,33 @@
 # 知识点: 摘要压缩策略 | 旧消息→摘要 | 摘要合并进 system | 滑动窗口+摘要混合策略
 # ============================================================
 
-def summarize_old_messages(old_messages):
+
+def summarize_old_messages(old_messages: list[dict]) -> str:
     """
     把旧消息列表压缩成摘要字符串
     格式: "user:内容 | assistant:内容 | ..."
     没有消息返回 ""
     """
-    parts = []
+    parts: list[str] = []
     for msg in old_messages:
         role = msg["role"]
         content = msg["content"]
         parts.append(role + ":" + content)
 
-    return ' | '.join(parts)
+    return " | ".join(parts)
 
 
-def compress_memory(messages, max_turns):
+def compress_memory(messages: list[dict], max_turns: int) -> tuple[str, list[dict]]:
     """
     返回 (summary, recent_messages)
     - system 如果有，保留在 recent_messages 最前面
     - 超过最近 max_turns 轮的旧消息生成 summary
     """
-    system_msg = None
+    system_msg: dict | None = None
     rest = messages
 
     # 剔除system信息单独拿出
-    if messages and messages[0].get("role") == 'system':
+    if messages and messages[0].get("role") == "system":
         system_msg = messages[0]
         rest = messages[1:]
 
@@ -67,8 +68,8 @@ def compress_memory(messages, max_turns):
         return "", rest
 
     # 窗口保留信息条数
-    old = rest[:len(rest) - keep_count]
-    recent = rest[len(rest) - keep_count:]
+    old = rest[: len(rest) - keep_count]
+    recent = rest[len(rest) - keep_count :]
 
     # 摘要生成
     summary = summarize_old_messages(old_messages=old)
@@ -79,8 +80,7 @@ def compress_memory(messages, max_turns):
     return summary, recent
 
 
-
-def build_context(summary, recent_messages):
+def build_context(summary: str, recent_messages: list[dict]) -> list[dict]:
     """
     把摘要和最近窗口拼成可发送给 LLM 的 messages
     摘要优先合并进已有 system，没有 system 则新增 system
@@ -129,7 +129,9 @@ if __name__ == "__main__":
     print(f"PASS/FAIL 最近窗口条数 -> {len(recent)} | expected: 5")
     print(f"PASS/FAIL system在最前 -> {recent[0]['role']} | expected: system")
     print(f"PASS/FAIL 最后一轮保留 -> {recent[-1]['content']} | expected: 再见")
-    print(f"PASS/FAIL 旧消息进摘要 -> {'user:你好' in summary and '今天是晴天' in summary} | expected: True")
+    print(
+        f"PASS/FAIL 旧消息进摘要 -> {'user:你好' in summary and '今天是晴天' in summary} | expected: True"
+    )
 
     # --- 测试 build_context ---
     ctx = build_context(summary, recent)

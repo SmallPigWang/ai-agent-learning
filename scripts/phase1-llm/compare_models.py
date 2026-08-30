@@ -23,10 +23,13 @@
 # ============================================================
 
 import os
+import sys
+
 import requests
 from dotenv import load_dotenv
 
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     """加载指定的 API Key"""
@@ -36,8 +39,10 @@ def load_api_key(key_name: str) -> str | None:
 
 # ---------- 待实现 ----------
 
-def call_model(prompt: str, api_key: str, model: str,
-               base_url: str, system_prompt: str = "") -> str:
+
+def call_model(
+    prompt: str, api_key: str, model: str, base_url: str, system_prompt: str = ""
+) -> str:
     """
     通用模型调用 —— 支持任何 OpenAI 兼容 API
     流程:
@@ -54,23 +59,15 @@ def call_model(prompt: str, api_key: str, model: str,
 
     url = base_url
 
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-    body = {
-        "model": model,
-        "messages": messages,
-        "max_tokens": 1024
-    }
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    body = {"model": model, "messages": messages, "max_tokens": 1024}
     response = requests.post(url, headers=headers, json=body)
     return response.json()["choices"][0]["message"]["content"]
 
-    
 
-
-def compare_models(prompt: str, deepseek_key: str, claude_key: str,
-                   claude_base: str) -> dict[str, str]:
+def compare_models(
+    prompt: str, deepseek_key: str, claude_key: str, claude_base: str
+) -> dict[str, str]:
     """
     同时调用两个模型，返回对比结果
     流程:
@@ -89,7 +86,7 @@ def compare_models(prompt: str, deepseek_key: str, claude_key: str,
         prompt=prompt,
         api_key=deepseek_key,
         model="deepseek-v4-flash",
-        base_url="https://api.deepseek.com/chat/completions"
+        base_url="https://api.deepseek.com/chat/completions",
     )
 
     # 调claude中转
@@ -103,8 +100,9 @@ def compare_models(prompt: str, deepseek_key: str, claude_key: str,
     return {"deepseek": deepseek_reply, "claude": claude_reply}
 
 
-def stream_compare(prompt: str, deepseek_key: str, claude_key: str,
-                   claude_base: str):
+def stream_compare(
+    prompt: str, deepseek_key: str, claude_key: str, claude_base: str
+) -> None:
     """
     流式对比 —— 先打 DeepSeek 流式输出，再打 Claude 流式输出
     流程:
@@ -127,8 +125,10 @@ def stream_compare(prompt: str, deepseek_key: str, claude_key: str,
     }
     response = requests.post(
         "https://api.deepseek.com/chat/completions",
-        headers={"Authorization": f"Bearer {deepseek_key}",
-                 "Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {deepseek_key}",
+            "Content-Type": "application/json",
+        },
         json=body,
         stream=True,
     )
@@ -157,8 +157,10 @@ def stream_compare(prompt: str, deepseek_key: str, claude_key: str,
     body["messages"] = messages
     response = requests.post(
         claude_base,
-        headers={"Authorization": f"Bearer {claude_key}",
-                 "Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {claude_key}",
+            "Content-Type": "application/json",
+        },
         json=body,
         stream=True,
     )
@@ -181,7 +183,6 @@ def stream_compare(prompt: str, deepseek_key: str, claude_key: str,
             print(content, end="", flush=True)
     print()
     print("=== DeepSeek")
-    
 
 
 # ============================================================
@@ -192,21 +193,26 @@ if __name__ == "__main__":
 
     dk = load_api_key("DEEPSEEK_API_KEY")
     ck = load_api_key("JIEKOU_API_KEY")
-    cb = (load_api_key("JIEKOU_BASE_URL") or "https://api.highwayapi.ai/openai/v1") + "/chat/completions"
+    cb = (
+        load_api_key("JIEKOU_BASE_URL") or "https://api.highwayapi.ai/openai/v1"
+    ) + "/chat/completions"
 
     if not dk or not ck or "你的" in dk or "你的" in ck:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY 和 JIEKOU_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # 测试1: call_model — DeepSeek 能调用
-    r1 = call_model("1+1=？只回答数字", dk,
-                    "deepseek-v4-flash", "https://api.deepseek.com/chat/completions")
+    r1 = call_model(
+        "1+1=？只回答数字",
+        dk,
+        "deepseek-v4-flash",
+        "https://api.deepseek.com/chat/completions",
+    )
     print(f"{'PASS' if '2' in r1 else 'FAIL'} DeepSeek -> {r1!r}")
     all_pass = all_pass and "2" in r1
 
     # 测试2: call_model — Claude 能调用
-    r2 = call_model("1+1=？只回答数字", ck,
-                    "claude-haiku-4-5-20251001", cb)
+    r2 = call_model("1+1=？只回答数字", ck, "claude-haiku-4-5-20251001", cb)
     print(f"{'PASS' if '2' in r2 else 'FAIL'} Claude -> {r2!r}")
     all_pass = all_pass and "2" in r2
 

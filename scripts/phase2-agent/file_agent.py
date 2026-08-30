@@ -13,14 +13,13 @@
 # 知识点: 文件工具三件套 | AgentState dataclass 状态追踪 | _safe_path 路径沙箱 | 多步链式任务
 # ============================================================
 
-import os as _os
 import json as _json
-import requests
-from dotenv import load_dotenv
-from typing import Any
-from datetime import datetime
+import os as _os
+import sys
 from dataclasses import dataclass, field
 
+import requests
+from dotenv import load_dotenv
 
 # ---------- 安全沙箱 ----------
 WORKSPACE = _os.path.join(_os.path.dirname(__file__), "workspace")
@@ -37,6 +36,7 @@ def _safe_path(path: str) -> str:
 
 
 # ---------- 待实现：文件操作工具 ----------
+
 
 def read_file(path: str) -> str:
     """
@@ -67,11 +67,10 @@ def list_files(directory: str = ".") -> str:
     files = _os.listdir(safe_dir)
     lines = []
     for f in files:
-        full_path = _os.path.join(safe_dir,f)
+        full_path = _os.path.join(safe_dir, f)
         size = _os.path.getsize(full_path)
         lines.append(f"{f} ({size} B)")
     return "\n".join(lines) if lines else "(空目录)"
-
 
 
 # ---------- JSON Schema（参照之前的写法）----------
@@ -86,12 +85,12 @@ READ_FILE_SCHEMA = {
             "properties": {
                 "path": {
                     "type": "string",
-                    "description": "要读取的文件路径（相对于工作区）"
+                    "description": "要读取的文件路径（相对于工作区）",
                 }
             },
-            "required": ["path"]
-        }
-    }
+            "required": ["path"],
+        },
+    },
 }
 
 # TODO: 参照 READ_FILE_SCHEMA 写 WRITE_FILE_SCHEMA 和 LIST_FILES_SCHEMA
@@ -105,16 +104,13 @@ WRITE_FILE_SCHEMA = {
             "properties": {
                 "path": {
                     "type": "string",
-                    "description": "要写入的文件路径（相对于工作区）"
+                    "description": "要写入的文件路径（相对于工作区）",
                 },
-                "content":{
-                    "type":"string",
-                    "description": "要写入的文件内容"
-                },
+                "content": {"type": "string", "description": "要写入的文件内容"},
             },
-            "required": ["path","content"]
-        }
-    }
+            "required": ["path", "content"],
+        },
+    },
 }
 
 LIST_FILES_SCHEMA = {
@@ -125,14 +121,11 @@ LIST_FILES_SCHEMA = {
         "parameters": {
             "type": "object",
             "properties": {
-                "directory": {
-                    "type": "string",
-                    "description": "要进入的文件夹路径"
-                }
+                "directory": {"type": "string", "description": "要进入的文件夹路径"}
             },
-            "required": ["directory"]
-        }
-    }
+            "required": ["directory"],
+        },
+    },
 }
 
 
@@ -149,12 +142,14 @@ ALL_TOOLS = [READ_FILE_SCHEMA, WRITE_FILE_SCHEMA, LIST_FILES_SCHEMA]
 
 # ---------- 待实现：Agent 状态追踪 ----------
 
+
 @dataclass
 class AgentState:
     """
     追踪 Agent 每轮执行状态。
     提示: 参照你之前学的 dataclass（day-03 的 employee_system.py）
     """
+
     # TODO: 定义以下字段
     # messages: list[dict]  — 对话历史
     # iteration: int = 0    — 当前轮数
@@ -164,18 +159,20 @@ class AgentState:
     iteration: int = 0
     tool_calls_made: list[str] = field(default_factory=list)
     consecutive_errors: int = 0
-    
 
 
 # ---------- 待实现：带状态的文件助手循环 ----------
 
+
 def load_api_key(key_name: str) -> str | None:
+    """从 .env 加载指定的 API Key"""
     load_dotenv()
     return _os.getenv(key_name)
 
 
-def file_assistant_loop(prompt: str, tools: list[dict], key: str,
-                        max_iterations: int = 10) -> tuple[str, AgentState]:
+def file_assistant_loop(
+    prompt: str, tools: list[dict], key: str, max_iterations: int = 10
+) -> tuple[str, AgentState]:
     """
     带状态追踪的文件助手 ReAct 循环。
     返回 (最终回答, 执行状态)。
@@ -187,18 +184,15 @@ def file_assistant_loop(prompt: str, tools: list[dict], key: str,
 
     """
     URL = "https://api.deepseek.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {key}", 
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
     state = AgentState(messages=[{"role": "user", "content": prompt}])
 
     for _ in range(max_iterations):
         state.iteration += 1
         body = {
-            "model":"deepseek-chat",
-            "messages":state.messages,
-            "tools":tools,
+            "model": "deepseek-chat",
+            "messages": state.messages,
+            "tools": tools,
         }
         resp = requests.post(url=URL, json=body, headers=headers)
         msg = resp.json()["choices"][0]["message"]
@@ -213,20 +207,22 @@ def file_assistant_loop(prompt: str, tools: list[dict], key: str,
             try:
                 result = TOOL_MAP[name](**args)
                 state.consecutive_errors = 0  # 成功，重置
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 result = f"Error: {e}"
                 state.consecutive_errors += 1
                 if state.consecutive_errors >= 3:
                     return ("连续 3 次工具调用失败，终止", state)
 
             state.tool_calls_made.append(name)
-            state.messages.append({
-                "role": "tool",
-                "tool_call_id": tc["id"],
-                "content": result,
-            })
+            state.messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tc["id"],
+                    "content": result,
+                }
+            )
 
-    return ("达到最大轮数", state)   
+    return ("达到最大轮数", state)
 
 
 # ============================================================
@@ -237,7 +233,7 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     # ---------- 准备测试文件 ----------
     _os.makedirs(WORKSPACE, exist_ok=True)
@@ -247,45 +243,63 @@ if __name__ == "__main__":
     # 测试1: read_file 本身
     r1 = read_file("hello.txt")
     r1_pass = "Hello" in r1
-    print(f"{'PASS' if r1_pass else 'FAIL'} read_file(hello.txt) -> {r1!r} | expected: 含 Hello")
+    print(
+        f"{'PASS' if r1_pass else 'FAIL'} read_file(hello.txt) -> {r1!r} | expected: 含 Hello"
+    )
     all_pass = all_pass and r1_pass
 
     # 测试2: write_file 本身
     r2 = write_file("test.txt", "Hello")
     r2_pass = "test.txt" in r2
-    print(f"{'PASS' if r2_pass else 'FAIL'} write_file(test.txt) -> {r2!r} | expected: 含文件名")
+    print(
+        f"{'PASS' if r2_pass else 'FAIL'} write_file(test.txt) -> {r2!r} | expected: 含文件名"
+    )
     all_pass = all_pass and r2_pass
 
     # 测试3: list_files 本身
     r3 = list_files(".")
     r3_pass = "test.txt" in r3 and "hello.txt" in r3
-    print(f"{'PASS' if r3_pass else 'FAIL'} list_files(.) -> {r3!r} | expected: 含 test.txt + hello.txt")
+    print(
+        f"{'PASS' if r3_pass else 'FAIL'} list_files(.) -> {r3!r} | expected: 含 test.txt + hello.txt"
+    )
     all_pass = all_pass and r3_pass
 
     # 测试4: Agent 读取文件
-    r4, s4 = file_assistant_loop("帮我读一下 hello.txt 的内容，然后告诉我里面写了什么", ALL_TOOLS, key)
+    r4, s4 = file_assistant_loop(
+        "帮我读一下 hello.txt 的内容，然后告诉我里面写了什么", ALL_TOOLS, key
+    )
     r4_pass = "Hello" in r4
-    print(f"{'PASS' if r4_pass else 'FAIL'} Agent(读文件) -> {r4[:80]!r}... | expected: 含文件内容")
+    print(
+        f"{'PASS' if r4_pass else 'FAIL'} Agent(读文件) -> {r4[:80]!r}... | expected: 含文件内容"
+    )
     print(f"     状态: 迭代 {s4.iteration} 轮, 调用工具 {s4.tool_calls_made}")
     all_pass = all_pass and r4_pass
 
     # 测试5: Agent 写文件
     r5, s5 = file_assistant_loop(
         "帮我创建一个文件 summary.txt，内容是: 今天学习ReAct循环，理解了多轮推理。",
-        ALL_TOOLS, key
+        ALL_TOOLS,
+        key,
     )
-    r5_pass = "summary.txt" in r5 and _os.path.exists(_os.path.join(WORKSPACE, "summary.txt"))
-    print(f"{'PASS' if r5_pass else 'FAIL'} Agent(写文件) -> {r5[:80]!r}... | expected: 文件创建成功")
+    r5_pass = "summary.txt" in r5 and _os.path.exists(
+        _os.path.join(WORKSPACE, "summary.txt")
+    )
+    print(
+        f"{'PASS' if r5_pass else 'FAIL'} Agent(写文件) -> {r5[:80]!r}... | expected: 文件创建成功"
+    )
     print(f"     状态: 迭代 {s5.iteration} 轮, 调用工具 {s5.tool_calls_made}")
     all_pass = all_pass and r5_pass
 
     # 测试6: Agent 多步任务 — 列出文件 → 读取 → 总结
     r6, s6 = file_assistant_loop(
         "先列出当前目录有哪些文件，然后读取 hello.txt，最后把它的内容转成大写写进 hello_upper.txt",
-        ALL_TOOLS, key
+        ALL_TOOLS,
+        key,
     )
     r6_pass = _os.path.exists(_os.path.join(WORKSPACE, "hello_upper.txt"))
-    print(f"{'PASS' if r6_pass else 'FAIL'} Agent(多步文件操作) -> {r6[:80]!r}... | expected: hello_upper.txt 存在")
+    print(
+        f"{'PASS' if r6_pass else 'FAIL'} Agent(多步文件操作) -> {r6[:80]!r}... | expected: hello_upper.txt 存在"
+    )
     print(f"     状态: 迭代 {s6.iteration} 轮, 调用工具 {s6.tool_calls_made}")
     all_pass = all_pass and r6_pass
 

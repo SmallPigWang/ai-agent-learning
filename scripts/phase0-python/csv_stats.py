@@ -12,11 +12,15 @@
 # 知识点: with open 文件读写 | readlines 跳过表头 | FileNotFoundError | 脏数据跳过 | f-string
 # ============================================================
 
-def csv_stats(filepath: str):
+
+import os
+
+
+def csv_stats(filepath: str) -> dict | None:
     """读取 CSV 文件，返回年龄和分数的统计数据"""
     # with读取文件
     try:
-        with open(filepath,"r",encoding='utf-8') as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             lines = f.readlines()
     except FileNotFoundError:
         return None
@@ -30,7 +34,7 @@ def csv_stats(filepath: str):
     max_score = -1
 
     for line in lines[1:]:
-        line = line.strip() # 去除行尾的换行符
+        line = line.strip()  # 去除行尾的换行符
         parts = line.split(",")
 
         try:
@@ -46,25 +50,20 @@ def csv_stats(filepath: str):
             max_score = score
             max_name = name
 
-    if len(ages) == 0:
+    if not ages:
         return None
 
-    avg_age = round(sum(ages)/len(ages), 1)
+    avg_age = round(sum(ages) / len(ages), 1)
 
-    return {
-        "总人数":len(ages),
-        "平均年龄":avg_age,
-        "最高分":(max_name, max_score)
-    }
+    return {"总人数": len(ages), "平均年龄": avg_age, "最高分": (max_name, max_score)}
 
 
 # ============================================================
 # 测试用例（自动创建临时文件 → 测试 → 清理）
 # ============================================================
 if __name__ == "__main__":
-    import os
 
-    def _write_csv(filepath: str, content: str):
+    def _write_csv(filepath: str, content: str) -> None:
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
 
@@ -76,7 +75,10 @@ if __name__ == "__main__":
 
     # 测试2: 包含脏数据
     path2 = os.path.join(test_dir, "_test_dirty.csv")
-    _write_csv(path2, "姓名,年龄,分数\nTom,20,88.0\nJerry,abc,76.0\nSpike,25,xyz\nMickey,30,95.5")
+    _write_csv(
+        path2,
+        "姓名,年龄,分数\nTom,20,88.0\nJerry,abc,76.0\nSpike,25,xyz\nMickey,30,95.5",
+    )
 
     # 测试3: 不存在的文件
     path3 = os.path.join(test_dir, "_not_exist.csv")

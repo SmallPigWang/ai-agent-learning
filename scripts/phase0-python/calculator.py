@@ -8,7 +8,8 @@
 # 知识点: 字符串 split 解析 | float 类型转换 | if/elif 分支 | 除零错误处理
 # ============================================================
 
-def calculate(expression: str):
+
+def calculate(expression: str) -> float | str:
     """
     输入一个算式字符串，返回计算结果
     格式: "数字 运算符 数字"（空格隔开）

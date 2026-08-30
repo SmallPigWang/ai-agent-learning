@@ -33,23 +33,28 @@
 # ============================================================
 
 from dataclasses import dataclass, field
-from typing import Optional, Literal
+from typing import Literal
 
 # ---------- Part 1: dataclass 版本 ----------
+
 
 @dataclass
 class TaskItem:
     """任务数据类 — 用 @dataclass 省去样板代码"""
+
     title: str
-    priority: Literal[1,2,3,4,5] = 1 # 限定选择并给予默认值
-    done: bool = False 
-    tags: list[str] = field(default_factory=list) # 对于可变类型参数的写法
-    category: Optional[str] = None
+    priority: Literal[1, 2, 3, 4, 5] = 1  # 限定选择并给予默认值
+    done: bool = False
+    tags: list[str] = field(default_factory=list)  # 对于可变类型参数的写法
+    category: str | None = None
+
 
 # ---------- Part 2: 手写版本（对比用）----------
 
+
 class TaskOld:
     """手写 __init__ + __repr__ 的传统类"""
+
     def __init__(self, title: str, priority: int = 1, done: bool = False):
         self.title = title
         self.priority = priority
@@ -57,7 +62,10 @@ class TaskOld:
         self.tags: list[str] = []
 
     def __repr__(self):
-        return f"TaskOld(title={self.title!r}, priority={self.priority}, done={self.done})"
+        return (
+            f"TaskOld(title={self.title!r}, priority={self.priority}, done={self.done})"
+        )
+
 
 # ============================================================
 # 测试用例
@@ -67,15 +75,17 @@ if __name__ == "__main__":
 
     # 测试1: 基本创建 + 默认值
     t1 = TaskItem(title="学 dataclass")
-    if t1.title == "学 dataclass" and t1.priority == 1 and t1.done == False:
+    if t1.title == "学 dataclass" and t1.priority == 1 and not t1.done:
         print(f"PASS 默认值创建 -> {t1}")
     else:
-        print(f"FAIL 默认值创建 -> title={t1.title}, priority={t1.priority}, done={t1.done}")
+        print(
+            f"FAIL 默认值创建 -> title={t1.title}, priority={t1.priority}, done={t1.done}"
+        )
         all_pass = False
 
     # 测试2: 指定全部字段
     t2 = TaskItem(title="写代码", priority=5, done=True)
-    if t2.priority == 5 and t2.done == True:
+    if t2.priority == 5 and t2.done:
         print(f"PASS 全字段创建 -> {t2}")
     else:
         print(f"FAIL 全字段创建 -> {t2}")
@@ -109,9 +119,9 @@ if __name__ == "__main__":
     # 测试6: 自动生成的 __eq__
     t5 = TaskItem(title="学 dataclass")  # 默认 priority=1, done=False
     if t1 == t5:
-        print(f"PASS 自动__eq__ -> t1 == t5")
+        print("PASS 自动__eq__ -> t1 == t5")
     else:
-        print(f"FAIL 自动__eq__ -> t1 != t5")
+        print("FAIL 自动__eq__ -> t1 != t5")
         all_pass = False
 
     # 测试7: TaskOld 手写类 vs TaskItem dataclass 对比
@@ -120,7 +130,7 @@ if __name__ == "__main__":
     if old.title == t1.title:
         print(f"PASS TaskOld基础 -> {old.title}")
     else:
-        print(f"FAIL TaskOld基础")
+        print("FAIL TaskOld基础")
         all_pass = False
 
     # 测试8: Optional 字段默认 None
@@ -140,11 +150,11 @@ if __name__ == "__main__":
 
     # 测试10: Literal 类型限制（运行时不会报错，但 type checker 会提示）
     # 确认 priority 可以是 1-5 的整数
-    valid = all(t.priority in [1,2,3,4,5] for t in [t1, t2, t3, t4, t5])
+    valid = all(t.priority in [1, 2, 3, 4, 5] for t in [t1, t2, t3, t4, t5])
     if valid:
-        print(f"PASS priority范围验证 -> 所有任务的priority都在1-5")
+        print("PASS priority范围验证 -> 所有任务的priority都在1-5")
     else:
-        print(f"FAIL priority范围验证")
+        print("FAIL priority范围验证")
         all_pass = False
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

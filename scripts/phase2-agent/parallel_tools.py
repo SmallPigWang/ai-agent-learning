@@ -18,15 +18,16 @@
 # 知识点: for tc in tool_calls 并行执行 | 多条 tool 消息回填 | assistant 在 tool 之前
 # ============================================================
 
-import os
 import json as _json
-import requests
-from dotenv import load_dotenv
-from typing import Any
+import os
+import sys
 from datetime import datetime
 
+import requests
+from dotenv import load_dotenv
 
 # ---------- 复用 ----------
+
 
 def load_api_key(key_name: str) -> str | None:
     load_dotenv()
@@ -35,20 +36,21 @@ def load_api_key(key_name: str) -> str | None:
 
 # ---------- 工具函数 ----------
 
+
 def calculator(expression: str) -> str:
     """安全计算数学表达式"""
     allowed = set("0123456789+-*/().% ")
     if not all(c in allowed for c in expression):
-        return f"Error: 非法字符"
+        return "Error: 非法字符"
     try:
         return str(eval(expression))
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"Error: {e}"
 
 
 def get_current_time() -> str:
     """获取当前时间"""
-    return datetime.now().strftime("%H:%M:%S")
+    return datetime.now().strftime("%H:%M:%S")  # noqa: DTZ005
 
 
 # TODO: 实现第 3 个工具
@@ -72,12 +74,12 @@ CALCULATOR_SCHEMA = {
             "properties": {
                 "expression": {
                     "type": "string",
-                    "description": "数学表达式，如 '1+2*3'"
+                    "description": "数学表达式，如 '1+2*3'",
                 }
             },
-            "required": ["expression"]
-        }
-    }
+            "required": ["expression"],
+        },
+    },
 }
 
 TIME_SCHEMA = {
@@ -85,11 +87,8 @@ TIME_SCHEMA = {
     "function": {
         "name": "get_current_time",
         "description": "获取当前北京时间",
-        "parameters": {
-            "type": "object",
-            "properties": {}
-        }
-    }
+        "parameters": {"type": "object", "properties": {}},
+    },
 }
 
 # TODO: 参照上面两个写 WEATHER_SCHEMA（有一个参数: city 字符串）
@@ -101,15 +100,11 @@ WEATHER_SCHEMA = {
         "parameters": {
             "type": "object",
             "properties": {
-                "city":
-                {
-                    "type": "string",
-                    "description": "城市名称：如北京、上海"
-                }
+                "city": {"type": "string", "description": "城市名称：如北京、上海"}
             },
-            "required": ["city"]
-        }
-    }
+            "required": ["city"],
+        },
+    },
 }
 
 
@@ -118,13 +113,14 @@ WEATHER_SCHEMA = {
 TOOL_MAP = {
     "calculator": calculator,
     "get_current_time": get_current_time,
-    "get_weather": get_weather, 
+    "get_weather": get_weather,
 }
 
 ALL_TOOLS = [CALCULATOR_SCHEMA, TIME_SCHEMA, WEATHER_SCHEMA]
 
 
 # ---------- 待实现：并行工具调用循环 ----------
+
 
 def parallel_tool_loop(prompt: str, tools: list[dict], key: str) -> str:
     """
@@ -159,15 +155,12 @@ def parallel_tool_loop(prompt: str, tools: list[dict], key: str) -> str:
     """
     messages = [{"role": "user", "content": prompt}]
     body = {
-        "model":"deepseek-chat",
-        "messages":messages,
-        "tools":tools,
+        "model": "deepseek-chat",
+        "messages": messages,
+        "tools": tools,
     }
     URL = "https://api.deepseek.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {key}", 
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
 
     resp = requests.post(url=URL, json=body, headers=headers)
     msg = resp.json()["choices"][0]["message"]
@@ -180,11 +173,13 @@ def parallel_tool_loop(prompt: str, tools: list[dict], key: str) -> str:
             tool_name = tc["function"]["name"]
             args = _json.loads(tc["function"]["arguments"])
             result = TOOL_MAP[tool_name](**args)
-            messages.append({
-                "role": "tool",
-                "tool_call_id": tc["id"],
-                "content": result,  
-            })
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tc["id"],
+                    "content": result,
+                }
+            )
     else:
         return msg["content"]
 
@@ -205,7 +200,7 @@ if __name__ == "__main__":
     key = load_api_key("DEEPSEEK_API_KEY")
     if not key or "你的" in key:
         print("请先在 .env 中配置 DEEPSEEK_API_KEY")
-        exit(1)
+        sys.exit(1)
 
     URL = "https://api.deepseek.com/v1/chat/completions"
     HEADERS = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
@@ -213,19 +208,25 @@ if __name__ == "__main__":
     # 测试1: get_weather 函数本身
     r1 = get_weather("北京")
     r1_pass = "北京" in r1 and "25" in r1
-    print(f"{'PASS' if r1_pass else 'FAIL'} get_weather(北京) -> {r1!r} | expected: 含 北京+25°C")
+    print(
+        f"{'PASS' if r1_pass else 'FAIL'} get_weather(北京) -> {r1!r} | expected: 含 北京+25°C"
+    )
     all_pass = all_pass and r1_pass
 
     # 测试2: 单工具 — 不退化（parallel 版也能处理单个 tool_call）
     r2 = parallel_tool_loop("1+2+3+4+5等于多少？", ALL_TOOLS, key)
     r2_pass = "15" in r2
-    print(f"{'PASS' if r2_pass else 'FAIL'} parallel(单工具-计算) -> {r2!r} | expected: 含15")
+    print(
+        f"{'PASS' if r2_pass else 'FAIL'} parallel(单工具-计算) -> {r2!r} | expected: 含15"
+    )
     all_pass = all_pass and r2_pass
 
     # 测试3: 单工具 — 不影响不需要工具的情况
     r3 = parallel_tool_loop("你好，用一句话介绍你自己", ALL_TOOLS, key)
     r3_pass = r3 is not None and len(r3) > 0
-    print(f"{'PASS' if r3_pass else 'FAIL'} parallel(闲聊) -> {r3[:60]!r}... | expected: 正常回答")
+    print(
+        f"{'PASS' if r3_pass else 'FAIL'} parallel(闲聊) -> {r3[:60]!r}... | expected: 正常回答"
+    )
     all_pass = all_pass and r3_pass
 
     # 测试4: ★ 并行 — 一问问两个工具
@@ -233,7 +234,9 @@ if __name__ == "__main__":
     r4_has_time = ":" in r4 or "点" in r4
     r4_has_calc = "5000" in r4
     r4_pass = r4_has_time and r4_has_calc
-    print(f"{'PASS' if r4_pass else 'FAIL'} parallel(时间+计算) -> {r4!r} | expected: 含时间+5000")
+    print(
+        f"{'PASS' if r4_pass else 'FAIL'} parallel(时间+计算) -> {r4!r} | expected: 含时间+5000"
+    )
     all_pass = all_pass and r4_pass
 
     print(f"\n{'ALL PASS!' if all_pass else 'FAIL - check above'}")

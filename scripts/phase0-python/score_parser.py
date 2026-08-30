@@ -9,11 +9,12 @@
 # 知识点: 双重 split 解析 | try/except ValueError | 元组打包 | 卫语句提前返回
 # ============================================================
 
-def parse_scores(text: str):
+
+def parse_scores(text: str) -> dict | None:
     """解析成绩字符串，返回最高分和平均分"""
     if not text:
         return None
-    
+
     student = text.split(",")
     count = 0
     max_score = 0
@@ -32,24 +33,20 @@ def parse_scores(text: str):
             max_score = score
             max_name = name
         total += score
-    
-    avg = total / count
-    return {"最高分": (max_name, max_score),"平均分":round(avg,2)}
 
-    
+    avg = total / count
+    return {"最高分": (max_name, max_score), "平均分": round(avg, 2)}
+
+
 # ============================================================
 # 测试用例
 # ============================================================
 if __name__ == "__main__":
     tests = [
-        ("Alice:85, Bob:92, Charlie:78",
-         {"最高分": ("Bob", 92), "平均分": 85.0}),
-        ("张三:100",
-         {"最高分": ("张三", 100), "平均分": 100.0}),
-        ("",
-         None),
-        ("Tom:60, Jerry:abc, Spike:80",
-         {"最高分": ("Spike", 80), "平均分": 70.0}),
+        ("Alice:85, Bob:92, Charlie:78", {"最高分": ("Bob", 92), "平均分": 85.0}),
+        ("张三:100", {"最高分": ("张三", 100), "平均分": 100.0}),
+        ("", None),
+        ("Tom:60, Jerry:abc, Spike:80", {"最高分": ("Spike", 80), "平均分": 70.0}),
     ]
 
     for text, expected in tests:
