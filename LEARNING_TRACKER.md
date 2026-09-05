@@ -34,9 +34,10 @@
 | 5 | 08-09 | — | 2.1 Tool Calling + 2.2 ReAct 循环 + 文件助手 | [📝](logs/day-05.md) |
 | 6 | 08-16 | — | 复习 + 2.3 记忆系统（滑动窗口 + 摘要压缩） | [📝](logs/day-06.md) |
 | 7 | 08-30 | 08:00-19:30 | 全仓规范整改 + 2.3 通关（对比实验/偏好记忆/挑战/阅读）+ 2.4 开荒 | [📝](logs/day-07.md) |
+| 8 | 09-05 | 10:00-22:47 | 2.4+2.5 双封箱 + 2.6 前两仗（注入靶场/权限分级）+ 图谱前端改造 | [📝](logs/day-08.md) |
 | 🔄 | — | — | 复习日（每 5 个学习日 1 次） | — |
 
-**下一目标**: 阶段 2.4 任务规划（填完 `plan_and_execute.py` 三函数 → 动态重规划）
+**下一目标**: 阶段 2.6 收尾（输出校验+沙箱 → 检验 → OWASP 初读）→ 冲阶段 2 验收
 
 > 🔄 复习日内容: 跑 🔴 核心脚本并解释原理 + 扫 PITFALLS Top 5 + 重测 STUDYNOTE_EVAL（阶段 2 后）
 
@@ -225,29 +226,31 @@
 - [x] 📖 阅读: Anthropic《Effective context engineering for AI agents》
 
 ### 2.4 任务规划与分解（2-3天）
-- [ ] Plan-and-Execute 模式
-- [ ] 动态重规划
-- [ ] 🔧 练习：Agent 先规划再执行 📎 `plan_and_execute.py`
-- [ ] 🔧 练习：测试执行中受阻→自动调整
-- [ ] ✅ 检验：复杂任务能被正确分解执行
-- [ ] 📖 阅读: Anthropic《Building Effective Agents》（Plan-and-Execute 部分）
+- [x] Plan-and-Execute 模式
+- [x] 动态重规划
+- [x] 🔧 练习：Agent 先规划再执行 📎 `plan_and_execute.py`
+- [x] 🔧 练习：测试执行中受阻→自动调整 📎 `replan_loop.py`
+- [x] ✅ 检验：复杂任务能被正确分解执行 📎 `plan_verify.py`
+- [x] 📖 阅读: Anthropic《Building Effective Agents》（Plan-and-Execute 部分）
+- [x] 🧩 独立挑战题：依赖感知执行器 📎 `dep_executor.py`
 
 ### 2.5 Reflection 反思机制（2天）
-- [ ] 反思循环：生成 → 自评 → 改进
-- [ ] 反思的成本效益分析
-- [ ] 🔧 练习：给 Agent 加自反思
-- [ ] 🔧 练习：对比开/关反思的质量和成本
-- [ ] ✅ 检验：理解反思何时值得用
-- [ ] 📖 阅读: Reflexion 论文（Shinn et al., 2023）
+- [x] 反思循环：生成 → 自评 → 改进
+- [x] 反思的成本效益分析
+- [x] 🔧 练习：给 Agent 加自反思 📎 `reflection_loop.py`
+- [x] 🔧 练习：对比开/关反思的质量和成本 📎 `reflection_cost_benefit.py`
+- [x] ✅ 检验：理解反思何时值得用
+- [x] 📖 阅读: Reflexion 论文（Shinn et al., 2023）
+- [x] 🧩 独立挑战题：跨试次情景记忆 📎 `episodic_reflection.py`
 
 ### 2.6 安全与护栏入门（2-3天）
 - [ ] Agent 安全威胁矩阵
-- [ ] Prompt 注入理解
-- [ ] 工具权限分级（🟢🟡🔴）
+- [x] Prompt 注入理解
+- [x] 工具权限分级（🟢🟡🔴）
 - [ ] 输出校验
 - [ ] 沙箱隔离
-- [ ] 🔧 练习：攻击自己的 Agent
-- [ ] 🔧 练习：实现工具权限分级
+- [x] 🔧 练习：攻击自己的 Agent 📎 `prompt_injection_lab.py`
+- [x] 🔧 练习：实现工具权限分级 📎 `tool_permissions.py`
 - [ ] ✅ 检验：能说出 5 种攻击手段和防御方案
 - [ ] 📖 阅读: OWASP LLM Top 10（初读）
 
@@ -504,10 +507,6 @@
 ### 明天计划
 -
 
-### 自我评分 (1-5)
-- 理解程度:
-- 完成度:
-- 投入度:
 ```
 
 ---

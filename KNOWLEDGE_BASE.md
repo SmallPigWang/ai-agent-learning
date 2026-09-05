@@ -177,6 +177,113 @@
 | del 语句 | del d[key] 删除字典的键，d[k]=v 的反面 |
 | 卫语句双条件 | user not in vault or key not in vault[user]——两种"不用干活"提前返回 |
 
+### 2.4 任务规划与分解
+| 知识点 | 一句话说明 |
+|--------|-----------|
+| Plan-and-Execute 模式 | 先生成完整计划再逐步执行，vs ReAct 走一步看一步（边炒菜边想 vs 先看菜谱） |
+| 计划即数据 | plan 是 list[dict]，可校验、可打印、可给人过目 |
+| 静态清单循环 vs 动态决定 | P&E 循环一个静态列表，ReAct 每轮问 LLM——前者省调用、可审计 |
+| 工具注册表分发 | {"动作名": 函数}，按 action 查表调用，加工具只加表项 |
+| *args 调用侧解包 | fn(*[2,3]) = fn(2,3)；safe_get 的 *keys 是签名侧收拢，一体两面 |
+| 优雅降级 | 未知操作返回错误字符串不崩溃，引擎继续跑 |
+| 校验器参数放宽 | 安检员天生要接"可能不合法"的输入，签名用 list 而非 list[dict] |
+| 动态重规划 | 受阻→重算【剩余】路线→继续，已完成的结果不回滚（导航改道不回出发点） |
+| 重规划预算 max_replans | 防庸医 replanner 无限变道烧钱，max_iterations 的直系亲戚 |
+| 错误即数据 | 优雅降级的产出（未知操作字符串）= 上游系统的触发信号 |
+| while+手动索引 | 循环对象要中途整体替换时，for 锁死迭代对象，while 才能边跑边换 |
+| import 自己的模块 | 同目录 from plan_and_execute import ...，DRY 复用零件 |
+| 失败痕迹保留 | results 记录每次失败——审计时能看到在哪改的道 |
+| planner vs replanner | 出发前盲规划(只知任务) vs 受阻时知情改道(知任务+进度+故障)，只管剩余 |
+| 共享黑板 state | 步骤间数据流走闭包 dict，不走返回值（框架 checkpoint 思想） |
+| zip 拉链配对 | zip(a,b) 按位置咬合成对，配权重/配对计算一步到位 |
+| CWD vs 脚本目录 | 相对路径跟着"从哪运行"走；Path(__file__).parent 锚定"文件在哪" |
+| Workflow vs Agent | 流程固定（下一步听代码）vs 动态流程（下一步听 LLM）——run_plan vs react_loop |
+| gate 闸门思想 | 步骤之间加检查点：validate_plan 拦进门计划、is_failed 拦半路结果，脏数据不流向下一步 |
+| 何时该用 Agent | 任务步骤无法预知、需现场决策才上 Agent；宁简勿繁，从最简单方案开始 |
+| 依赖感知执行（拓扑排序朴素版） | 每步声明 needs，循环挑"依赖全就位"的步骤执行，清单顺序≠执行顺序 |
+| 死锁检测 | 还有剩余但挑不出任何就绪步骤 = 依赖成环，报告终止而非挂死 |
+| done 用 set | 已完成 id 集合用 set——`n in done` 是 O(1) 查询，list 是 O(n) |
+| sorted(key=lambda) | 排 dict 列表给一把"尺子"：key=lambda s: s["id"] 量哪个字段 |
+| all() / any() | 全都成立吗 / 有一个成立吗——all 管闸门全过才放行，any 管警报有一个就响 |
+
+### 2.5 Reflection 反思机制
+| 知识点 | 一句话说明 |
+|--------|-----------|
+| 反思循环 | 生成→自评→改进：ReAct 对外行动，反思对内检讨自己上一稿 |
+| 批评家=规则代码 | 硬约束检查用代码不用 LLM——免费、确定、可测试（离线可验的逻辑不花钱） |
+| 反思便签=工作记忆 | 问题清单翻译成便签喂回下一轮生成器，note 跨轮传递 |
+| 问题收敛曲线 | problems_history 里问题数递减（如 [2,1,0]）——反思有效的数字证据 |
+| critic 返回问题清单 | 比 bool 信息量大：清单直接变成下一轮的改进指令（错误即数据第三次登场） |
+| 预算即圈数 | for range(max_rounds)：每圈必然消耗预算，放学铃必须存在 |
+| 语言强化学习 | 不改权重改文字记忆——不做脑手术，改贴便利贴（Reflexion） |
+| Actor/Evaluator/Self-reflection | = generator/check_slogan/build_reflection，我写过 Reflexion 迷你版 |
+| episodic memory | 反思跨试次（任务）存活；note 只在单任务内——长期记忆+反思便签的合体 |
+| 反思按需付费 | 第 1 轮=裸奔，一稿过零成本，烂稿才补轮——怕翻倍不敢开是错觉 |
+
+### 7.1 论文阅读（元能力）
+| 知识点 | 一句话说明 |
+|--------|-----------|
+| 三遍寻宝法 | 侦察(摘要/图表/结论5分钟)→挖宝(Intro末段+方法+Figure1)→按需拆解(复现时才精读) |
+| Figure 1 定律 | Agent 论文 90% 精华在架构图——先看懂图再看字 |
+| 代码锚定法 | 把论文组件翻译成自己写过的函数，概念立刻落地 |
+| 费曼检验 | 写不出 3 行总结=没读懂，回去重读 Figure 1 |
+
+| episodic memory 实现 | 长期记忆(落盘教训库)×反思(便签)的组合——lesson 跨任务传递 |
+| 读旧+append+写回 | 追加式落盘三步：复用 load 读旧库，别只写新条目（会覆盖历史） |
+| 容错返回同形状 | 异常路径返回值类型必须与正常路径一致（[] 而非 False，否则下游 .append 爆炸） |
+| 剧本放闭包外 | 脚本化 fake 的剧本必须定义在函数体外——体内=每次调用重发剧本永远第一稿 |
+
+### 2.6 安全与护栏
+| 知识点 | 一句话说明 |
+|--------|-----------|
+| 威胁矩阵 | 5 大攻击面: 注入/越权工具/数据泄露/输出投毒/供应链——对应防御: 过滤/分级/校验/校验/沙箱 |
+| Prompt 注入 | 指令藏在数据里（留言板/网页/文件）——LLM 眼里数据和指令都是文字，天生分不清 |
+| 大小写归一化 | 文本检测先 text.lower()——否则 DISREGARD 大写攻击直接穿防 |
+| 表驱动特征检测 | 危险短语进 PATTERNS 表 + 循环，加特征零改逻辑 |
+| 过滤 vs 拦截 | sanitize 消毒放行（柔和）vs guard 命中即拒（强硬）——纵深防御两层都上 |
+| 规则模拟 LLM | 用 if 模拟"被劫持的 LLM"——离线靶场不花 API 钱 |
+| 遍历字符串陷阱 | for x in "字符串" 拆成逐字符——遍历名单要遍历【列表】 |
+| 绿黄红权限分级 | 按副作用: 无副作用(绿自动放行)/可逆(黄需确认)/不可逆(红人工通道) |
+| 默认拒绝 Default Deny | 未登记=红——dict.get(k, 'red') 一行落地，宁可误拒不可误放 |
+| 审计记裁决不记申报 | 日志记闸门的 allowed，不是申请人的 auto_confirm——被拒的试图才是警报 |
+| 闸门与执行分离 | authorize 只决策，run_tool 先闸后执行——安检员不搬货 |
+| 契约文案即接口 | 拒绝消息文本是需求契约的一部分，下游靠它拼日志——精确照抄不发挥 |
+
+## 📖 Day 8 高频变量词表（教练命名 → 中文语义）
+
+| 名字 | 语义 | 登场文件 |
+|------|------|---------|
+| `planner` | 计划师：出发前盲规划，只知任务 | plan_and_execute |
+| `replanner` | 重规划师：受阻时知情改道（知任务+进度+故障） | replan_loop |
+| `plan` / `step` | 计划=数据（list[dict]）；step=其中一步 | 2.4 全家 |
+| `order` | 执行顺序（重排的证据） | dep_executor |
+| `done` | 已完成 id 集合（set，O(1) 查询） | dep_executor |
+| `ready` | 就绪步骤（依赖全就位且未跑） | dep_executor |
+| `is_failed` | 故障信号（降级消息当触发器） | replan_loop |
+| `note` | 反思便签（喂给下一轮生成器） | reflection_loop |
+| `problems` | 问题清单（批评家输出，空=合格） | 2.5 全家 |
+| `prefix` | 便签前缀段（"过往教训: "固定开头） | episodic_reflection |
+| `lesson` | 教训（跨任务存进情景记忆的那句话） | episodic_reflection |
+| `attempts` | 每一稿的记录 | reflection_loop |
+| `problems_history` | 每轮问题清单的历史 | reflection_loop |
+| `rounds` | 用了几轮（成本代理） | 2.5 全家 |
+| `factory` | 造机器的厂（调用产全新生成器） | cost_benefit |
+| `generator` | 发电机（产出候选的那位） | 2.5 全家 |
+| `critic` | 批评家（硬规则挑毛病） | reflection_loop |
+| `board_text` | 留言板文本（间接注入的藏身处） | prompt_injection_lab |
+| `INJECTION_PATTERNS` | 注入特征表（表驱动检测） | prompt_injection_lab |
+| `sanitize` | 消毒员（替换危险词后放行） | prompt_injection_lab |
+| `RISK_TABLE` | 工具风险等级表 | tool_permissions |
+| `AUDIT_LOG` | 审计日志（记试图，含被拒） | tool_permissions |
+| `allowed` | 闸门的裁决：准不准 | tool_permissions |
+| `auto_confirm` | 申请人的申报：我确认了（≠裁决） | tool_permissions |
+| `level` | 风险等级（green/yellow/red） | tool_permissions |
+| 成本效益决策 | 约束可编程(critic免费)+失败代价高→开反思；约束主观+任务一次性→别开 |
+| calls 成本代理 | 生成器调用次数≈LLM token 钱；裸奔恒 1，反思=rounds |
+| 对照组实验(方法论复用) | 和 2.3 记忆对比同款：基线+实验组+同一剧本，结论三态：白设/赚了/纯亏 |
+| 工厂模式 | factory() 每次产全新生成器——两组各用各的，剧本不串 |
+| 厂子vs机器 | factory 调用→得发电机；generator 调用→得标语；传机器不传产物 |
+
 ---
 
 ## 🔜 待补充模块

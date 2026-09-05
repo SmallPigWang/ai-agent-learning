@@ -56,7 +56,7 @@
   // ---- 布局常量（roadmap.sh 式，紧凑排布） ----
   const SPINE_X = 175
   const AREA_X = 300
-  const SLOT_W = 140, SLOT_H = 36, MAXC = 4
+  const SLOT_W = 140, SLOT_H = 46, MAXC = 4
   const WORLD_W = AREA_X + MAXC * SLOT_W + 70
 
   const canvas = document.getElementById('canvas')
@@ -87,6 +87,25 @@
       s = s.slice(0, s.length - 2) + '…'
     }
     return s
+  }
+
+  // 按像素宽度折行，最多 maxLines 行；放不下的末行仍截断（长知识点名完整显示）
+  function wrapText(text, font, maxW, maxLines) {
+    ctx.font = font
+    const full = String(text)
+    if (maxLines < 2 || ctx.measureText(full).width <= maxW) {
+      return [full]
+    }
+    const lines = []
+    let rest = full
+    while (lines.length < maxLines - 1 && rest.length > 1) {
+      let cut = rest.length
+      while (cut > 1 && ctx.measureText(rest.slice(0, cut)).width > maxW) cut--
+      lines.push(rest.slice(0, cut))
+      rest = rest.slice(cut)
+    }
+    lines.push(measureTrunc(rest, font, maxW))
+    return lines
   }
 
   function computeLayout() {
@@ -125,12 +144,15 @@
           const c = i % cols
           const cx = AREA_X + c * SLOT_W + SLOT_W / 2
           const cy = y + 3 + r * SLOT_H + SLOT_H / 2
-          const text = measureTrunc(p.name, chipFont, p.learned ? 100 : 104)
+          const lines = wrapText(p.name, chipFont, p.learned ? 100 : 104, 2)
           ctx.font = chipFont
-          const w = ctx.measureText(text).width + (p.learned ? 26 : 22)
-          const chip = { node: p, x: cx - w / 2, y: cy - 15, w: w, h: 30 }
+          let textW = 0
+          for (const l of lines) textW = Math.max(textW, ctx.measureText(l).width)
+          const w = textW + (p.learned ? 26 : 22)
+          const chipH = lines.length > 1 ? 42 : 30
+          const chip = { node: p, x: cx - w / 2, y: cy - chipH / 2, w: w, h: chipH, lines: lines }
           chips.push(chip)
-          posBy.set(p.id, { x: chip.x, y: chip.y, w: w, h: 30 })
+          posBy.set(p.id, { x: chip.x, y: chip.y, w: w, h: chipH })
         })
         bands.push({ mod: md, modChip: modChip, chips: chips, y: y, h: bandH })
         y += bandH + 10
@@ -436,10 +458,12 @@
   function drawChip(rect, o) {
     const isSel = selected && selected.id === rect.node.id
     const isHov = hovered && hovered.id === rect.node.id
-    // 芯片尺寸按文字重新量取，保证与布局一致
+    // 芯片尺寸按文字重新量取，保证与布局一致；rect.lines 存在则多行绘制（知识点完整显示）
     ctx.font = o.font
-    const text = measureTrunc(rect.node.name, o.font, o.maxW)
-    const w = ctx.measureText(text).width + o.pad
+    const lines = rect.lines || [measureTrunc(rect.node.name, o.font, o.maxW)]
+    let textW = 0
+    for (const l of lines) textW = Math.max(textW, ctx.measureText(l).width)
+    const w = textW + o.pad
     rect.x = rect.x + rect.w / 2 - w / 2
     rect.w = w
     if (isHov || isSel) {
@@ -468,7 +492,11 @@
     ctx.font = o.font
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText(text, rect.x + w / 2 + (o.textShift || 0), rect.y + rect.h / 2 + 0.5)
+    const lh = 14  // 多行行距
+    const y0 = rect.y + rect.h / 2 - (lines.length - 1) * lh / 2 + 0.5
+    for (let i = 0; i < lines.length; i++) {
+      ctx.fillText(lines[i], rect.x + w / 2 + (o.textShift || 0), y0 + i * lh)
+    }
   }
 
   function fitView() {
@@ -757,7 +785,7 @@
       if (n.pitfalls && n.pitfalls.length) {
         html += '<div class="block"><h3>相关踩坑</h3><ul>' +
           n.pitfalls.map(function (p) {
-            return '<li>🕳 <b>坑' + p.num + '</b> ' + esc(truncateText(p.err, 24)) +
+            return '<li>🕳 <b>坑' + p.num + '</b> ' + esc(p.err) +
               ' <span style="color:#94a3b8">→ ' + esc(p.fix) + '</span></li>'
           }).join('') + '</ul></div>'
       }
@@ -839,11 +867,6 @@
       })
     })
     render()
-  }
-
-  function truncateText(s, max) {
-    s = String(s)
-    return s.length > max ? s.slice(0, max - 1) + '…' : s
   }
 
   // ---------- 侧边栏 ----------

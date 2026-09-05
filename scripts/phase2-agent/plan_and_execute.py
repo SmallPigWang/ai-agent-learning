@@ -40,16 +40,46 @@
 # ============================================================
 
 
-def validate_plan(plan: list[dict]) -> bool:
+def validate_plan(plan: list) -> bool:  # 校验器收"可能不合法"输入，参数类型放宽
     """校验计划是否合法: 非空、每步含 id/action/args、类型正确、id 从 1 连续"""
+    if not plan:
+        return False
+
+    for i, step in enumerate(plan):
+        if not isinstance(step, dict):
+            return False
+        for key in ("id", "action", "args"):
+            if key not in step:
+                return False
+        if not isinstance(step["action"], str) or not isinstance(step["args"], list):
+            return False
+        if step["id"] != i + 1:
+            return False
+
+    return True
 
 
 def execute_step(step: dict, tools: dict) -> str:
     """执行单步: 注册表查函数 -> *args 解包调用；未知操作优雅降级"""
 
+    action = step["action"]
+
+    if action not in set(tools):
+        return f"未知操作: {action}"
+
+    return str(tools[action](*step["args"]))
+
 
 def run_plan(task: str, planner, tools: dict) -> dict:
     """Plan-and-Execute 引擎: 规划(回调) -> 安检 -> 逐步执行 -> 汇总"""
+
+    plan = planner(task)
+
+    if not validate_plan(plan):
+        return {"ok": False, "reason": "计划不合法", "results": []}
+
+    results = [execute_step(step, tools) for step in plan]
+    return {"ok": True, "task": task, "steps": len(plan), "results": results}
 
 
 if __name__ == "__main__":
@@ -78,14 +108,20 @@ if __name__ == "__main__":
         return good_plan
 
     def bad_planner(task: str) -> list[dict]:
-        return [{"id": 1, "action": "add", "args": [1, 1]}, {"id": 3, "action": "fly"}]  # id断号+缺args
+        return [
+            {"id": 1, "action": "add", "args": [1, 1]},
+            {"id": 3, "action": "fly"},
+        ]  # id断号+缺args
 
     # 测试1: validate_plan 安检
     print(f"PASS/FAIL 合法计划 -> {validate_plan(good_plan)} | expected: True")
     print(f"PASS/FAIL 空计划 -> {validate_plan([])} | expected: False")
     no_args = [{"id": 1, "action": "add"}]
     print(f"PASS/FAIL 缺args键 -> {validate_plan(no_args)} | expected: False")
-    bad_id = [{"id": 1, "action": "add", "args": [1]}, {"id": 3, "action": "mul", "args": [2]}]
+    bad_id = [
+        {"id": 1, "action": "add", "args": [1]},
+        {"id": 3, "action": "mul", "args": [2]},
+    ]
     print(f"PASS/FAIL id断号 -> {validate_plan(bad_id)} | expected: False")
     not_dict = ["not a dict"]
     print(f"PASS/FAIL 步骤不是dict -> {validate_plan(not_dict)} | expected: False")

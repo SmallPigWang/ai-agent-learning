@@ -50,7 +50,3 @@
 - JSON 是 Agent 开发的"通用语"——API 请求体、工具 Schema、LLM 响应、消息结构全是 JSON，必须形成肌肉记忆。
 - DeepSeek 模型 `deepseek-chat`（实际跑的是 v4-flash），tools 参数是 `"tools"` 不是 `"functions"`。
 
-## 自我评分 (1-5)
-- 理解程度: 5
-- 完成度: 5
-- 投入度: 5

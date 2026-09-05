@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-08-30 19:37:17",
+ "generatedAt": "2026-09-05 23:00:40",
  "nodes": [
   {
    "id": "s:0",
@@ -114,6 +114,34 @@ window.KB_DATA = {
    "stage": "2"
   },
   {
+   "id": "m:2.4",
+   "type": "module",
+   "name": "2.4 任务规划与分解",
+   "code": "2.4",
+   "stage": "2"
+  },
+  {
+   "id": "m:2.5",
+   "type": "module",
+   "name": "2.5 Reflection 反思机制",
+   "code": "2.5",
+   "stage": "2"
+  },
+  {
+   "id": "m:7.1",
+   "type": "module",
+   "name": "7.1 论文阅读（元能力）",
+   "code": "7.1",
+   "stage": "2"
+  },
+  {
+   "id": "m:2.6",
+   "type": "module",
+   "name": "2.6 安全与护栏",
+   "code": "2.6",
+   "stage": "2"
+  },
+  {
    "id": "k:0.1:变量与数据类型",
    "type": "knowledge",
    "name": "变量与数据类型",
@@ -121,11 +149,6 @@ window.KB_DATA = {
    "module": "0.1",
    "stage": "0",
    "pitfalls": [
-    {
-     "num": 3,
-     "err": "`self.tags : list[str] = []` 报错",
-     "fix": "冒号紧跟变量名"
-    },
     {
      "num": 42,
      "err": "`int(msg[\"role\"])` ValueError",
@@ -178,6 +201,11 @@ window.KB_DATA = {
      "num": 39,
      "err": "`merged + recent_messages[1:]` 报错",
      "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    },
+    {
+     "num": 50,
+     "err": "`id in list[dict]` 永远 False 不报错",
+     "fix": "in 之前核对两边类型一致；查 id 集合用 set"
     }
    ],
    "learned": true,
@@ -265,7 +293,13 @@ window.KB_DATA = {
    "desc": "自动管理资源，不用手动 close",
    "module": "0.2",
    "stage": "0",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 52,
+     "err": "落盘 FileNotFoundError",
+     "fix": "写文件三件套：open(path, \"w\", encoding=\"utf-8\")"
+    }
+   ],
    "learned": true,
    "days": [
     2
@@ -507,13 +541,7 @@ window.KB_DATA = {
    "desc": "`变量: 类型 = 值`，冒号管类型、等号管值",
    "module": "0.3",
    "stage": "0",
-   "pitfalls": [
-    {
-     "num": 2,
-     "err": "`self.tags = list[str] = []` 语法错误",
-     "fix": "`self.tags: list[str] = []`"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     3
@@ -655,7 +683,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    8
    ]
   },
   {
@@ -867,7 +896,13 @@ window.KB_DATA = {
    "desc": "body `\"stream\": True` + 请求 `stream=True`",
    "module": "1.4",
    "stage": "1",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 53,
+     "err": "detect 对干净输入也返回 True",
+     "fix": "遍历名单要遍历【列表】(PATTERNS)"
+    }
+   ],
    "learned": true,
    "days": [
     4
@@ -1083,13 +1118,7 @@ window.KB_DATA = {
    "desc": "字典解包成 Pydantic 对象（Agent 底座：代码可安全消费 LLM 输出）",
    "module": "1.6",
    "stage": "1",
-   "pitfalls": [
-    {
-     "num": 39,
-     "err": "`merged + recent_messages[1:]` 报错",
-     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     4,
@@ -1128,7 +1157,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    8
    ]
   },
   {
@@ -1212,13 +1242,7 @@ window.KB_DATA = {
    "desc": "逐层 isinstance + key in dict 检查，缺层返回 default",
    "module": "2.1",
    "stage": "2",
-   "pitfalls": [
-    {
-     "num": 14,
-     "err": "返回了 API Key 而不是回复",
-     "fix": "命名语义化，返回前核对"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     5,
@@ -1522,11 +1546,18 @@ window.KB_DATA = {
    "desc": "summarize 等作为参数传入，测试传离线 fake、生产传 LLM，接口不变",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 51,
+     "err": "脚本化 fake 永远返回第一稿",
+     "fix": "剧本放函数体外（闭包），或用工厂每次产新机器"
+    }
+   ],
    "learned": true,
    "days": [
     7,
-    5
+    5,
+    8
    ]
   },
   {
@@ -1671,7 +1702,9 @@ window.KB_DATA = {
    "stage": "2",
    "pitfalls": [],
    "learned": true,
-   "days": []
+   "days": [
+    8
+   ]
   },
   {
    "id": "k:2.3:startswith()",
@@ -1833,6 +1866,789 @@ window.KB_DATA = {
    ]
   },
   {
+   "id": "k:2.4:Plan-and-Execute 模式",
+   "type": "knowledge",
+   "name": "Plan-and-Execute 模式",
+   "desc": "先生成完整计划再逐步执行，vs ReAct 走一步看一步（边炒菜边想 vs 先看菜谱）",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    7
+   ]
+  },
+  {
+   "id": "k:2.4:计划即数据",
+   "type": "knowledge",
+   "name": "计划即数据",
+   "desc": "plan 是 list[dict]，可校验、可打印、可给人过目",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 39,
+     "err": "`merged + recent_messages[1:]` 报错",
+     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    }
+   ],
+   "learned": true,
+   "days": [
+    7,
+    8,
+    6
+   ]
+  },
+  {
+   "id": "k:2.4:静态清单循环 vs 动态决定",
+   "type": "knowledge",
+   "name": "静态清单循环 vs 动态决定",
+   "desc": "P&E 循环一个静态列表，ReAct 每轮问 LLM——前者省调用、可审计",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 12,
+     "err": "列表推导结果全是同一个值",
+     "fix": "推导式变量名与循环一致"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.4:工具注册表分发",
+   "type": "knowledge",
+   "name": "工具注册表分发",
+   "desc": "{\"动作名\": 函数}，按 action 查表调用，加工具只加表项",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.4:*args 调用侧解包",
+   "type": "knowledge",
+   "name": "*args 调用侧解包",
+   "desc": "fn(*[2,3]) = fn(2,3)；safe_get 的 *keys 是签名侧收拢，一体两面",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5,
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:优雅降级",
+   "type": "knowledge",
+   "name": "优雅降级",
+   "desc": "未知操作返回错误字符串不崩溃，引擎继续跑",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.4:校验器参数放宽",
+   "type": "knowledge",
+   "name": "校验器参数放宽",
+   "desc": "安检员天生要接\"可能不合法\"的输入，签名用 list 而非 list[dict]",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 2,
+     "err": "`self.tags = list[str] = []` 语法错误",
+     "fix": "`self.tags: list[str] = []`"
+    },
+    {
+     "num": 3,
+     "err": "`self.tags : list[str] = []` 报错",
+     "fix": "冒号紧跟变量名"
+    },
+    {
+     "num": 50,
+     "err": "`id in list[dict]` 永远 False 不报错",
+     "fix": "in 之前核对两边类型一致；查 id 集合用 set"
+    }
+   ],
+   "learned": false,
+   "days": [
+    4,
+    3,
+    6
+   ]
+  },
+  {
+   "id": "k:2.4:动态重规划",
+   "type": "knowledge",
+   "name": "动态重规划",
+   "desc": "受阻→重算【剩余】路线→继续，已完成的结果不回滚（导航改道不回出发点）",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:重规划预算 max_replans",
+   "type": "knowledge",
+   "name": "重规划预算 max_replans",
+   "desc": "防庸医 replanner 无限变道烧钱，max_iterations 的直系亲戚",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:错误即数据",
+   "type": "knowledge",
+   "name": "错误即数据",
+   "desc": "优雅降级的产出（未知操作字符串）= 上游系统的触发信号",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:while+手动索引",
+   "type": "knowledge",
+   "name": "while+手动索引",
+   "desc": "循环对象要中途整体替换时，for 锁死迭代对象，while 才能边跑边换",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    1
+   ]
+  },
+  {
+   "id": "k:2.4:import 自己的模块",
+   "type": "knowledge",
+   "name": "import 自己的模块",
+   "desc": "同目录 from plan_and_execute import ...，DRY 复用零件",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:失败痕迹保留",
+   "type": "knowledge",
+   "name": "失败痕迹保留",
+   "desc": "results 记录每次失败——审计时能看到在哪改的道",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.4:planner vs replanner",
+   "type": "knowledge",
+   "name": "planner vs replanner",
+   "desc": "出发前盲规划(只知任务) vs 受阻时知情改道(知任务+进度+故障)，只管剩余",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:共享黑板 state",
+   "type": "knowledge",
+   "name": "共享黑板 state",
+   "desc": "步骤间数据流走闭包 dict，不走返回值（框架 checkpoint 思想）",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.4:zip 拉链配对",
+   "type": "knowledge",
+   "name": "zip 拉链配对",
+   "desc": "zip(a,b) 按位置咬合成对，配权重/配对计算一步到位",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.4:CWD vs 脚本目录",
+   "type": "knowledge",
+   "name": "CWD vs 脚本目录",
+   "desc": "相对路径跟着\"从哪运行\"走；Path(__file__).parent 锚定\"文件在哪\"",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 49,
+     "err": "报告文件落在仓库根而不是脚本目录",
+     "fix": "`Path(__file__).parent / path` 锚定脚本目录"
+    },
+    {
+     "num": 52,
+     "err": "落盘 FileNotFoundError",
+     "fix": "写文件三件套：open(path, \"w\", encoding=\"utf-8\")"
+    }
+   ],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.4:Workflow vs Agent",
+   "type": "knowledge",
+   "name": "Workflow vs Agent",
+   "desc": "流程固定（下一步听代码）vs 动态流程（下一步听 LLM）——run_plan vs react_loop",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.4:gate 闸门思想",
+   "type": "knowledge",
+   "name": "gate 闸门思想",
+   "desc": "步骤之间加检查点：validate_plan 拦进门计划、is_failed 拦半路结果，脏数据不流向下一步",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:何时该用 Agent",
+   "type": "knowledge",
+   "name": "何时该用 Agent",
+   "desc": "任务步骤无法预知、需现场决策才上 Agent；宁简勿繁，从最简单方案开始",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    7
+   ]
+  },
+  {
+   "id": "k:2.4:依赖感知执行（拓扑排序朴素版）",
+   "type": "knowledge",
+   "name": "依赖感知执行（拓扑排序朴素版）",
+   "desc": "每步声明 needs，循环挑\"依赖全就位\"的步骤执行，清单顺序≠执行顺序",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5
+   ]
+  },
+  {
+   "id": "k:2.4:死锁检测",
+   "type": "knowledge",
+   "name": "死锁检测",
+   "desc": "还有剩余但挑不出任何就绪步骤 = 依赖成环，报告终止而非挂死",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:done 用 set",
+   "type": "knowledge",
+   "name": "done 用 set",
+   "desc": "已完成 id 集合用 set——`n in done` 是 O(1) 查询，list 是 O(n)",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 6,
+     "err": "`text == \"DONE\"` 永远不触发",
+     "fix": "`text == \"[DONE]\"` 写完整"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4
+   ]
+  },
+  {
+   "id": "k:2.4:sorted(key=lambda)",
+   "type": "knowledge",
+   "name": "sorted(key=lambda)",
+   "desc": "排 dict 列表给一把\"尺子\"：key=lambda s: s[\"id\"] 量哪个字段",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 14,
+     "err": "返回了 API Key 而不是回复",
+     "fix": "命名语义化，返回前核对"
+    }
+   ],
+   "learned": true,
+   "days": [
+    5,
+    4,
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:all() / any()",
+   "type": "knowledge",
+   "name": "all() / any()",
+   "desc": "全都成立吗 / 有一个成立吗——all 管闸门全过才放行，any 管警报有一个就响",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.5:反思循环",
+   "type": "knowledge",
+   "name": "反思循环",
+   "desc": "生成→自评→改进：ReAct 对外行动，反思对内检讨自己上一稿",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:批评家=规则代码",
+   "type": "knowledge",
+   "name": "批评家=规则代码",
+   "desc": "硬约束检查用代码不用 LLM——免费、确定、可测试（离线可验的逻辑不花钱）",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    7,
+    4
+   ]
+  },
+  {
+   "id": "k:2.5:反思便签=工作记忆",
+   "type": "knowledge",
+   "name": "反思便签=工作记忆",
+   "desc": "问题清单翻译成便签喂回下一轮生成器，note 跨轮传递",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:问题收敛曲线",
+   "type": "knowledge",
+   "name": "问题收敛曲线",
+   "desc": "problems_history 里问题数递减（如 [2,1,0]）——反思有效的数字证据",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:critic 返回问题清单",
+   "type": "knowledge",
+   "name": "critic 返回问题清单",
+   "desc": "比 bool 信息量大：清单直接变成下一轮的改进指令（错误即数据第三次登场）",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    4
+   ]
+  },
+  {
+   "id": "k:2.5:预算即圈数",
+   "type": "knowledge",
+   "name": "预算即圈数",
+   "desc": "for range(max_rounds)：每圈必然消耗预算，放学铃必须存在",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.5:语言强化学习",
+   "type": "knowledge",
+   "name": "语言强化学习",
+   "desc": "不改权重改文字记忆——不做脑手术，改贴便利贴（Reflexion）",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:Actor/Evaluator/Self-reflection",
+   "type": "knowledge",
+   "name": "Actor/Evaluator/Self-reflection",
+   "desc": "= generator/check_slogan/build_reflection，我写过 Reflexion 迷你版",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 19,
+     "err": "`self.books = None` 后遍历报错",
+     "fix": "初始化为 `[]`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "k:2.5:episodic memory",
+   "type": "knowledge",
+   "name": "episodic memory",
+   "desc": "反思跨试次（任务）存活；note 只在单任务内——长期记忆+反思便签的合体",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:反思按需付费",
+   "type": "knowledge",
+   "name": "反思按需付费",
+   "desc": "第 1 轮=裸奔，一稿过零成本，烂稿才补轮——怕翻倍不敢开是错觉",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:7.1:三遍寻宝法",
+   "type": "knowledge",
+   "name": "三遍寻宝法",
+   "desc": "侦察(摘要/图表/结论5分钟)→挖宝(Intro末段+方法+Figure1)→按需拆解(复现时才精读)",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:7.1:Figure 1 定律",
+   "type": "knowledge",
+   "name": "Figure 1 定律",
+   "desc": "Agent 论文 90% 精华在架构图——先看懂图再看字",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:7.1:代码锚定法",
+   "type": "knowledge",
+   "name": "代码锚定法",
+   "desc": "把论文组件翻译成自己写过的函数，概念立刻落地",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:7.1:费曼检验",
+   "type": "knowledge",
+   "name": "费曼检验",
+   "desc": "写不出 3 行总结=没读懂，回去重读 Figure 1",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:7.1:episodic memory 实现",
+   "type": "knowledge",
+   "name": "episodic memory 实现",
+   "desc": "长期记忆(落盘教训库)×反思(便签)的组合——lesson 跨任务传递",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:7.1:读旧+append+写回",
+   "type": "knowledge",
+   "name": "读旧+append+写回",
+   "desc": "追加式落盘三步：复用 load 读旧库，别只写新条目（会覆盖历史）",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:7.1:容错返回同形状",
+   "type": "knowledge",
+   "name": "容错返回同形状",
+   "desc": "异常路径返回值类型必须与正常路径一致（[] 而非 False，否则下游 .append 爆炸）",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5,
+    4,
+    2
+   ]
+  },
+  {
+   "id": "k:7.1:剧本放闭包外",
+   "type": "knowledge",
+   "name": "剧本放闭包外",
+   "desc": "脚本化 fake 的剧本必须定义在函数体外——体内=每次调用重发剧本永远第一稿",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 51,
+     "err": "脚本化 fake 永远返回第一稿",
+     "fix": "剧本放函数体外（闭包），或用工厂每次产新机器"
+    }
+   ],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.6:威胁矩阵",
+   "type": "knowledge",
+   "name": "威胁矩阵",
+   "desc": "5 大攻击面: 注入/越权工具/数据泄露/输出投毒/供应链——对应防御: 过滤/分级/校验/校验/沙箱",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:Prompt 注入",
+   "type": "knowledge",
+   "name": "Prompt 注入",
+   "desc": "指令藏在数据里（留言板/网页/文件）——LLM 眼里数据和指令都是文字，天生分不清",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    8,
+    7
+   ]
+  },
+  {
+   "id": "k:2.6:大小写归一化",
+   "type": "knowledge",
+   "name": "大小写归一化",
+   "desc": "文本检测先 text.lower()——否则 DISREGARD 大写攻击直接穿防",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:表驱动特征检测",
+   "type": "knowledge",
+   "name": "表驱动特征检测",
+   "desc": "危险短语进 PATTERNS 表 + 循环，加特征零改逻辑",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.6:过滤 vs 拦截",
+   "type": "knowledge",
+   "name": "过滤 vs 拦截",
+   "desc": "sanitize 消毒放行（柔和）vs guard 命中即拒（强硬）——纵深防御两层都上",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 56,
+     "err": "审计记错、guard 交给消毒员",
+     "fix": "用词表锚定角色语义，写前默念名字含义"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:规则模拟 LLM",
+   "type": "knowledge",
+   "name": "规则模拟 LLM",
+   "desc": "用 if 模拟\"被劫持的 LLM\"——离线靶场不花 API 钱",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    5,
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:遍历字符串陷阱",
+   "type": "knowledge",
+   "name": "遍历字符串陷阱",
+   "desc": "for x in \"字符串\" 拆成逐字符——遍历名单要遍历【列表】",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 53,
+     "err": "detect 对干净输入也返回 True",
+     "fix": "遍历名单要遍历【列表】(PATTERNS)"
+    }
+   ],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:绿黄红权限分级",
+   "type": "knowledge",
+   "name": "绿黄红权限分级",
+   "desc": "按副作用: 无副作用(绿自动放行)/可逆(黄需确认)/不可逆(红人工通道)",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:默认拒绝 Default Deny",
+   "type": "knowledge",
+   "name": "默认拒绝 Default Deny",
+   "desc": "未登记=红——dict.get(k, 'red') 一行落地，宁可误拒不可误放",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5
+   ]
+  },
+  {
+   "id": "k:2.6:审计记裁决不记申报",
+   "type": "knowledge",
+   "name": "审计记裁决不记申报",
+   "desc": "日志记闸门的 allowed，不是申请人的 auto_confirm——被拒的试图才是警报",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 56,
+     "err": "审计记错、guard 交给消毒员",
+     "fix": "用词表锚定角色语义，写前默念名字含义"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:闸门与执行分离",
+   "type": "knowledge",
+   "name": "闸门与执行分离",
+   "desc": "authorize 只决策，run_tool 先闸后执行——安检员不搬货",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.6:契约文案即接口",
+   "type": "knowledge",
+   "name": "契约文案即接口",
+   "desc": "拒绝消息文本是需求契约的一部分，下游靠它拼日志——精确照抄不发挥",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
    "id": "x:0",
    "type": "planned",
    "name": "2.4 任务规划（Plan-and-Execute）",
@@ -1933,6 +2749,26 @@ window.KB_DATA = {
   {
    "source": "s:2",
    "target": "m:2.3",
+   "type": "contain"
+  },
+  {
+   "source": "s:2",
+   "target": "m:2.4",
+   "type": "contain"
+  },
+  {
+   "source": "s:2",
+   "target": "m:2.5",
+   "type": "contain"
+  },
+  {
+   "source": "s:2",
+   "target": "m:7.1",
+   "type": "contain"
+  },
+  {
+   "source": "s:2",
+   "target": "m:2.6",
    "type": "contain"
   },
   {
@@ -2476,6 +3312,281 @@ window.KB_DATA = {
    "type": "contain"
   },
   {
+   "source": "m:2.4",
+   "target": "k:2.4:Plan-and-Execute 模式",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:计划即数据",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:静态清单循环 vs 动态决定",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:工具注册表分发",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:*args 调用侧解包",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:优雅降级",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:校验器参数放宽",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:动态重规划",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:重规划预算 max_replans",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:错误即数据",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:while+手动索引",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:import 自己的模块",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:失败痕迹保留",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:planner vs replanner",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:共享黑板 state",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:zip 拉链配对",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:CWD vs 脚本目录",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:Workflow vs Agent",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:gate 闸门思想",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:何时该用 Agent",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:依赖感知执行（拓扑排序朴素版）",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:死锁检测",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:done 用 set",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:sorted(key=lambda)",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.4",
+   "target": "k:2.4:all() / any()",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:反思循环",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:批评家=规则代码",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:反思便签=工作记忆",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:问题收敛曲线",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:critic 返回问题清单",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:预算即圈数",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:语言强化学习",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:Actor/Evaluator/Self-reflection",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:episodic memory",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.5",
+   "target": "k:2.5:反思按需付费",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:三遍寻宝法",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:Figure 1 定律",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:代码锚定法",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:费曼检验",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:episodic memory 实现",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:读旧+append+写回",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:容错返回同形状",
+   "type": "contain"
+  },
+  {
+   "source": "m:7.1",
+   "target": "k:7.1:剧本放闭包外",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:威胁矩阵",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:Prompt 注入",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:大小写归一化",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:表驱动特征检测",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:过滤 vs 拦截",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:规则模拟 LLM",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:遍历字符串陷阱",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:绿黄红权限分级",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:默认拒绝 Default Deny",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:审计记裁决不记申报",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:闸门与执行分离",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:契约文案即接口",
+   "type": "contain"
+  },
+  {
    "source": "k:0.1:变量与数据类型",
    "target": "k:0.1:条件判断",
    "type": "path"
@@ -3012,6 +4123,281 @@ window.KB_DATA = {
   },
   {
    "source": "k:2.3:卫语句双条件",
+   "target": "k:2.4:Plan-and-Execute 模式",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:Plan-and-Execute 模式",
+   "target": "k:2.4:计划即数据",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:计划即数据",
+   "target": "k:2.4:静态清单循环 vs 动态决定",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:静态清单循环 vs 动态决定",
+   "target": "k:2.4:工具注册表分发",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:工具注册表分发",
+   "target": "k:2.4:*args 调用侧解包",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:*args 调用侧解包",
+   "target": "k:2.4:优雅降级",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:优雅降级",
+   "target": "k:2.4:校验器参数放宽",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:校验器参数放宽",
+   "target": "k:2.4:动态重规划",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:动态重规划",
+   "target": "k:2.4:重规划预算 max_replans",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:重规划预算 max_replans",
+   "target": "k:2.4:错误即数据",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:错误即数据",
+   "target": "k:2.4:while+手动索引",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:while+手动索引",
+   "target": "k:2.4:import 自己的模块",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:import 自己的模块",
+   "target": "k:2.4:失败痕迹保留",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:失败痕迹保留",
+   "target": "k:2.4:planner vs replanner",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:planner vs replanner",
+   "target": "k:2.4:共享黑板 state",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:共享黑板 state",
+   "target": "k:2.4:zip 拉链配对",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:zip 拉链配对",
+   "target": "k:2.4:CWD vs 脚本目录",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:CWD vs 脚本目录",
+   "target": "k:2.4:Workflow vs Agent",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:Workflow vs Agent",
+   "target": "k:2.4:gate 闸门思想",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:gate 闸门思想",
+   "target": "k:2.4:何时该用 Agent",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:何时该用 Agent",
+   "target": "k:2.4:依赖感知执行（拓扑排序朴素版）",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:依赖感知执行（拓扑排序朴素版）",
+   "target": "k:2.4:死锁检测",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:死锁检测",
+   "target": "k:2.4:done 用 set",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:done 用 set",
+   "target": "k:2.4:sorted(key=lambda)",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:sorted(key=lambda)",
+   "target": "k:2.4:all() / any()",
+   "type": "path"
+  },
+  {
+   "source": "k:2.4:all() / any()",
+   "target": "k:2.5:反思循环",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:反思循环",
+   "target": "k:2.5:批评家=规则代码",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:批评家=规则代码",
+   "target": "k:2.5:反思便签=工作记忆",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:反思便签=工作记忆",
+   "target": "k:2.5:问题收敛曲线",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:问题收敛曲线",
+   "target": "k:2.5:critic 返回问题清单",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:critic 返回问题清单",
+   "target": "k:2.5:预算即圈数",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:预算即圈数",
+   "target": "k:2.5:语言强化学习",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:语言强化学习",
+   "target": "k:2.5:Actor/Evaluator/Self-reflection",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:Actor/Evaluator/Self-reflection",
+   "target": "k:2.5:episodic memory",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:episodic memory",
+   "target": "k:2.5:反思按需付费",
+   "type": "path"
+  },
+  {
+   "source": "k:2.5:反思按需付费",
+   "target": "k:7.1:三遍寻宝法",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:三遍寻宝法",
+   "target": "k:7.1:Figure 1 定律",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:Figure 1 定律",
+   "target": "k:7.1:代码锚定法",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:代码锚定法",
+   "target": "k:7.1:费曼检验",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:费曼检验",
+   "target": "k:7.1:episodic memory 实现",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:episodic memory 实现",
+   "target": "k:7.1:读旧+append+写回",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:读旧+append+写回",
+   "target": "k:7.1:容错返回同形状",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:容错返回同形状",
+   "target": "k:7.1:剧本放闭包外",
+   "type": "path"
+  },
+  {
+   "source": "k:7.1:剧本放闭包外",
+   "target": "k:2.6:威胁矩阵",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:威胁矩阵",
+   "target": "k:2.6:Prompt 注入",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:Prompt 注入",
+   "target": "k:2.6:大小写归一化",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:大小写归一化",
+   "target": "k:2.6:表驱动特征检测",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:表驱动特征检测",
+   "target": "k:2.6:过滤 vs 拦截",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:过滤 vs 拦截",
+   "target": "k:2.6:规则模拟 LLM",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:规则模拟 LLM",
+   "target": "k:2.6:遍历字符串陷阱",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:遍历字符串陷阱",
+   "target": "k:2.6:绿黄红权限分级",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:绿黄红权限分级",
+   "target": "k:2.6:默认拒绝 Default Deny",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:默认拒绝 Default Deny",
+   "target": "k:2.6:审计记裁决不记申报",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:审计记裁决不记申报",
+   "target": "k:2.6:闸门与执行分离",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:闸门与执行分离",
+   "target": "k:2.6:契约文案即接口",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:契约文案即接口",
    "target": "x:0",
    "type": "path"
   },
@@ -3044,13 +4430,25 @@ window.KB_DATA = {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
    "type": "related",
-   "label": "llama"
+   "label": "qwen"
+  },
+  {
+   "source": "k:2.5:episodic memory",
+   "target": "k:7.1:episodic memory 实现",
+   "type": "related",
+   "label": "memory"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.6:规则模拟 LLM",
+   "type": "related",
+   "label": "llm"
   },
   {
    "source": "k:2.1:parse_tool_arguments()",
    "target": "k:2.3:json 落盘",
    "type": "related",
-   "label": "loads"
+   "label": "json"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -3077,16 +4475,28 @@ window.KB_DATA = {
    "label": "system"
   },
   {
+   "source": "k:1.1:AI→ML→DL→LLM→Agent",
+   "target": "k:2.4:Workflow vs Agent",
+   "type": "related",
+   "label": "agent"
+  },
+  {
    "source": "k:2.3:system 常驻豁免",
    "target": "k:2.3:摘要合并进 system",
    "type": "related",
    "label": "system"
   },
   {
+   "source": "k:0.1:四种数据结构",
+   "target": "k:2.4:计划即数据",
+   "type": "related",
+   "label": "dict"
+  },
+  {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
    "type": "related",
-   "label": "system"
+   "label": "user"
   },
   {
    "source": "k:0.1:异常处理",
@@ -3095,8 +4505,38 @@ window.KB_DATA = {
    "label": "except"
   },
   {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.6:Prompt 注入",
+   "type": "related",
+   "label": "prompt"
+  },
+  {
    "source": "k:1.6:`Recipe(**dict)`",
    "target": "k:2.3:dict 保持插入顺序",
+   "type": "related",
+   "label": "dict"
+  },
+  {
+   "source": "k:1.6:`Recipe(**dict)`",
+   "target": "k:2.4:Workflow vs Agent",
+   "type": "related",
+   "label": "agent"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.5:批评家=规则代码",
+   "type": "related",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.5:批评家=规则代码",
+   "target": "k:2.6:规则模拟 LLM",
+   "type": "related",
+   "label": "llm"
+  },
+  {
+   "source": "k:0.1:四种数据结构",
+   "target": "k:2.4:校验器参数放宽",
    "type": "related",
    "label": "dict"
   },
@@ -3113,16 +4553,28 @@ window.KB_DATA = {
    "label": "field"
   },
   {
+   "source": "k:0.3:field(default_factory=list)",
+   "target": "k:2.4:校验器参数放宽",
+   "type": "related",
+   "label": "list"
+  },
+  {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
    "type": "related",
-   "label": "llm"
+   "label": "agent"
   },
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:2.3:规则抽取 vs LLM 抽取",
    "type": "related",
    "label": "llm"
+  },
+  {
+   "source": "k:1.1:AI→ML→DL→LLM→Agent",
+   "target": "k:2.4:何时该用 Agent",
+   "type": "related",
+   "label": "agent"
   },
   {
    "source": "k:1.1:Token",
@@ -3135,6 +4587,12 @@ window.KB_DATA = {
    "target": "k:2.3:token 粗估",
    "type": "related",
    "label": "token"
+  },
+  {
+   "source": "k:1.3:API Key 安全",
+   "target": "k:2.4:sorted(key=lambda)",
+   "type": "related",
+   "label": "key"
   },
   {
    "source": "k:1.3:四角色",
@@ -3179,10 +4637,28 @@ window.KB_DATA = {
    "label": "assistant"
   },
   {
+   "source": "k:2.1:safe_get()",
+   "target": "k:2.4:sorted(key=lambda)",
+   "type": "related",
+   "label": "key"
+  },
+  {
+   "source": "k:2.1:safe_get()",
+   "target": "k:2.6:默认拒绝 Default Deny",
+   "type": "related",
+   "label": "dict"
+  },
+  {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
    "type": "related",
    "label": "agentstate"
+  },
+  {
+   "source": "k:2.3:表驱动",
+   "target": "k:2.6:表驱动特征检测",
+   "type": "related",
+   "label": "驱动"
   },
   {
    "source": "k:0.1:四种数据结构",
@@ -3201,6 +4677,24 @@ window.KB_DATA = {
    "target": "k:2.3:三种记忆分工",
    "type": "related",
    "label": "messages"
+  },
+  {
+   "source": "k:2.3:回调函数注入",
+   "target": "k:2.5:批评家=规则代码",
+   "type": "related",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.3:回调函数注入",
+   "target": "k:2.6:Prompt 注入",
+   "type": "related",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.4:静态清单循环 vs 动态决定",
+   "target": "k:2.5:反思循环",
+   "type": "related",
+   "label": "react"
   },
   {
    "source": "s:2",
@@ -3447,6 +4941,93 @@ window.KB_DATA = {
     "k:2.3:del 语句",
     "k:2.3:卫语句双条件"
    ]
+  },
+  {
+   "id": "m:2.4",
+   "code": "2.4",
+   "name": "任务规划与分解",
+   "stage": "2",
+   "points": [
+    "k:2.4:Plan-and-Execute 模式",
+    "k:2.4:计划即数据",
+    "k:2.4:静态清单循环 vs 动态决定",
+    "k:2.4:工具注册表分发",
+    "k:2.4:*args 调用侧解包",
+    "k:2.4:优雅降级",
+    "k:2.4:校验器参数放宽",
+    "k:2.4:动态重规划",
+    "k:2.4:重规划预算 max_replans",
+    "k:2.4:错误即数据",
+    "k:2.4:while+手动索引",
+    "k:2.4:import 自己的模块",
+    "k:2.4:失败痕迹保留",
+    "k:2.4:planner vs replanner",
+    "k:2.4:共享黑板 state",
+    "k:2.4:zip 拉链配对",
+    "k:2.4:CWD vs 脚本目录",
+    "k:2.4:Workflow vs Agent",
+    "k:2.4:gate 闸门思想",
+    "k:2.4:何时该用 Agent",
+    "k:2.4:依赖感知执行（拓扑排序朴素版）",
+    "k:2.4:死锁检测",
+    "k:2.4:done 用 set",
+    "k:2.4:sorted(key=lambda)",
+    "k:2.4:all() / any()"
+   ]
+  },
+  {
+   "id": "m:2.5",
+   "code": "2.5",
+   "name": "Reflection 反思机制",
+   "stage": "2",
+   "points": [
+    "k:2.5:反思循环",
+    "k:2.5:批评家=规则代码",
+    "k:2.5:反思便签=工作记忆",
+    "k:2.5:问题收敛曲线",
+    "k:2.5:critic 返回问题清单",
+    "k:2.5:预算即圈数",
+    "k:2.5:语言强化学习",
+    "k:2.5:Actor/Evaluator/Self-reflection",
+    "k:2.5:episodic memory",
+    "k:2.5:反思按需付费"
+   ]
+  },
+  {
+   "id": "m:7.1",
+   "code": "7.1",
+   "name": "论文阅读（元能力）",
+   "stage": "2",
+   "points": [
+    "k:7.1:三遍寻宝法",
+    "k:7.1:Figure 1 定律",
+    "k:7.1:代码锚定法",
+    "k:7.1:费曼检验",
+    "k:7.1:episodic memory 实现",
+    "k:7.1:读旧+append+写回",
+    "k:7.1:容错返回同形状",
+    "k:7.1:剧本放闭包外"
+   ]
+  },
+  {
+   "id": "m:2.6",
+   "code": "2.6",
+   "name": "安全与护栏",
+   "stage": "2",
+   "points": [
+    "k:2.6:威胁矩阵",
+    "k:2.6:Prompt 注入",
+    "k:2.6:大小写归一化",
+    "k:2.6:表驱动特征检测",
+    "k:2.6:过滤 vs 拦截",
+    "k:2.6:规则模拟 LLM",
+    "k:2.6:遍历字符串陷阱",
+    "k:2.6:绿黄红权限分级",
+    "k:2.6:默认拒绝 Default Deny",
+    "k:2.6:审计记裁决不记申报",
+    "k:2.6:闸门与执行分离",
+    "k:2.6:契约文案即接口"
+   ]
   }
  ],
  "points": [
@@ -3457,11 +5038,6 @@ window.KB_DATA = {
    "module": "0.1",
    "stage": "0",
    "pitfalls": [
-    {
-     "num": 3,
-     "err": "`self.tags : list[str] = []` 报错",
-     "fix": "冒号紧跟变量名"
-    },
     {
      "num": 42,
      "err": "`int(msg[\"role\"])` ValueError",
@@ -3511,6 +5087,11 @@ window.KB_DATA = {
      "num": 39,
      "err": "`merged + recent_messages[1:]` 报错",
      "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    },
+    {
+     "num": 50,
+     "err": "`id in list[dict]` 永远 False 不报错",
+     "fix": "in 之前核对两边类型一致；查 id 集合用 set"
     }
    ],
    "learned": true,
@@ -3593,7 +5174,13 @@ window.KB_DATA = {
    "desc": "自动管理资源，不用手动 close",
    "module": "0.2",
    "stage": "0",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 52,
+     "err": "落盘 FileNotFoundError",
+     "fix": "写文件三件套：open(path, \"w\", encoding=\"utf-8\")"
+    }
+   ],
    "learned": true,
    "days": [
     2
@@ -3819,13 +5406,7 @@ window.KB_DATA = {
    "desc": "`变量: 类型 = 值`，冒号管类型、等号管值",
    "module": "0.3",
    "stage": "0",
-   "pitfalls": [
-    {
-     "num": 2,
-     "err": "`self.tags = list[str] = []` 语法错误",
-     "fix": "`self.tags: list[str] = []`"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     3
@@ -3958,7 +5539,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    8
    ]
   },
   {
@@ -4156,7 +5738,13 @@ window.KB_DATA = {
    "desc": "body `\"stream\": True` + 请求 `stream=True`",
    "module": "1.4",
    "stage": "1",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 53,
+     "err": "detect 对干净输入也返回 True",
+     "fix": "遍历名单要遍历【列表】(PATTERNS)"
+    }
+   ],
    "learned": true,
    "days": [
     4
@@ -4357,13 +5945,7 @@ window.KB_DATA = {
    "desc": "字典解包成 Pydantic 对象（Agent 底座：代码可安全消费 LLM 输出）",
    "module": "1.6",
    "stage": "1",
-   "pitfalls": [
-    {
-     "num": 39,
-     "err": "`merged + recent_messages[1:]` 报错",
-     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     4,
@@ -4400,7 +5982,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    8
    ]
   },
   {
@@ -4478,13 +6061,7 @@ window.KB_DATA = {
    "desc": "逐层 isinstance + key in dict 检查，缺层返回 default",
    "module": "2.1",
    "stage": "2",
-   "pitfalls": [
-    {
-     "num": 14,
-     "err": "返回了 API Key 而不是回复",
-     "fix": "命名语义化，返回前核对"
-    }
-   ],
+   "pitfalls": [],
    "learned": true,
    "days": [
     5,
@@ -4769,11 +6346,18 @@ window.KB_DATA = {
    "desc": "summarize 等作为参数传入，测试传离线 fake、生产传 LLM，接口不变",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 51,
+     "err": "脚本化 fake 永远返回第一稿",
+     "fix": "剧本放函数体外（闭包），或用工厂每次产新机器"
+    }
+   ],
    "learned": true,
    "days": [
     7,
-    5
+    5,
+    8
    ]
   },
   {
@@ -4909,7 +6493,9 @@ window.KB_DATA = {
    "stage": "2",
    "pitfalls": [],
    "learned": true,
-   "days": []
+   "days": [
+    8
+   ]
   },
   {
    "id": "k:2.3:startswith()",
@@ -5060,6 +6646,734 @@ window.KB_DATA = {
     5,
     4
    ]
+  },
+  {
+   "id": "k:2.4:Plan-and-Execute 模式",
+   "name": "Plan-and-Execute 模式",
+   "desc": "先生成完整计划再逐步执行，vs ReAct 走一步看一步（边炒菜边想 vs 先看菜谱）",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    7
+   ]
+  },
+  {
+   "id": "k:2.4:计划即数据",
+   "name": "计划即数据",
+   "desc": "plan 是 list[dict]，可校验、可打印、可给人过目",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 39,
+     "err": "`merged + recent_messages[1:]` 报错",
+     "fix": "用 `[merged] + recent_messages[1:]` 包成列表再拼接"
+    }
+   ],
+   "learned": true,
+   "days": [
+    7,
+    8,
+    6
+   ]
+  },
+  {
+   "id": "k:2.4:静态清单循环 vs 动态决定",
+   "name": "静态清单循环 vs 动态决定",
+   "desc": "P&E 循环一个静态列表，ReAct 每轮问 LLM——前者省调用、可审计",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 12,
+     "err": "列表推导结果全是同一个值",
+     "fix": "推导式变量名与循环一致"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.4:工具注册表分发",
+   "name": "工具注册表分发",
+   "desc": "{\"动作名\": 函数}，按 action 查表调用，加工具只加表项",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.4:*args 调用侧解包",
+   "name": "*args 调用侧解包",
+   "desc": "fn(*[2,3]) = fn(2,3)；safe_get 的 *keys 是签名侧收拢，一体两面",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5,
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:优雅降级",
+   "name": "优雅降级",
+   "desc": "未知操作返回错误字符串不崩溃，引擎继续跑",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.4:校验器参数放宽",
+   "name": "校验器参数放宽",
+   "desc": "安检员天生要接\"可能不合法\"的输入，签名用 list 而非 list[dict]",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 2,
+     "err": "`self.tags = list[str] = []` 语法错误",
+     "fix": "`self.tags: list[str] = []`"
+    },
+    {
+     "num": 3,
+     "err": "`self.tags : list[str] = []` 报错",
+     "fix": "冒号紧跟变量名"
+    },
+    {
+     "num": 50,
+     "err": "`id in list[dict]` 永远 False 不报错",
+     "fix": "in 之前核对两边类型一致；查 id 集合用 set"
+    }
+   ],
+   "learned": false,
+   "days": [
+    4,
+    3,
+    6
+   ]
+  },
+  {
+   "id": "k:2.4:动态重规划",
+   "name": "动态重规划",
+   "desc": "受阻→重算【剩余】路线→继续，已完成的结果不回滚（导航改道不回出发点）",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:重规划预算 max_replans",
+   "name": "重规划预算 max_replans",
+   "desc": "防庸医 replanner 无限变道烧钱，max_iterations 的直系亲戚",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:错误即数据",
+   "name": "错误即数据",
+   "desc": "优雅降级的产出（未知操作字符串）= 上游系统的触发信号",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:while+手动索引",
+   "name": "while+手动索引",
+   "desc": "循环对象要中途整体替换时，for 锁死迭代对象，while 才能边跑边换",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    1
+   ]
+  },
+  {
+   "id": "k:2.4:import 自己的模块",
+   "name": "import 自己的模块",
+   "desc": "同目录 from plan_and_execute import ...，DRY 复用零件",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:失败痕迹保留",
+   "name": "失败痕迹保留",
+   "desc": "results 记录每次失败——审计时能看到在哪改的道",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.4:planner vs replanner",
+   "name": "planner vs replanner",
+   "desc": "出发前盲规划(只知任务) vs 受阻时知情改道(知任务+进度+故障)，只管剩余",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:共享黑板 state",
+   "name": "共享黑板 state",
+   "desc": "步骤间数据流走闭包 dict，不走返回值（框架 checkpoint 思想）",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.4:zip 拉链配对",
+   "name": "zip 拉链配对",
+   "desc": "zip(a,b) 按位置咬合成对，配权重/配对计算一步到位",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.4:CWD vs 脚本目录",
+   "name": "CWD vs 脚本目录",
+   "desc": "相对路径跟着\"从哪运行\"走；Path(__file__).parent 锚定\"文件在哪\"",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 49,
+     "err": "报告文件落在仓库根而不是脚本目录",
+     "fix": "`Path(__file__).parent / path` 锚定脚本目录"
+    },
+    {
+     "num": 52,
+     "err": "落盘 FileNotFoundError",
+     "fix": "写文件三件套：open(path, \"w\", encoding=\"utf-8\")"
+    }
+   ],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.4:Workflow vs Agent",
+   "name": "Workflow vs Agent",
+   "desc": "流程固定（下一步听代码）vs 动态流程（下一步听 LLM）——run_plan vs react_loop",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    4
+   ]
+  },
+  {
+   "id": "k:2.4:gate 闸门思想",
+   "name": "gate 闸门思想",
+   "desc": "步骤之间加检查点：validate_plan 拦进门计划、is_failed 拦半路结果，脏数据不流向下一步",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:何时该用 Agent",
+   "name": "何时该用 Agent",
+   "desc": "任务步骤无法预知、需现场决策才上 Agent；宁简勿繁，从最简单方案开始",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5,
+    7
+   ]
+  },
+  {
+   "id": "k:2.4:依赖感知执行（拓扑排序朴素版）",
+   "name": "依赖感知执行（拓扑排序朴素版）",
+   "desc": "每步声明 needs，循环挑\"依赖全就位\"的步骤执行，清单顺序≠执行顺序",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    5
+   ]
+  },
+  {
+   "id": "k:2.4:死锁检测",
+   "name": "死锁检测",
+   "desc": "还有剩余但挑不出任何就绪步骤 = 依赖成环，报告终止而非挂死",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:done 用 set",
+   "name": "done 用 set",
+   "desc": "已完成 id 集合用 set——`n in done` 是 O(1) 查询，list 是 O(n)",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 6,
+     "err": "`text == \"DONE\"` 永远不触发",
+     "fix": "`text == \"[DONE]\"` 写完整"
+    }
+   ],
+   "learned": true,
+   "days": [
+    4
+   ]
+  },
+  {
+   "id": "k:2.4:sorted(key=lambda)",
+   "name": "sorted(key=lambda)",
+   "desc": "排 dict 列表给一把\"尺子\"：key=lambda s: s[\"id\"] 量哪个字段",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 14,
+     "err": "返回了 API Key 而不是回复",
+     "fix": "命名语义化，返回前核对"
+    }
+   ],
+   "learned": true,
+   "days": [
+    5,
+    4,
+    8
+   ]
+  },
+  {
+   "id": "k:2.4:all() / any()",
+   "name": "all() / any()",
+   "desc": "全都成立吗 / 有一个成立吗——all 管闸门全过才放行，any 管警报有一个就响",
+   "module": "2.4",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.5:反思循环",
+   "name": "反思循环",
+   "desc": "生成→自评→改进：ReAct 对外行动，反思对内检讨自己上一稿",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:批评家=规则代码",
+   "name": "批评家=规则代码",
+   "desc": "硬约束检查用代码不用 LLM——免费、确定、可测试（离线可验的逻辑不花钱）",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    7,
+    4
+   ]
+  },
+  {
+   "id": "k:2.5:反思便签=工作记忆",
+   "name": "反思便签=工作记忆",
+   "desc": "问题清单翻译成便签喂回下一轮生成器，note 跨轮传递",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:问题收敛曲线",
+   "name": "问题收敛曲线",
+   "desc": "problems_history 里问题数递减（如 [2,1,0]）——反思有效的数字证据",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:critic 返回问题清单",
+   "name": "critic 返回问题清单",
+   "desc": "比 bool 信息量大：清单直接变成下一轮的改进指令（错误即数据第三次登场）",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8,
+    4
+   ]
+  },
+  {
+   "id": "k:2.5:预算即圈数",
+   "name": "预算即圈数",
+   "desc": "for range(max_rounds)：每圈必然消耗预算，放学铃必须存在",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.5:语言强化学习",
+   "name": "语言强化学习",
+   "desc": "不改权重改文字记忆——不做脑手术，改贴便利贴（Reflexion）",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:Actor/Evaluator/Self-reflection",
+   "name": "Actor/Evaluator/Self-reflection",
+   "desc": "= generator/check_slogan/build_reflection，我写过 Reflexion 迷你版",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 19,
+     "err": "`self.books = None` 后遍历报错",
+     "fix": "初始化为 `[]`"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8,
+    2,
+    3
+   ]
+  },
+  {
+   "id": "k:2.5:episodic memory",
+   "name": "episodic memory",
+   "desc": "反思跨试次（任务）存活；note 只在单任务内——长期记忆+反思便签的合体",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.5:反思按需付费",
+   "name": "反思按需付费",
+   "desc": "第 1 轮=裸奔，一稿过零成本，烂稿才补轮——怕翻倍不敢开是错觉",
+   "module": "2.5",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:7.1:三遍寻宝法",
+   "name": "三遍寻宝法",
+   "desc": "侦察(摘要/图表/结论5分钟)→挖宝(Intro末段+方法+Figure1)→按需拆解(复现时才精读)",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:7.1:Figure 1 定律",
+   "name": "Figure 1 定律",
+   "desc": "Agent 论文 90% 精华在架构图——先看懂图再看字",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:7.1:代码锚定法",
+   "name": "代码锚定法",
+   "desc": "把论文组件翻译成自己写过的函数，概念立刻落地",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:7.1:费曼检验",
+   "name": "费曼检验",
+   "desc": "写不出 3 行总结=没读懂，回去重读 Figure 1",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:7.1:episodic memory 实现",
+   "name": "episodic memory 实现",
+   "desc": "长期记忆(落盘教训库)×反思(便签)的组合——lesson 跨任务传递",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:7.1:读旧+append+写回",
+   "name": "读旧+append+写回",
+   "desc": "追加式落盘三步：复用 load 读旧库，别只写新条目（会覆盖历史）",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:7.1:容错返回同形状",
+   "name": "容错返回同形状",
+   "desc": "异常路径返回值类型必须与正常路径一致（[] 而非 False，否则下游 .append 爆炸）",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5,
+    4,
+    2
+   ]
+  },
+  {
+   "id": "k:7.1:剧本放闭包外",
+   "name": "剧本放闭包外",
+   "desc": "脚本化 fake 的剧本必须定义在函数体外——体内=每次调用重发剧本永远第一稿",
+   "module": "7.1",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 51,
+     "err": "脚本化 fake 永远返回第一稿",
+     "fix": "剧本放函数体外（闭包），或用工厂每次产新机器"
+    }
+   ],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.6:威胁矩阵",
+   "name": "威胁矩阵",
+   "desc": "5 大攻击面: 注入/越权工具/数据泄露/输出投毒/供应链——对应防御: 过滤/分级/校验/校验/沙箱",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:Prompt 注入",
+   "name": "Prompt 注入",
+   "desc": "指令藏在数据里（留言板/网页/文件）——LLM 眼里数据和指令都是文字，天生分不清",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    8,
+    7
+   ]
+  },
+  {
+   "id": "k:2.6:大小写归一化",
+   "name": "大小写归一化",
+   "desc": "文本检测先 text.lower()——否则 DISREGARD 大写攻击直接穿防",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:表驱动特征检测",
+   "name": "表驱动特征检测",
+   "desc": "危险短语进 PATTERNS 表 + 循环，加特征零改逻辑",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.6:过滤 vs 拦截",
+   "name": "过滤 vs 拦截",
+   "desc": "sanitize 消毒放行（柔和）vs guard 命中即拒（强硬）——纵深防御两层都上",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 56,
+     "err": "审计记错、guard 交给消毒员",
+     "fix": "用词表锚定角色语义，写前默念名字含义"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:规则模拟 LLM",
+   "name": "规则模拟 LLM",
+   "desc": "用 if 模拟\"被劫持的 LLM\"——离线靶场不花 API 钱",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    4,
+    5,
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:遍历字符串陷阱",
+   "name": "遍历字符串陷阱",
+   "desc": "for x in \"字符串\" 拆成逐字符——遍历名单要遍历【列表】",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 53,
+     "err": "detect 对干净输入也返回 True",
+     "fix": "遍历名单要遍历【列表】(PATTERNS)"
+    }
+   ],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:绿黄红权限分级",
+   "name": "绿黄红权限分级",
+   "desc": "按副作用: 无副作用(绿自动放行)/可逆(黄需确认)/不可逆(红人工通道)",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:默认拒绝 Default Deny",
+   "name": "默认拒绝 Default Deny",
+   "desc": "未登记=红——dict.get(k, 'red') 一行落地，宁可误拒不可误放",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    5
+   ]
+  },
+  {
+   "id": "k:2.6:审计记裁决不记申报",
+   "name": "审计记裁决不记申报",
+   "desc": "日志记闸门的 allowed，不是申请人的 auto_confirm——被拒的试图才是警报",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 56,
+     "err": "审计记错、guard 交给消毒员",
+     "fix": "用词表锚定角色语义，写前默念名字含义"
+    }
+   ],
+   "learned": true,
+   "days": [
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:闸门与执行分离",
+   "name": "闸门与执行分离",
+   "desc": "authorize 只决策，run_tool 先闸后执行——安检员不搬货",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
+  },
+  {
+   "id": "k:2.6:契约文案即接口",
+   "name": "契约文案即接口",
+   "desc": "拒绝消息文本是需求契约的一部分，下游靠它拼日志——精确照抄不发挥",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": []
   }
  ],
  "planned": [
@@ -5203,6 +7517,61 @@ window.KB_DATA = {
   "k:2.3:FIFO 淘汰",
   "k:2.3:del 语句",
   "k:2.3:卫语句双条件",
+  "k:2.4:Plan-and-Execute 模式",
+  "k:2.4:计划即数据",
+  "k:2.4:静态清单循环 vs 动态决定",
+  "k:2.4:工具注册表分发",
+  "k:2.4:*args 调用侧解包",
+  "k:2.4:优雅降级",
+  "k:2.4:校验器参数放宽",
+  "k:2.4:动态重规划",
+  "k:2.4:重规划预算 max_replans",
+  "k:2.4:错误即数据",
+  "k:2.4:while+手动索引",
+  "k:2.4:import 自己的模块",
+  "k:2.4:失败痕迹保留",
+  "k:2.4:planner vs replanner",
+  "k:2.4:共享黑板 state",
+  "k:2.4:zip 拉链配对",
+  "k:2.4:CWD vs 脚本目录",
+  "k:2.4:Workflow vs Agent",
+  "k:2.4:gate 闸门思想",
+  "k:2.4:何时该用 Agent",
+  "k:2.4:依赖感知执行（拓扑排序朴素版）",
+  "k:2.4:死锁检测",
+  "k:2.4:done 用 set",
+  "k:2.4:sorted(key=lambda)",
+  "k:2.4:all() / any()",
+  "k:2.5:反思循环",
+  "k:2.5:批评家=规则代码",
+  "k:2.5:反思便签=工作记忆",
+  "k:2.5:问题收敛曲线",
+  "k:2.5:critic 返回问题清单",
+  "k:2.5:预算即圈数",
+  "k:2.5:语言强化学习",
+  "k:2.5:Actor/Evaluator/Self-reflection",
+  "k:2.5:episodic memory",
+  "k:2.5:反思按需付费",
+  "k:7.1:三遍寻宝法",
+  "k:7.1:Figure 1 定律",
+  "k:7.1:代码锚定法",
+  "k:7.1:费曼检验",
+  "k:7.1:episodic memory 实现",
+  "k:7.1:读旧+append+写回",
+  "k:7.1:容错返回同形状",
+  "k:7.1:剧本放闭包外",
+  "k:2.6:威胁矩阵",
+  "k:2.6:Prompt 注入",
+  "k:2.6:大小写归一化",
+  "k:2.6:表驱动特征检测",
+  "k:2.6:过滤 vs 拦截",
+  "k:2.6:规则模拟 LLM",
+  "k:2.6:遍历字符串陷阱",
+  "k:2.6:绿黄红权限分级",
+  "k:2.6:默认拒绝 Default Deny",
+  "k:2.6:审计记裁决不记申报",
+  "k:2.6:闸门与执行分离",
+  "k:2.6:契约文案即接口",
   "x:0",
   "x:1",
   "x:2",
@@ -5214,12 +7583,22 @@ window.KB_DATA = {
   {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
-   "label": "llama"
+   "label": "qwen"
+  },
+  {
+   "source": "k:2.5:episodic memory",
+   "target": "k:7.1:episodic memory 实现",
+   "label": "memory"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.6:规则模拟 LLM",
+   "label": "llm"
   },
   {
    "source": "k:2.1:parse_tool_arguments()",
    "target": "k:2.3:json 落盘",
-   "label": "loads"
+   "label": "json"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -5242,14 +7621,24 @@ window.KB_DATA = {
    "label": "system"
   },
   {
+   "source": "k:1.1:AI→ML→DL→LLM→Agent",
+   "target": "k:2.4:Workflow vs Agent",
+   "label": "agent"
+  },
+  {
    "source": "k:2.3:system 常驻豁免",
    "target": "k:2.3:摘要合并进 system",
    "label": "system"
   },
   {
+   "source": "k:0.1:四种数据结构",
+   "target": "k:2.4:计划即数据",
+   "label": "dict"
+  },
+  {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
-   "label": "system"
+   "label": "user"
   },
   {
    "source": "k:0.1:异常处理",
@@ -5257,8 +7646,33 @@ window.KB_DATA = {
    "label": "except"
   },
   {
+   "source": "k:1.5:System Prompt 四法则",
+   "target": "k:2.6:Prompt 注入",
+   "label": "prompt"
+  },
+  {
    "source": "k:1.6:`Recipe(**dict)`",
    "target": "k:2.3:dict 保持插入顺序",
+   "label": "dict"
+  },
+  {
+   "source": "k:1.6:`Recipe(**dict)`",
+   "target": "k:2.4:Workflow vs Agent",
+   "label": "agent"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.5:批评家=规则代码",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.5:批评家=规则代码",
+   "target": "k:2.6:规则模拟 LLM",
+   "label": "llm"
+  },
+  {
+   "source": "k:0.1:四种数据结构",
+   "target": "k:2.4:校验器参数放宽",
    "label": "dict"
   },
   {
@@ -5272,14 +7686,24 @@ window.KB_DATA = {
    "label": "field"
   },
   {
+   "source": "k:0.3:field(default_factory=list)",
+   "target": "k:2.4:校验器参数放宽",
+   "label": "list"
+  },
+  {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
-   "label": "llm"
+   "label": "agent"
   },
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:2.3:规则抽取 vs LLM 抽取",
    "label": "llm"
+  },
+  {
+   "source": "k:1.1:AI→ML→DL→LLM→Agent",
+   "target": "k:2.4:何时该用 Agent",
+   "label": "agent"
   },
   {
    "source": "k:1.1:Token",
@@ -5290,6 +7714,11 @@ window.KB_DATA = {
    "source": "k:1.1:Token",
    "target": "k:2.3:token 粗估",
    "label": "token"
+  },
+  {
+   "source": "k:1.3:API Key 安全",
+   "target": "k:2.4:sorted(key=lambda)",
+   "label": "key"
   },
   {
    "source": "k:1.3:四角色",
@@ -5327,9 +7756,24 @@ window.KB_DATA = {
    "label": "assistant"
   },
   {
+   "source": "k:2.1:safe_get()",
+   "target": "k:2.4:sorted(key=lambda)",
+   "label": "key"
+  },
+  {
+   "source": "k:2.1:safe_get()",
+   "target": "k:2.6:默认拒绝 Default Deny",
+   "label": "dict"
+  },
+  {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
    "label": "agentstate"
+  },
+  {
+   "source": "k:2.3:表驱动",
+   "target": "k:2.6:表驱动特征检测",
+   "label": "驱动"
   },
   {
    "source": "k:0.1:四种数据结构",
@@ -5345,6 +7789,21 @@ window.KB_DATA = {
    "source": "k:1.3:跨轮记忆",
    "target": "k:2.3:三种记忆分工",
    "label": "messages"
+  },
+  {
+   "source": "k:2.3:回调函数注入",
+   "target": "k:2.5:批评家=规则代码",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.3:回调函数注入",
+   "target": "k:2.6:Prompt 注入",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.4:静态清单循环 vs 动态决定",
+   "target": "k:2.5:反思循环",
+   "label": "react"
   }
  ],
  "days": [
@@ -5382,14 +7841,19 @@ window.KB_DATA = {
    "num": 7,
    "date": "2026-08-30",
    "title": "2026-08-30（08:00-19:30，含休息"
+  },
+  {
+   "num": 8,
+   "date": "2026-09-05",
+   "title": "2026-09-05（10:00-22:47，含午休/出门/晚饭"
   }
  ],
  "stats": {
   "stages": 3,
-  "modules": 13,
-  "knowledge": 108,
-  "pitfalls": 48,
+  "modules": 17,
+  "knowledge": 163,
+  "pitfalls": 56,
   "planned": 6,
-  "related": 27
+  "related": 45
  }
 };

@@ -82,6 +82,14 @@
 | 36 | git push 慢/超时 | 国内连 GitHub 网络问题 | 正常现象，小项目可接受；必要时走代理 |
 | 37 | 第一次 push 卡住 | 需要浏览器授权 | 按提示完成 OAuth 授权 |
 | 48 | 外部脚本改的文件被编辑器覆盖（×3） | VS Code 缓冲区不知道磁盘已变 | 外部修改后先 Revert File 再动手 |
+| 49 | 报告文件落在仓库根而不是脚本目录 | 相对路径跟着 CWD（从哪运行）走，不跟文件位置走 | `Path(__file__).parent / path` 锚定脚本目录 |
+| 50 | `id in list[dict]` 永远 False 不报错 | 类型不匹配的 in 静默失效（int 查 dict 列表） | in 之前核对两边类型一致；查 id 集合用 set |
+| 51 | 脚本化 fake 永远返回第一稿 | 剧本列表定义在函数体内，每次调用重置 | 剧本放函数体外（闭包），或用工厂每次产新机器 |
+| 52 | 落盘 FileNotFoundError | open 忘写 "w" 模式，默认只读 | 写文件三件套：open(path, "w", encoding="utf-8") |
+| 53 | detect 对干净输入也返回 True | for x in lowered 遍历字符串=逐字符，首字符必在自身 | 遍历名单要遍历【列表】(PATTERNS) |
+| 54 | TypeError: slice indices | .find() 当 .replace() 用，find 返回下标 | 换内容用 replace(旧,新)；找位置才是 find |
+| 55 | 复制旧引擎进新函数全盘报错 | 没改签名/键名/文案（replanner 根本不在参数里） | 复制模板后逐项核对：参数/返回键/文案契约 |
+| 56 | 审计记错、guard 交给消毒员 | 语义相近名串门：申报(auto_confirm)≠裁决(allowed) | 用词表锚定角色语义，写前默念名字含义 |
 
 ---
 
