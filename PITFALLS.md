@@ -31,6 +31,10 @@
 | 15 | 奖金算错 | 手误（0.25 vs 需求 0.15） | 写完对照需求注释复查数字 |
 | 16 | 容器属性报"不能遍历" | 初始化为 None | 容器属性初始化为空列表 `[]` |
 | 38 | 窗口保留条数不对 | 切片边界算错（用 keep_count 而不是 len-rest） | 用 `len(rest)-keep_count` 作为切点 |
+| 42 | `int(msg["role"])` ValueError | int() 是类型转换，不是数长度 | 求字符数用 `len()` |
+| 43 | `vault.items(user)` TypeError | items() 不带参数；按键取值+默认值是另一个方法 | `vault.get(user, {})` |
+| 44 | `del profile[user]` KeyError | 删错层：vault 的键是用户名，profile 的键是偏好名 | 动手前先想清楚自己在哪一层 |
+| 45 | 窗口保留了最旧消息、保留率 1.0 | 切片方向反：正索引从头丢（#38 方向版） | 窗口永远负索引从尾数 `rest[-N:]` |
 
 ## 3. 类型与 Pylance
 
@@ -47,6 +51,7 @@
 | 39 | `merged + recent_messages[1:]` 报错 | dict 不能直接和 list 相加 | 用 `[merged] + recent_messages[1:]` 包成列表再拼接 |
 | 40 | 摘要为空时返回 None | 测试期望空字符串 | 无旧消息时返回 `""` |
 | 41 | 新建 system 消息 role 写成 recent | 把列表变量当角色名 | 固定写 `"system"` |
+| 46 | mypy: Need type annotation for "x" | 空容器类型推断不出 | 空容器必须注解 `x: dict = {}` |
 
 ## 4. API 调用
 
@@ -66,6 +71,7 @@
 | 31 | 终端输出 emoji 崩溃 | Windows 终端默认 GBK 编码 | `setx PYTHONUTF8 1` 根治 |
 | 32 | 测试标记乱码 | 同上 | 或换成英文 PASS/FAIL 标记 |
 | 33 | CMD 长命令被截断 | 命令行长度限制 | 用配置文件代替命令行参数 |
+| 47 | `；` SyntaxError: invalid character | 中文分号混进 except 行尾 | 代码标点全英文半角；写代码切英文输入法（#8 家族） |
 
 ## 6. 工具与 Git
 
@@ -75,6 +81,7 @@
 | 35 | conda 环境混乱 | 原始源和清华镜像混装 | 只用一个源 |
 | 36 | git push 慢/超时 | 国内连 GitHub 网络问题 | 正常现象，小项目可接受；必要时走代理 |
 | 37 | 第一次 push 卡住 | 需要浏览器授权 | 按提示完成 OAuth 授权 |
+| 48 | 外部脚本改的文件被编辑器覆盖（×3） | VS Code 缓冲区不知道磁盘已变 | 外部修改后先 Revert File 再动手 |
 
 ---
 
@@ -101,3 +108,10 @@
 - [x] 2026-08-16: 摘要为空返回 None | 测试期望空字符串 | 返回 `""`
 - [x] 2026-08-16: role 写成 recent | 把列表当角色名 | 固定写 `"system"`
 - [ ] 2026-08-30: 测试对全角，/半角,逗号精确比对导致 FAIL | 过严断言——耦合了与学习目标无关的格式细节 | 断言验证"意图"（startswith + in），不逐字符比对；确需精确格式时从 expected 复制粘贴字符
+- [x] 2026-08-30: int() 当 len() 用（ValueError 'user'） | 转换器当尺子用 | 字符数用 len → #42
+- [x] 2026-08-30: vault.items(user) TypeError | items 不带参数 | get(user, {}) → #43
+- [x] 2026-08-30: del profile[user] KeyError | 删错层 | del profile[key]，先想清楚在哪层 → #44
+- [x] 2026-08-30: rest[6:] 保留最旧、保留率 1.0 | 切片方向反 | 窗口负索引从尾数 → #45
+- [x] 2026-08-30: mypy Need type annotation ×2 | 空容器没注解 | x: dict = {} → #46
+- [x] 2026-08-30: 全角分号 SyntaxError | 中文输入法标点混入代码 | 标点全英文半角 → #47
+- [x] 2026-08-30: 编辑器覆盖外部修改 ×3 | VS Code 缓冲区未感知磁盘变化 | 先 Revert File → #48

@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-08-30 11:34:11",
+ "generatedAt": "2026-08-30 19:37:17",
  "nodes": [
   {
    "id": "s:0",
@@ -125,12 +125,18 @@ window.KB_DATA = {
      "num": 3,
      "err": "`self.tags : list[str] = []` 报错",
      "fix": "冒号紧跟变量名"
+    },
+    {
+     "num": 42,
+     "err": "`int(msg[\"role\"])` ValueError",
+     "fix": "求字符数用 `len()`"
     }
    ],
    "learned": true,
    "days": [
     3,
-    1
+    1,
+    7
    ]
   },
   {
@@ -177,8 +183,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    5,
-    6
+    7,
+    5
    ]
   },
   {
@@ -595,7 +601,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    7
    ]
   },
   {
@@ -608,7 +615,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    7
    ]
   },
   {
@@ -659,7 +667,9 @@ window.KB_DATA = {
    "stage": "1",
    "pitfalls": [],
    "learned": true,
-   "days": []
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:1.2:六家对比",
@@ -778,7 +788,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    7
    ]
   },
   {
@@ -816,7 +827,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    7
    ]
   },
   {
@@ -830,6 +842,7 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
+    7,
     5
    ]
   },
@@ -935,7 +948,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    6
+    6,
+    7
    ]
   },
   {
@@ -1080,7 +1094,7 @@ window.KB_DATA = {
    "days": [
     4,
     5,
-    6
+    7
    ]
   },
   {
@@ -1100,7 +1114,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     5,
-    4
+    4,
+    7
    ]
   },
   {
@@ -1259,7 +1274,7 @@ window.KB_DATA = {
    "days": [
     5,
     4,
-    6
+    7
    ]
   },
   {
@@ -1326,6 +1341,7 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     5,
+    7,
     4
    ]
   },
@@ -1349,10 +1365,17 @@ window.KB_DATA = {
    "desc": "只保留 system + 最近 N 轮，旧消息丢弃，省空间",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 45,
+     "err": "窗口保留了最旧消息、保留率 1.0",
+     "fix": "窗口永远负索引从尾数 `rest[-N:]`"
+    }
+   ],
    "learned": true,
    "days": [
-    6
+    6,
+    7
    ]
   },
   {
@@ -1372,7 +1395,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    6
+    6,
+    7
    ]
   },
   {
@@ -1399,7 +1423,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    6
+    6,
+    7
    ]
   },
   {
@@ -1413,8 +1438,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     6,
-    4,
-    5
+    7,
+    4
    ]
   },
   {
@@ -1437,10 +1462,17 @@ window.KB_DATA = {
    "desc": "role + content 字符数相加，粗略判断离上下文上限多远",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 42,
+     "err": "`int(msg[\"role\"])` ValueError",
+     "fix": "求字符数用 `len()`"
+    }
+   ],
    "learned": true,
    "days": [
-    4
+    4,
+    7
    ]
   },
   {
@@ -1453,9 +1485,9 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     6,
-    5,
-    4
+    5
    ]
   },
   {
@@ -1468,6 +1500,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     4
    ]
   },
@@ -1492,6 +1525,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     5
    ]
   },
@@ -1505,6 +1539,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     6
    ]
   },
@@ -1516,8 +1551,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:规则抽取 vs LLM 抽取",
@@ -1529,6 +1566,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     4,
     5
    ]
@@ -1550,8 +1588,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    6,
-    5
+    7,
+    6
    ]
   },
   {
@@ -1570,6 +1608,7 @@ window.KB_DATA = {
    ],
    "learned": true,
    "days": [
+    7,
     4,
     5
    ]
@@ -1618,8 +1657,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:表驱动",
@@ -1629,7 +1670,7 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
+   "learned": true,
    "days": []
   },
   {
@@ -1691,8 +1732,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:浅拷贝陷阱",
@@ -1702,8 +1745,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:{**d, k: v} 合并",
@@ -1726,6 +1771,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     5,
     4
    ]
@@ -1738,8 +1784,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:del 语句",
@@ -1748,7 +1796,13 @@ window.KB_DATA = {
    "desc": "del d[key] 删除字典的键，d[k]=v 的反面",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 44,
+     "err": "`del profile[user]` KeyError",
+     "fix": "动手前先想清楚自己在哪一层"
+    }
+   ],
    "learned": true,
    "days": []
   },
@@ -1759,9 +1813,21 @@ window.KB_DATA = {
    "desc": "user not in vault or key not in vault[user]——两种\"不用干活\"提前返回",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
-   "learned": false,
+   "pitfalls": [
+    {
+     "num": 43,
+     "err": "`vault.items(user)` TypeError",
+     "fix": "`vault.get(user, {})`"
+    },
+    {
+     "num": 44,
+     "err": "`del profile[user]` KeyError",
+     "fix": "动手前先想清楚自己在哪一层"
+    }
+   ],
+   "learned": true,
    "days": [
+    7,
     5,
     4
    ]
@@ -2978,13 +3044,13 @@ window.KB_DATA = {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
    "type": "related",
-   "label": "claude"
+   "label": "llama"
   },
   {
    "source": "k:2.1:parse_tool_arguments()",
    "target": "k:2.3:json 落盘",
    "type": "related",
-   "label": "json"
+   "label": "loads"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -2996,7 +3062,7 @@ window.KB_DATA = {
    "source": "k:1.3:四角色",
    "target": "k:2.1:消息顺序",
    "type": "related",
-   "label": "user"
+   "label": "assistant"
   },
   {
    "source": "k:2.3:system 常驻豁免",
@@ -3026,7 +3092,7 @@ window.KB_DATA = {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
    "type": "related",
-   "label": "try"
+   "label": "except"
   },
   {
    "source": "k:1.6:`Recipe(**dict)`",
@@ -3050,7 +3116,7 @@ window.KB_DATA = {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
    "type": "related",
-   "label": "agent"
+   "label": "llm"
   },
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
@@ -3074,7 +3140,7 @@ window.KB_DATA = {
    "source": "k:1.3:四角色",
    "target": "k:2.3:轮（turn）",
    "type": "related",
-   "label": "user"
+   "label": "assistant"
   },
   {
    "source": "k:1.3:usage",
@@ -3110,13 +3176,13 @@ window.KB_DATA = {
    "source": "k:2.1:消息顺序",
    "target": "k:2.3:轮（turn）",
    "type": "related",
-   "label": "user"
+   "label": "assistant"
   },
   {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
    "type": "related",
-   "label": "messages"
+   "label": "agentstate"
   },
   {
    "source": "k:0.1:四种数据结构",
@@ -3395,12 +3461,18 @@ window.KB_DATA = {
      "num": 3,
      "err": "`self.tags : list[str] = []` 报错",
      "fix": "冒号紧跟变量名"
+    },
+    {
+     "num": 42,
+     "err": "`int(msg[\"role\"])` ValueError",
+     "fix": "求字符数用 `len()`"
     }
    ],
    "learned": true,
    "days": [
     3,
-    1
+    1,
+    7
    ]
   },
   {
@@ -3444,8 +3516,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    5,
-    6
+    7,
+    5
    ]
   },
   {
@@ -3836,7 +3908,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    7
    ]
   },
   {
@@ -3848,7 +3921,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    7
    ]
   },
   {
@@ -3895,7 +3969,9 @@ window.KB_DATA = {
    "stage": "1",
    "pitfalls": [],
    "learned": true,
-   "days": []
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:1.2:六家对比",
@@ -4007,7 +4083,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    5
+    5,
+    7
    ]
   },
   {
@@ -4042,7 +4119,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    4
+    4,
+    7
    ]
   },
   {
@@ -4055,6 +4133,7 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
+    7,
     5
    ]
   },
@@ -4153,7 +4232,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    6
+    6,
+    7
    ]
   },
   {
@@ -4288,7 +4368,7 @@ window.KB_DATA = {
    "days": [
     4,
     5,
-    6
+    7
    ]
   },
   {
@@ -4307,7 +4387,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     5,
-    4
+    4,
+    7
    ]
   },
   {
@@ -4457,7 +4538,7 @@ window.KB_DATA = {
    "days": [
     5,
     4,
-    6
+    7
    ]
   },
   {
@@ -4519,6 +4600,7 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     5,
+    7,
     4
    ]
   },
@@ -4540,10 +4622,17 @@ window.KB_DATA = {
    "desc": "只保留 system + 最近 N 轮，旧消息丢弃，省空间",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 45,
+     "err": "窗口保留了最旧消息、保留率 1.0",
+     "fix": "窗口永远负索引从尾数 `rest[-N:]`"
+    }
+   ],
    "learned": true,
    "days": [
-    6
+    6,
+    7
    ]
   },
   {
@@ -4562,7 +4651,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    6
+    6,
+    7
    ]
   },
   {
@@ -4587,7 +4677,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    6
+    6,
+    7
    ]
   },
   {
@@ -4600,8 +4691,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     6,
-    4,
-    5
+    7,
+    4
    ]
   },
   {
@@ -4622,10 +4713,17 @@ window.KB_DATA = {
    "desc": "role + content 字符数相加，粗略判断离上下文上限多远",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 42,
+     "err": "`int(msg[\"role\"])` ValueError",
+     "fix": "求字符数用 `len()`"
+    }
+   ],
    "learned": true,
    "days": [
-    4
+    4,
+    7
    ]
   },
   {
@@ -4637,9 +4735,9 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     6,
-    5,
-    4
+    5
    ]
   },
   {
@@ -4651,6 +4749,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     4
    ]
   },
@@ -4673,6 +4772,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     5
    ]
   },
@@ -4685,6 +4785,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     6
    ]
   },
@@ -4695,8 +4796,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:规则抽取 vs LLM 抽取",
@@ -4707,6 +4810,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     4,
     5
    ]
@@ -4727,8 +4831,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    6,
-    5
+    7,
+    6
    ]
   },
   {
@@ -4746,6 +4850,7 @@ window.KB_DATA = {
    ],
    "learned": true,
    "days": [
+    7,
     4,
     5
    ]
@@ -4791,8 +4896,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:表驱动",
@@ -4801,7 +4908,7 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
+   "learned": true,
    "days": []
   },
   {
@@ -4860,8 +4967,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:浅拷贝陷阱",
@@ -4870,8 +4979,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:{**d, k: v} 合并",
@@ -4892,6 +5003,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    7,
     5,
     4
    ]
@@ -4903,8 +5015,10 @@ window.KB_DATA = {
    "module": "2.3",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": []
+   "learned": true,
+   "days": [
+    7
+   ]
   },
   {
    "id": "k:2.3:del 语句",
@@ -4912,7 +5026,13 @@ window.KB_DATA = {
    "desc": "del d[key] 删除字典的键，d[k]=v 的反面",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
+   "pitfalls": [
+    {
+     "num": 44,
+     "err": "`del profile[user]` KeyError",
+     "fix": "动手前先想清楚自己在哪一层"
+    }
+   ],
    "learned": true,
    "days": []
   },
@@ -4922,9 +5042,21 @@ window.KB_DATA = {
    "desc": "user not in vault or key not in vault[user]——两种\"不用干活\"提前返回",
    "module": "2.3",
    "stage": "2",
-   "pitfalls": [],
-   "learned": false,
+   "pitfalls": [
+    {
+     "num": 43,
+     "err": "`vault.items(user)` TypeError",
+     "fix": "`vault.get(user, {})`"
+    },
+    {
+     "num": 44,
+     "err": "`del profile[user]` KeyError",
+     "fix": "动手前先想清楚自己在哪一层"
+    }
+   ],
+   "learned": true,
    "days": [
+    7,
     5,
     4
    ]
@@ -5082,12 +5214,12 @@ window.KB_DATA = {
   {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
-   "label": "claude"
+   "label": "llama"
   },
   {
    "source": "k:2.1:parse_tool_arguments()",
    "target": "k:2.3:json 落盘",
-   "label": "json"
+   "label": "loads"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -5097,7 +5229,7 @@ window.KB_DATA = {
   {
    "source": "k:1.3:四角色",
    "target": "k:2.1:消息顺序",
-   "label": "user"
+   "label": "assistant"
   },
   {
    "source": "k:2.3:system 常驻豁免",
@@ -5122,7 +5254,7 @@ window.KB_DATA = {
   {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
-   "label": "try"
+   "label": "except"
   },
   {
    "source": "k:1.6:`Recipe(**dict)`",
@@ -5142,7 +5274,7 @@ window.KB_DATA = {
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
-   "label": "agent"
+   "label": "llm"
   },
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
@@ -5162,7 +5294,7 @@ window.KB_DATA = {
   {
    "source": "k:1.3:四角色",
    "target": "k:2.3:轮（turn）",
-   "label": "user"
+   "label": "assistant"
   },
   {
    "source": "k:1.3:usage",
@@ -5192,12 +5324,12 @@ window.KB_DATA = {
   {
    "source": "k:2.1:消息顺序",
    "target": "k:2.3:轮（turn）",
-   "label": "user"
+   "label": "assistant"
   },
   {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
-   "label": "messages"
+   "label": "agentstate"
   },
   {
    "source": "k:0.1:四种数据结构",
@@ -5245,13 +5377,18 @@ window.KB_DATA = {
    "num": 6,
    "date": "2026-08-16",
    "title": "2026-08-16（复习 + 2.3 记忆系统"
+  },
+  {
+   "num": 7,
+   "date": "2026-08-30",
+   "title": "2026-08-30（08:00-19:30，含休息"
   }
  ],
  "stats": {
   "stages": 3,
   "modules": 13,
   "knowledge": 108,
-  "pitfalls": 41,
+  "pitfalls": 48,
   "planned": 6,
   "related": 27
  }
