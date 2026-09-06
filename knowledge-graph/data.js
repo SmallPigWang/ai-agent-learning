@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-09-06 10:19:48",
+ "generatedAt": "2026-09-06 13:35:19",
  "nodes": [
   {
    "id": "s:0",
@@ -4714,13 +4714,13 @@ window.KB_DATA = {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:计划即数据",
    "type": "related",
-   "label": "dict"
+   "label": "list"
   },
   {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
    "type": "related",
-   "label": "system"
+   "label": "user"
   },
   {
    "source": "k:0.1:异常处理",
@@ -4744,7 +4744,7 @@ window.KB_DATA = {
    "source": "k:1.6:`Recipe(**dict)`",
    "target": "k:2.4:Workflow vs Agent",
    "type": "related",
-   "label": "agent"
+   "label": "llm"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -4762,7 +4762,7 @@ window.KB_DATA = {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:校验器参数放宽",
    "type": "related",
-   "label": "dict"
+   "label": "list"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -4786,7 +4786,7 @@ window.KB_DATA = {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
    "type": "related",
-   "label": "agent"
+   "label": "llm"
   },
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
@@ -4870,7 +4870,7 @@ window.KB_DATA = {
    "source": "k:2.1:safe_get()",
    "target": "k:2.6:默认拒绝 Default Deny",
    "type": "related",
-   "label": "default"
+   "label": "dict"
   },
   {
    "source": "k:2.2:ReAct 原理",
@@ -4888,7 +4888,7 @@ window.KB_DATA = {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
    "type": "related",
-   "label": "messages"
+   "label": "agentstate"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -8036,12 +8036,12 @@ window.KB_DATA = {
   {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:计划即数据",
-   "label": "dict"
+   "label": "list"
   },
   {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
-   "label": "system"
+   "label": "user"
   },
   {
    "source": "k:0.1:异常处理",
@@ -8061,7 +8061,7 @@ window.KB_DATA = {
   {
    "source": "k:1.6:`Recipe(**dict)`",
    "target": "k:2.4:Workflow vs Agent",
-   "label": "agent"
+   "label": "llm"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -8076,7 +8076,7 @@ window.KB_DATA = {
   {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:校验器参数放宽",
-   "label": "dict"
+   "label": "list"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -8096,7 +8096,7 @@ window.KB_DATA = {
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
    "target": "k:1.6:`Recipe(**dict)`",
-   "label": "agent"
+   "label": "llm"
   },
   {
    "source": "k:1.1:AI→ML→DL→LLM→Agent",
@@ -8166,7 +8166,7 @@ window.KB_DATA = {
   {
    "source": "k:2.1:safe_get()",
    "target": "k:2.6:默认拒绝 Default Deny",
-   "label": "default"
+   "label": "dict"
   },
   {
    "source": "k:2.2:ReAct 原理",
@@ -8181,7 +8181,7 @@ window.KB_DATA = {
   {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
-   "label": "messages"
+   "label": "agentstate"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",

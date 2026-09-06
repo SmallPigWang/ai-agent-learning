@@ -270,31 +270,31 @@
 > 🎯 北极星落点: 给 StudyNote Agent 装上 RAG，用 logs + KNOWLEDGE_BASE 做语料
 
 ### 3.1 RAG 原理与最简实现（2-3天）
-- [ ] LLM 三大缺陷 → RAG 的诞生
-- [ ] 存入流程（文档→切块→向量化→存库）
-- [ ] 查询流程（提问→向量化→检索→拼Prompt→回答）
-- [ ] 🔧 练习：50 行代码实现最简 RAG
-- [ ] ✅ 检验：理解 RAG 每个环节的作用
-- [ ] 📖 阅读: RAG 原论文（Lewis et al., 2020）
+- [x] LLM 三大缺陷 → RAG 的诞生
+- [x] 存入流程（文档→切块→向量化→存库）
+- [x] 查询流程（提问→向量化→检索→拼Prompt→回答）
+- [x] 🔧 练习：50 行代码实现最简 RAG 📎 `mini_rag.py`
+- [x] ✅ 检验：理解 RAG 每个环节的作用
+- [x] 📖 阅读: RAG 原论文（Lewis et al., 2020）
 
 ### 3.2 文档解析与分块（2-3天）
-- [ ] PDF/HTML/Office 解析
-- [ ] 固定分块 vs 递归分块 vs 语义分块 vs 句子窗口
-- [ ] 元数据的重要性
-- [ ] 🔧 练习：3 种策略对比实验
-- [ ] 🔧 练习：加来源标注
-- [ ] ✅ 检验：能为真实文档选择合适的分块策略
-- [ ] 📖 阅读: LangChain Text Splitters 文档
+- [x] PDF/HTML/Office 解析（paper_audio 实战 + 概念卡）
+- [x] 固定分块 vs 递归分块 vs 语义分块 vs 句子窗口（概念）
+- [x] 元数据的重要性
+- [x] 🔧 练习：3 种策略对比实验 📎 `chunking_lab.py`
+- [x] 🔧 练习：加来源标注（tag_source 随对比实验完成）
+- [x] ✅ 检验：能为真实文档选择合适的分块策略
+- [x] 📖 阅读: LangChain Text Splitters 文档
 
 ### 3.3 Embedding 与向量数据库（2-3天）
-- [ ] 主流 Embedding 模型对比
-- [ ] 向量数据库选型指南
-- [ ] 🔧 练习：Chroma 搭本地向量库
-- [ ] 🔧 练习：对比不同 Embedding 模型
-- [ ] 📊 评估贯穿: 建测试查询集，每次练习记录检索命中率（hit rate）
-- [ ] 🔄 回头补 2.3: 用 Embedding 给 StudyNote Agent 升级向量长期记忆
-- [ ] ✅ 检验：算得出检索命中率
-- [ ] 📖 阅读: ChromaDB Getting Started 文档
+- [x] 主流 Embedding 模型对比（概念表 + 擂台实操）
+- [x] 向量数据库选型指南（Chroma/Qdrant/Milvus/Pinecone 口诀）
+- [x] 🔧 练习：Chroma 搭本地向量库 📎 `chroma_lab.py`（双引擎 5/5 打平）
+- [x] 🔧 练习：对比不同 Embedding 模型 📎 `embedding_bakeoff.py`（bge 100% vs hash 60%）
+- [x] 📊 评估贯穿: 建测试查询集，每次练习记录检索命中率（hit rate）
+- [ ] 🔄 回头补 2.3: 用 Embedding 给 StudyNote Agent 升级向量长期记忆 📎 `studynote_rag.py`
+- [x] ✅ 检验：算得出检索命中率（hit_rate 函数 + 擂台实战）
+- [x] 📖 阅读: ChromaDB Getting Started 文档
 
 ### 3.4 检索策略进阶（2-3天）
 - [ ] 混合检索（稠密+稀疏）

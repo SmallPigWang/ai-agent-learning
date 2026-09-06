@@ -1,0 +1,7 @@
+{
+  "extraPaths": [
+    "scripts/phase2-agent",
+    "scripts/phase3-rag",
+    "scripts/paper_audio"
+  ]
+}

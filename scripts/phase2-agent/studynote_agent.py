@@ -31,8 +31,8 @@ _TOOLS = Path(__file__).resolve().parent.parent.parent / ".tools" / "audiotools"
 if _TOOLS.exists():
     sys.path.insert(0, str(_TOOLS))  # 自举: requests/dotenv 免 PYTHONPATH
 
-import requests  # noqa: E402
-from dotenv import load_dotenv  # noqa: E402
+import requests
+from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 API_URL = "https://open.bigmodel.cn/api/coding/paas/v4/chat/completions"
@@ -46,7 +46,8 @@ list_days() -> 列出所有学习日及标题
 read_day(n) -> 读取第 n 天的学习日志（n 是数字）
 read_kb() -> 读取知识库全表（所有已学知识点）
 read_tracker() -> 读取学习看板（各阶段进度、下一目标）
-search_notes(keyword) -> 跨所有日志和知识库搜索关键词
+search_notes(keyword) -> 跨所有日志和知识库搜索关键词（子串匹配，短词可用）
+vector_search(keyword) -> 语义检索全仓库 661 块知识（bge+Chroma，意思相近即可命中——优先用它）
 
 规则：
 - 需要资料时，回复格式必须是：ACTION: 工具名(参数)
@@ -56,6 +57,7 @@ search_notes(keyword) -> 跨所有日志和知识库搜索关键词
 
 
 # ---------- 工具（复用件，已写好，不用动） ----------
+
 
 def list_days() -> str:
     """列出所有学习日及标题。"""
@@ -70,7 +72,9 @@ def list_days() -> str:
 def read_day(n: int) -> str:
     """读取第 n 天的学习日志。"""
     p = ROOT / "logs" / f"day-{int(n):02d}.md"
-    return p.read_text(encoding="utf-8") if p.exists() else f"(day-{int(n):02d}.md 不存在)"
+    return (
+        p.read_text(encoding="utf-8") if p.exists() else f"(day-{int(n):02d}.md 不存在)"
+    )
 
 
 def read_kb() -> str:
@@ -88,7 +92,11 @@ def read_tracker() -> str:
 def search_notes(keyword: str) -> str:
     """跨日志+知识库搜关键词，返回命中的文件和行。"""
     hits: list[str] = []
-    for p in [ROOT / "KNOWLEDGE_BASE.md", ROOT / "PITFALLS.md", *sorted((ROOT / "logs").glob("day-*.md"))]:
+    for p in [
+        ROOT / "KNOWLEDGE_BASE.md",
+        ROOT / "PITFALLS.md",
+        *sorted((ROOT / "logs").glob("day-*.md")),
+    ]:
         for i, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
             if keyword in line:
                 hits.append(f"{p.name}:{i}: {line.strip()[:100]}")
@@ -97,19 +105,37 @@ def search_notes(keyword: str) -> str:
     return "\n".join(hits) if hits else f"(没有找到含 '{keyword}' 的内容)"
 
 
-TOOLS = {"list_days": list_days, "read_day": read_day, "read_kb": read_kb,
-         "read_tracker": read_tracker, "search_notes": search_notes}
+from collections.abc import Callable
+
+TOOLS: dict[str, Callable] = {
+    "list_days": list_days,
+    "read_day": read_day,
+    "read_kb": read_kb,
+    "read_tracker": read_tracker,
+    "search_notes": search_notes,
+}
+
+# ── 压轴换装（3.3）：挂上语义检索武器（需 torch_env：bge+chromadb）──
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "phase3-rag"))
+from studynote_rag import vector_search
+
+TOOLS["vector_search"] = vector_search
 
 
 # ---------- 引擎（你要实现） ----------
+
 
 def call_llm(messages: list[dict], api_key: str) -> str:
     """调 GLM 返回回复文本（content 字段）"""
     resp = requests.post(
         API_URL,
         headers={"Authorization": f"Bearer {api_key}"},
-        json={"model": MODEL, "messages": messages, "max_tokens": 4096,
-              "temperature": 0.3},
+        json={
+            "model": MODEL,
+            "messages": messages,
+            "max_tokens": 4096,
+            "temperature": 0.3,
+        },
         timeout=180,
     )
     resp.raise_for_status()
@@ -131,19 +157,25 @@ def parse_action(reply: str) -> tuple[str, list] | None:
 
 def run_agent(question: str, api_key: str) -> str:
     """ReAct 主循环: 问→ACTION→执行→OBSERVATION回填→...→ANSWER"""
-    messages: list[dict] = [{"role": "system", "content": SYSTEM_PROMPT},
-                            {"role": "user", "content": question}]
+    messages: list[dict] = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": question},
+    ]
 
     for _ in range(MAX_ITERATIONS):
-        reply = call_llm(messages, api_key)                    # ① 问大脑
+        reply = call_llm(messages, api_key)  # ① 问大脑
 
-        action = parse_action(reply)                            # ② 解析动作
-        if action is None:                              #    没有 ACTION → 是答案或违规
-            m = re.search(r"ANSWER:\s*(.+)", reply, re.S)
-            return m.group(1).strip() if m else f"(引擎: 未见 ACTION/ANSWER，原话={reply[:200]})"
+        action = parse_action(reply)  # ② 解析动作
+        if action is None:  #    没有 ACTION → 是答案或违规
+            m = re.search(r"ANSWER:\s*(.+)", reply, re.DOTALL)
+            return (
+                m.group(1).strip()
+                if m
+                else f"(引擎: 未见 ACTION/ANSWER，原话={reply[:200]})"
+            )
 
         name, args = action
-        fn = TOOLS.get(name)                           # ③ 注册表查工具
+        fn = TOOLS.get(name)  # ③ 注册表查工具
         if fn is None:
             observation = f"(未知工具: {name}，可用: {list(TOOLS)})"
         else:
