@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-09-05 23:00:40",
+ "generatedAt": "2026-09-06 10:19:48",
  "nodes": [
   {
    "id": "s:0",
@@ -20,7 +20,7 @@ window.KB_DATA = {
    "type": "stage",
    "name": "2. Agent 核心",
    "code": "2",
-   "progress": 35
+   "progress": 100
   },
   {
    "id": "m:0.1",
@@ -1311,7 +1311,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    9
    ]
   },
   {
@@ -1324,7 +1325,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    9
    ]
   },
   {
@@ -1599,7 +1601,7 @@ window.KB_DATA = {
    "days": [
     7,
     4,
-    5
+    9
    ]
   },
   {
@@ -1919,7 +1921,7 @@ window.KB_DATA = {
    "days": [
     8,
     5,
-    4
+    9
    ]
   },
   {
@@ -2492,6 +2494,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    9,
     8
    ]
   },
@@ -2506,8 +2509,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    8,
-    7
+    9,
+    8
    ]
   },
   {
@@ -2638,15 +2641,146 @@ window.KB_DATA = {
    "days": []
   },
   {
-   "id": "k:2.6:契约文案即接口",
+   "id": "k:2.6:输出校验(出口安检)",
    "type": "knowledge",
-   "name": "契约文案即接口",
-   "desc": "拒绝消息文本是需求契约的一部分，下游靠它拼日志——精确照抄不发挥",
+   "name": "输出校验(出口安检)",
+   "desc": "Agent 产物流进下游前的最后一道闸：SQL只读/单语句/无破坏词",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    4
+   ]
+  },
+  {
+   "id": "k:2.6:检查优先级=契约",
+   "type": "knowledge",
+   "name": "检查优先级=契约",
+   "desc": "多规则同时踩线先报哪个由契约(测试)定——多语句是注入最本质签名优先报",
    "module": "2.6",
    "stage": "2",
    "pitfalls": [],
    "learned": false,
+   "days": [
+    9
+   ]
+  },
+  {
+   "id": "k:2.6:resolve后再验身",
+   "type": "knowledge",
+   "name": "resolve后再验身",
+   "desc": "永不信字面路径: ../先展开再 is_relative_to 比对，伪装即失效",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
    "days": []
+  },
+  {
+   "id": "k:2.6:纵深防御代码形状",
+   "type": "knowledge",
+   "name": "纵深防御代码形状",
+   "desc": "两道闸串联(各自独立可测)，authorize→run_tool 同构第三台",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:OWASP LLM Top 10",
+   "type": "knowledge",
+   "name": "OWASP LLM Top 10",
+   "desc": "业界十大病清单——注入/输出处理/过度代理/供应链我防过，泄露/DoS/数据投毒是新面孔",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    8,
+    4
+   ]
+  },
+  {
+   "id": "k:2.6:5攻5防口诀",
+   "type": "knowledge",
+   "name": "5攻5防口诀",
+   "desc": "进口过滤、手分级、出口校验、范围圈死、来源审查",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": [
+    9
+   ]
+  },
+  {
+   "id": "k:2.6:LLM输出=概率猜测",
+   "type": "knowledge",
+   "name": "LLM输出=概率猜测",
+   "desc": "不是可信结果——过度依赖(LLM09)的病根，进出口设闸的总依据",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    4,
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:文字版ReAct协议",
+   "type": "knowledge",
+   "name": "文字版ReAct协议",
+   "desc": "ACTION/OBSERVATION/ANSWER 文本协议——不依赖API原生tool_calls，与手写react_loop同构",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    5,
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:脚本自举模式",
+   "type": "knowledge",
+   "name": "脚本自举模式",
+   "desc": "sys.path.insert挂载.tools/——仓库自带依赖，裸python3直跑，/tmp蒸发免疫",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 49,
+     "err": "报告文件落在仓库根而不是脚本目录",
+     "fix": "`Path(__file__).parent / path` 锚定脚本目录"
+    }
+   ],
+   "learned": true,
+   "days": [
+    9,
+    4
+   ]
+  },
+  {
+   "id": "k:2.6:Agent可靠性来源",
+   "type": "knowledge",
+   "name": "Agent可靠性来源",
+   "desc": "不是模型聪明，是每个进出口设闸+引擎逼它先查资料再开口",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    4,
+    5
+   ]
   },
   {
    "id": "x:0",
@@ -3583,7 +3717,52 @@ window.KB_DATA = {
   },
   {
    "source": "m:2.6",
-   "target": "k:2.6:契约文案即接口",
+   "target": "k:2.6:输出校验(出口安检)",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:检查优先级=契约",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:resolve后再验身",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:纵深防御代码形状",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:OWASP LLM Top 10",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:5攻5防口诀",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:LLM输出=概率猜测",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:文字版ReAct协议",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:脚本自举模式",
+   "type": "contain"
+  },
+  {
+   "source": "m:2.6",
+   "target": "k:2.6:Agent可靠性来源",
    "type": "contain"
   },
   {
@@ -4393,11 +4572,56 @@ window.KB_DATA = {
   },
   {
    "source": "k:2.6:闸门与执行分离",
-   "target": "k:2.6:契约文案即接口",
+   "target": "k:2.6:输出校验(出口安检)",
    "type": "path"
   },
   {
-   "source": "k:2.6:契约文案即接口",
+   "source": "k:2.6:输出校验(出口安检)",
+   "target": "k:2.6:检查优先级=契约",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:检查优先级=契约",
+   "target": "k:2.6:resolve后再验身",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:resolve后再验身",
+   "target": "k:2.6:纵深防御代码形状",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:纵深防御代码形状",
+   "target": "k:2.6:OWASP LLM Top 10",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:OWASP LLM Top 10",
+   "target": "k:2.6:5攻5防口诀",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:5攻5防口诀",
+   "target": "k:2.6:LLM输出=概率猜测",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:LLM输出=概率猜测",
+   "target": "k:2.6:文字版ReAct协议",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:文字版ReAct协议",
+   "target": "k:2.6:脚本自举模式",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:脚本自举模式",
+   "target": "k:2.6:Agent可靠性来源",
+   "type": "path"
+  },
+  {
+   "source": "k:2.6:Agent可靠性来源",
    "target": "x:0",
    "type": "path"
   },
@@ -4436,7 +4660,7 @@ window.KB_DATA = {
    "source": "k:2.5:episodic memory",
    "target": "k:7.1:episodic memory 实现",
    "type": "related",
-   "label": "memory"
+   "label": "episodic"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -4448,7 +4672,7 @@ window.KB_DATA = {
    "source": "k:2.1:parse_tool_arguments()",
    "target": "k:2.3:json 落盘",
    "type": "related",
-   "label": "json"
+   "label": "loads"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -4496,7 +4720,7 @@ window.KB_DATA = {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
    "type": "related",
-   "label": "user"
+   "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
@@ -4544,7 +4768,7 @@ window.KB_DATA = {
    "source": "k:0.1:字符串操作",
    "target": "k:0.2:CSV 解析套路",
    "type": "related",
-   "label": "split"
+   "label": "strip"
   },
   {
    "source": "k:0.3:field(default_factory=list)",
@@ -4646,13 +4870,43 @@ window.KB_DATA = {
    "source": "k:2.1:safe_get()",
    "target": "k:2.6:默认拒绝 Default Deny",
    "type": "related",
-   "label": "dict"
+   "label": "default"
+  },
+  {
+   "source": "k:2.2:ReAct 原理",
+   "target": "k:2.6:文字版ReAct协议",
+   "type": "related",
+   "label": "react"
+  },
+  {
+   "source": "k:2.2:tool_loop vs ReAct",
+   "target": "k:2.6:文字版ReAct协议",
+   "type": "related",
+   "label": "react"
   },
   {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
    "type": "related",
-   "label": "agentstate"
+   "label": "messages"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.6:OWASP LLM Top 10",
+   "type": "related",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.4:Workflow vs Agent",
+   "target": "k:2.6:Agent可靠性来源",
+   "type": "related",
+   "label": "agent"
+  },
+  {
+   "source": "k:2.4:何时该用 Agent",
+   "target": "k:2.6:Agent可靠性来源",
+   "type": "related",
+   "label": "agent"
   },
   {
    "source": "k:2.3:表驱动",
@@ -4697,6 +4951,12 @@ window.KB_DATA = {
    "label": "react"
   },
   {
+   "source": "k:2.4:CWD vs 脚本目录",
+   "target": "k:2.6:脚本自举模式",
+   "type": "related",
+   "label": "path"
+  },
+  {
    "source": "s:2",
    "target": "x:0",
    "type": "planned"
@@ -4726,7 +4986,7 @@ window.KB_DATA = {
   {
    "code": "2",
    "name": "2. Agent 核心",
-   "progress": 35
+   "progress": 100
   }
  ],
  "modules": [
@@ -5026,7 +5286,16 @@ window.KB_DATA = {
     "k:2.6:默认拒绝 Default Deny",
     "k:2.6:审计记裁决不记申报",
     "k:2.6:闸门与执行分离",
-    "k:2.6:契约文案即接口"
+    "k:2.6:输出校验(出口安检)",
+    "k:2.6:检查优先级=契约",
+    "k:2.6:resolve后再验身",
+    "k:2.6:纵深防御代码形状",
+    "k:2.6:OWASP LLM Top 10",
+    "k:2.6:5攻5防口诀",
+    "k:2.6:LLM输出=概率猜测",
+    "k:2.6:文字版ReAct协议",
+    "k:2.6:脚本自举模式",
+    "k:2.6:Agent可靠性来源"
    ]
   }
  ],
@@ -6127,7 +6396,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    9
    ]
   },
   {
@@ -6139,7 +6409,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    9
    ]
   },
   {
@@ -6396,7 +6667,7 @@ window.KB_DATA = {
    "days": [
     7,
     4,
-    5
+    9
    ]
   },
   {
@@ -6698,7 +6969,7 @@ window.KB_DATA = {
    "days": [
     8,
     5,
-    4
+    9
    ]
   },
   {
@@ -7230,6 +7501,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
+    9,
     8
    ]
   },
@@ -7243,8 +7515,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    8,
-    7
+    9,
+    8
    ]
   },
   {
@@ -7366,14 +7638,136 @@ window.KB_DATA = {
    "days": []
   },
   {
-   "id": "k:2.6:契约文案即接口",
-   "name": "契约文案即接口",
-   "desc": "拒绝消息文本是需求契约的一部分，下游靠它拼日志——精确照抄不发挥",
+   "id": "k:2.6:输出校验(出口安检)",
+   "name": "输出校验(出口安检)",
+   "desc": "Agent 产物流进下游前的最后一道闸：SQL只读/单语句/无破坏词",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    4
+   ]
+  },
+  {
+   "id": "k:2.6:检查优先级=契约",
+   "name": "检查优先级=契约",
+   "desc": "多规则同时踩线先报哪个由契约(测试)定——多语句是注入最本质签名优先报",
    "module": "2.6",
    "stage": "2",
    "pitfalls": [],
    "learned": false,
+   "days": [
+    9
+   ]
+  },
+  {
+   "id": "k:2.6:resolve后再验身",
+   "name": "resolve后再验身",
+   "desc": "永不信字面路径: ../先展开再 is_relative_to 比对，伪装即失效",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
    "days": []
+  },
+  {
+   "id": "k:2.6:纵深防御代码形状",
+   "name": "纵深防御代码形状",
+   "desc": "两道闸串联(各自独立可测)，authorize→run_tool 同构第三台",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": []
+  },
+  {
+   "id": "k:2.6:OWASP LLM Top 10",
+   "name": "OWASP LLM Top 10",
+   "desc": "业界十大病清单——注入/输出处理/过度代理/供应链我防过，泄露/DoS/数据投毒是新面孔",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    8,
+    4
+   ]
+  },
+  {
+   "id": "k:2.6:5攻5防口诀",
+   "name": "5攻5防口诀",
+   "desc": "进口过滤、手分级、出口校验、范围圈死、来源审查",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": false,
+   "days": [
+    9
+   ]
+  },
+  {
+   "id": "k:2.6:LLM输出=概率猜测",
+   "name": "LLM输出=概率猜测",
+   "desc": "不是可信结果——过度依赖(LLM09)的病根，进出口设闸的总依据",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    4,
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:文字版ReAct协议",
+   "name": "文字版ReAct协议",
+   "desc": "ACTION/OBSERVATION/ANSWER 文本协议——不依赖API原生tool_calls，与手写react_loop同构",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    5,
+    8
+   ]
+  },
+  {
+   "id": "k:2.6:脚本自举模式",
+   "name": "脚本自举模式",
+   "desc": "sys.path.insert挂载.tools/——仓库自带依赖，裸python3直跑，/tmp蒸发免疫",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [
+    {
+     "num": 49,
+     "err": "报告文件落在仓库根而不是脚本目录",
+     "fix": "`Path(__file__).parent / path` 锚定脚本目录"
+    }
+   ],
+   "learned": true,
+   "days": [
+    9,
+    4
+   ]
+  },
+  {
+   "id": "k:2.6:Agent可靠性来源",
+   "name": "Agent可靠性来源",
+   "desc": "不是模型聪明，是每个进出口设闸+引擎逼它先查资料再开口",
+   "module": "2.6",
+   "stage": "2",
+   "pitfalls": [],
+   "learned": true,
+   "days": [
+    9,
+    4,
+    5
+   ]
   }
  ],
  "planned": [
@@ -7571,7 +7965,16 @@ window.KB_DATA = {
   "k:2.6:默认拒绝 Default Deny",
   "k:2.6:审计记裁决不记申报",
   "k:2.6:闸门与执行分离",
-  "k:2.6:契约文案即接口",
+  "k:2.6:输出校验(出口安检)",
+  "k:2.6:检查优先级=契约",
+  "k:2.6:resolve后再验身",
+  "k:2.6:纵深防御代码形状",
+  "k:2.6:OWASP LLM Top 10",
+  "k:2.6:5攻5防口诀",
+  "k:2.6:LLM输出=概率猜测",
+  "k:2.6:文字版ReAct协议",
+  "k:2.6:脚本自举模式",
+  "k:2.6:Agent可靠性来源",
   "x:0",
   "x:1",
   "x:2",
@@ -7588,7 +7991,7 @@ window.KB_DATA = {
   {
    "source": "k:2.5:episodic memory",
    "target": "k:7.1:episodic memory 实现",
-   "label": "memory"
+   "label": "episodic"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -7598,7 +8001,7 @@ window.KB_DATA = {
   {
    "source": "k:2.1:parse_tool_arguments()",
    "target": "k:2.3:json 落盘",
-   "label": "json"
+   "label": "loads"
   },
   {
    "source": "k:0.3:class + __init__",
@@ -7638,7 +8041,7 @@ window.KB_DATA = {
   {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
-   "label": "user"
+   "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
@@ -7678,7 +8081,7 @@ window.KB_DATA = {
   {
    "source": "k:0.1:字符串操作",
    "target": "k:0.2:CSV 解析套路",
-   "label": "split"
+   "label": "strip"
   },
   {
    "source": "k:0.3:field(default_factory=list)",
@@ -7763,12 +8166,37 @@ window.KB_DATA = {
   {
    "source": "k:2.1:safe_get()",
    "target": "k:2.6:默认拒绝 Default Deny",
-   "label": "dict"
+   "label": "default"
+  },
+  {
+   "source": "k:2.2:ReAct 原理",
+   "target": "k:2.6:文字版ReAct协议",
+   "label": "react"
+  },
+  {
+   "source": "k:2.2:tool_loop vs ReAct",
+   "target": "k:2.6:文字版ReAct协议",
+   "label": "react"
   },
   {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
-   "label": "agentstate"
+   "label": "messages"
+  },
+  {
+   "source": "k:2.3:规则抽取 vs LLM 抽取",
+   "target": "k:2.6:OWASP LLM Top 10",
+   "label": "llm"
+  },
+  {
+   "source": "k:2.4:Workflow vs Agent",
+   "target": "k:2.6:Agent可靠性来源",
+   "label": "agent"
+  },
+  {
+   "source": "k:2.4:何时该用 Agent",
+   "target": "k:2.6:Agent可靠性来源",
+   "label": "agent"
   },
   {
    "source": "k:2.3:表驱动",
@@ -7804,6 +8232,11 @@ window.KB_DATA = {
    "source": "k:2.4:静态清单循环 vs 动态决定",
    "target": "k:2.5:反思循环",
    "label": "react"
+  },
+  {
+   "source": "k:2.4:CWD vs 脚本目录",
+   "target": "k:2.6:脚本自举模式",
+   "label": "path"
   }
  ],
  "days": [
@@ -7846,14 +8279,19 @@ window.KB_DATA = {
    "num": 8,
    "date": "2026-09-05",
    "title": "2026-09-05（10:00-22:47，含午休/出门/晚饭"
+  },
+  {
+   "num": 9,
+   "date": "2026-09-06",
+   "title": "2026-09-06（09:00-14:00 前后"
   }
  ],
  "stats": {
   "stages": 3,
   "modules": 17,
-  "knowledge": 163,
+  "knowledge": 172,
   "pitfalls": 56,
   "planned": 6,
-  "related": 45
+  "related": 51
  }
 };

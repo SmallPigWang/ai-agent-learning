@@ -31,3 +31,6 @@ _test_*.csv
 Thumbs.db
 
 # 其他
+papers/
+audio_out/
+.tools/
