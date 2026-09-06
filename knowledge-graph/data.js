@@ -1,5 +1,5 @@
 window.KB_DATA = {
- "generatedAt": "2026-09-06 13:35:19",
+ "generatedAt": "2026-09-06 14:40:04",
  "nodes": [
   {
    "id": "s:0",
@@ -1144,7 +1144,7 @@ window.KB_DATA = {
    "days": [
     5,
     4,
-    7
+    9
    ]
   },
   {
@@ -1311,8 +1311,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5,
-    9
+    5
    ]
   },
   {
@@ -1325,8 +1324,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5,
-    9
+    5
    ]
   },
   {
@@ -1381,7 +1379,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    9
    ]
   },
   {
@@ -1527,6 +1526,7 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     7,
+    9,
     4
    ]
   },
@@ -1601,7 +1601,7 @@ window.KB_DATA = {
    "days": [
     7,
     4,
-    9
+    5
    ]
   },
   {
@@ -1878,8 +1878,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     8,
-    5,
-    7
+    9,
+    5
    ]
   },
   {
@@ -2099,7 +2099,7 @@ window.KB_DATA = {
    "module": "2.4",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
+   "learned": true,
    "days": []
   },
   {
@@ -2110,6 +2110,11 @@ window.KB_DATA = {
    "module": "2.4",
    "stage": "2",
    "pitfalls": [
+    {
+     "num": 60,
+     "err": "Pylance: Unable to resolve import（跨目录）",
+     "fix": "pyrightconfig extraPaths + mypy_path 白名单"
+    },
     {
      "num": 49,
      "err": "报告文件落在仓库根而不是脚本目录",
@@ -2122,7 +2127,9 @@ window.KB_DATA = {
     }
    ],
    "learned": true,
-   "days": []
+   "days": [
+    9
+   ]
   },
   {
    "id": "k:2.4:Workflow vs Agent",
@@ -2494,7 +2501,6 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     8
    ]
   },
@@ -2509,8 +2515,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    9,
-    8
+    8,
+    7
    ]
   },
   {
@@ -2663,9 +2669,7 @@ window.KB_DATA = {
    "stage": "2",
    "pitfalls": [],
    "learned": false,
-   "days": [
-    9
-   ]
+   "days": []
   },
   {
    "id": "k:2.6:resolve后再验身",
@@ -2675,7 +2679,7 @@ window.KB_DATA = {
    "module": "2.6",
    "stage": "2",
    "pitfalls": [],
-   "learned": true,
+   "learned": false,
    "days": []
   },
   {
@@ -2712,10 +2716,8 @@ window.KB_DATA = {
    "module": "2.6",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": [
-    9
-   ]
+   "learned": true,
+   "days": []
   },
   {
    "id": "k:2.6:LLM输出=概率猜测",
@@ -2727,9 +2729,9 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     4,
-    8
+    8,
+    5
    ]
   },
   {
@@ -2742,7 +2744,6 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     5,
     8
    ]
@@ -2755,6 +2756,11 @@ window.KB_DATA = {
    "module": "2.6",
    "stage": "2",
    "pitfalls": [
+    {
+     "num": 60,
+     "err": "Pylance: Unable to resolve import（跨目录）",
+     "fix": "pyrightconfig extraPaths + mypy_path 白名单"
+    },
     {
      "num": 49,
      "err": "报告文件落在仓库根而不是脚本目录",
@@ -2777,9 +2783,9 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     4,
-    5
+    5,
+    8
    ]
   },
   {
@@ -4654,13 +4660,13 @@ window.KB_DATA = {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
    "type": "related",
-   "label": "qwen"
+   "label": "gpt"
   },
   {
    "source": "k:2.5:episodic memory",
    "target": "k:7.1:episodic memory 实现",
    "type": "related",
-   "label": "episodic"
+   "label": "memory"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -4714,19 +4720,19 @@ window.KB_DATA = {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:计划即数据",
    "type": "related",
-   "label": "list"
+   "label": "dict"
   },
   {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
    "type": "related",
-   "label": "user"
+   "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
    "type": "related",
-   "label": "except"
+   "label": "try"
   },
   {
    "source": "k:1.5:System Prompt 四法则",
@@ -4762,7 +4768,7 @@ window.KB_DATA = {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:校验器参数放宽",
    "type": "related",
-   "label": "list"
+   "label": "dict"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -4888,7 +4894,7 @@ window.KB_DATA = {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
    "type": "related",
-   "label": "agentstate"
+   "label": "messages"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -4912,7 +4918,7 @@ window.KB_DATA = {
    "source": "k:2.3:表驱动",
    "target": "k:2.6:表驱动特征检测",
    "type": "related",
-   "label": "驱动"
+   "label": "表驱"
   },
   {
    "source": "k:0.1:四种数据结构",
@@ -6239,7 +6245,7 @@ window.KB_DATA = {
    "days": [
     5,
     4,
-    7
+    9
    ]
   },
   {
@@ -6396,8 +6402,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5,
-    9
+    5
    ]
   },
   {
@@ -6409,8 +6414,7 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5,
-    9
+    5
    ]
   },
   {
@@ -6461,7 +6465,8 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    5
+    5,
+    9
    ]
   },
   {
@@ -6598,6 +6603,7 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     7,
+    9,
     4
    ]
   },
@@ -6667,7 +6673,7 @@ window.KB_DATA = {
    "days": [
     7,
     4,
-    9
+    5
    ]
   },
   {
@@ -6928,8 +6934,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     8,
-    5,
-    7
+    9,
+    5
    ]
   },
   {
@@ -7134,7 +7140,7 @@ window.KB_DATA = {
    "module": "2.4",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
+   "learned": true,
    "days": []
   },
   {
@@ -7144,6 +7150,11 @@ window.KB_DATA = {
    "module": "2.4",
    "stage": "2",
    "pitfalls": [
+    {
+     "num": 60,
+     "err": "Pylance: Unable to resolve import（跨目录）",
+     "fix": "pyrightconfig extraPaths + mypy_path 白名单"
+    },
     {
      "num": 49,
      "err": "报告文件落在仓库根而不是脚本目录",
@@ -7156,7 +7167,9 @@ window.KB_DATA = {
     }
    ],
    "learned": true,
-   "days": []
+   "days": [
+    9
+   ]
   },
   {
    "id": "k:2.4:Workflow vs Agent",
@@ -7501,7 +7514,6 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     8
    ]
   },
@@ -7515,8 +7527,8 @@ window.KB_DATA = {
    "learned": true,
    "days": [
     4,
-    9,
-    8
+    8,
+    7
    ]
   },
   {
@@ -7658,9 +7670,7 @@ window.KB_DATA = {
    "stage": "2",
    "pitfalls": [],
    "learned": false,
-   "days": [
-    9
-   ]
+   "days": []
   },
   {
    "id": "k:2.6:resolve后再验身",
@@ -7669,7 +7679,7 @@ window.KB_DATA = {
    "module": "2.6",
    "stage": "2",
    "pitfalls": [],
-   "learned": true,
+   "learned": false,
    "days": []
   },
   {
@@ -7703,10 +7713,8 @@ window.KB_DATA = {
    "module": "2.6",
    "stage": "2",
    "pitfalls": [],
-   "learned": false,
-   "days": [
-    9
-   ]
+   "learned": true,
+   "days": []
   },
   {
    "id": "k:2.6:LLM输出=概率猜测",
@@ -7717,9 +7725,9 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     4,
-    8
+    8,
+    5
    ]
   },
   {
@@ -7731,7 +7739,6 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     5,
     8
    ]
@@ -7743,6 +7750,11 @@ window.KB_DATA = {
    "module": "2.6",
    "stage": "2",
    "pitfalls": [
+    {
+     "num": 60,
+     "err": "Pylance: Unable to resolve import（跨目录）",
+     "fix": "pyrightconfig extraPaths + mypy_path 白名单"
+    },
     {
      "num": 49,
      "err": "报告文件落在仓库根而不是脚本目录",
@@ -7764,9 +7776,9 @@ window.KB_DATA = {
    "pitfalls": [],
    "learned": true,
    "days": [
-    9,
     4,
-    5
+    5,
+    8
    ]
   }
  ],
@@ -7986,12 +7998,12 @@ window.KB_DATA = {
   {
    "source": "k:1.2:六家对比",
    "target": "k:1.2:选模型口诀",
-   "label": "qwen"
+   "label": "gpt"
   },
   {
    "source": "k:2.5:episodic memory",
    "target": "k:7.1:episodic memory 实现",
-   "label": "episodic"
+   "label": "memory"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -8036,17 +8048,17 @@ window.KB_DATA = {
   {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:计划即数据",
-   "label": "list"
+   "label": "dict"
   },
   {
    "source": "k:1.3:四角色",
    "target": "k:2.3:system 注入点",
-   "label": "user"
+   "label": "system"
   },
   {
    "source": "k:0.1:异常处理",
    "target": "k:0.2:脏数据跳过",
-   "label": "except"
+   "label": "try"
   },
   {
    "source": "k:1.5:System Prompt 四法则",
@@ -8076,7 +8088,7 @@ window.KB_DATA = {
   {
    "source": "k:0.1:四种数据结构",
    "target": "k:2.4:校验器参数放宽",
-   "label": "list"
+   "label": "dict"
   },
   {
    "source": "k:0.1:字符串操作",
@@ -8181,7 +8193,7 @@ window.KB_DATA = {
   {
    "source": "k:2.2:AgentState",
    "target": "k:2.3:三种记忆分工",
-   "label": "agentstate"
+   "label": "messages"
   },
   {
    "source": "k:2.3:规则抽取 vs LLM 抽取",
@@ -8201,7 +8213,7 @@ window.KB_DATA = {
   {
    "source": "k:2.3:表驱动",
    "target": "k:2.6:表驱动特征检测",
-   "label": "驱动"
+   "label": "表驱"
   },
   {
    "source": "k:0.1:四种数据结构",
@@ -8283,14 +8295,14 @@ window.KB_DATA = {
   {
    "num": 9,
    "date": "2026-09-06",
-   "title": "2026-09-06（09:00-14:00 前后"
+   "title": "2026-09-06（08:45-14:39"
   }
  ],
  "stats": {
   "stages": 3,
   "modules": 17,
   "knowledge": 172,
-  "pitfalls": 56,
+  "pitfalls": 60,
   "planned": 6,
   "related": 51
  }

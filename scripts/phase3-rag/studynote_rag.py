@@ -104,9 +104,11 @@ def vector_search(keyword: str, k: int = 3) -> str:
         n_results=k,
         include=["documents", "metadatas"],
     )
+    docs = (res.get("documents") or [[]])[0]   # 静态防御: chroma 类型说可能 None，运行时总在
+    metas = (res.get("metadatas") or [None])[0]
     lines = [
-        f"{m['source']}: {d}"  # 户口+原文 逐行拼（送的）
-        for d, m in zip(res["documents"][0], res["metadatas"][0])
+        f"{m['source']}: {d}" if m is not None else d  # m 可为 None(按 chroma 类型定义)，None 守卫
+        for d, m in zip(docs, metas)
     ]
     return "\n".join(lines) if lines else "(没有找到相关内容)"
 

@@ -342,5 +342,9 @@
 | add vs upsert | 撞id报错 vs 有则更新无则插入(幂等正解)；全删重建是块多时的下策 |
 | where元数据过滤 | 相似度搜索+结构筛选=混合检索雏形——tag_source户口的兑现 |
 | query vs get | 按相似度搜(给向量) vs 按条件取(给id/where) |
+| bge官方查询前缀 | 检索查询带'为这个句子生成表示以用于检索相关文章：'，文档不带——出厂设置 |
+| 静态None守卫 | 类型说可能None就要兜底: or [[]] + if m is not None——满足Pylance+防御未来 |
+| 661块真实语料 | KNOWLEDGE_BASE+PITFALLS+logs 按行收割(滤标题/分隔线)——仓库自带RAG语料 |
+| 终极对决 | 子串武器对同义整句扑空；语义武器bge一击命中(注入靶场行)——RAG价值实证 |
 | Retriever+Generator | 论文两件套：DPR找资料+BART生成；我的retrieve+build_prompt同构 |
 | embedding=文本→向量 | 让"意思近"变"夹角小"可计算；hash只是替身手法，向量才是产物 |

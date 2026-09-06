@@ -36,8 +36,8 @@ from make_audio import (  # noqa: E402
     merge_mp3,
 )
 
-API_URL = "https://open.bigmodel.cn/api/coding/paas/v4/chat/completions"
-MODEL = "glm-5.3"  # 旗舰(思考型)，走 coding 专线；被限流可换 glm-5-turbo
+API_URL = "https://api.deepseek.com/chat/completions"
+MODEL = "deepseek-v4-flash"  # 思考型，max_tokens 要给足（reasoning 占额度）
 EN_VOICE = "en-US-GuyNeural"
 REWRITE_CHUNK = 2500  # 原文字符/次改写
 
@@ -76,7 +76,10 @@ def rewrite(text: str, api_key: str, retries: int = 2) -> str:
                 timeout=180,
             )
             resp.raise_for_status()
-            return resp.json()["choices"][0]["message"]["content"].strip()
+            content = resp.json()["choices"][0]["message"]["content"].strip()
+            if not content:  # 空内容=隐形失败（思考型模型偶发），走重试
+                raise ValueError("DeepSeek 返回空 content")
+            return content
         except Exception as e:  # noqa: BLE001 网络重试兜底
             if attempt == retries:
                 raise
@@ -130,9 +133,9 @@ async def make_chapter(num: int, api_key: str, voice: str, sample: bool) -> None
 
 def main() -> None:
     load_dotenv()
-    key = os.getenv("ZHIPU_API_KEY")
+    key = os.getenv("DEEPSEEK_API_KEY")
     if not key:
-        sys.exit("请先在 .env 配置 ZHIPU_API_KEY（open.bigmodel.cn 控制台获取）")
+        sys.exit("请先在 .env 配置 DEEPSEEK_API_KEY")
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--chapters", default="2")

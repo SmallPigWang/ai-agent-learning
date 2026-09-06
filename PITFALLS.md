@@ -52,6 +52,7 @@
 | 40 | 摘要为空时返回 None | 测试期望空字符串 | 无旧消息时返回 `""` |
 | 41 | 新建 system 消息 role 写成 recent | 把列表变量当角色名 | 固定写 `"system"` |
 | 46 | mypy: Need type annotation for "x" | 空容器类型推断不出 | 空容器必须注解 `x: dict = {}` |
+| 60 | Pylance: Unable to resolve import（跨目录） | sys.path 运行时挂路径，静态分析不执行 | pyrightconfig extraPaths + mypy_path 白名单 |
 
 ## 4. API 调用
 
@@ -63,6 +64,7 @@
 | 28 | 流式没有 content | 推理模型的思考在 reasoning_content | `delta.get("content") or delta.get("reasoning_content")` |
 | 29 | 提示词要求 JSON 仍带代码块 | LLM 习惯性包 ```json | 正则 re.sub 剥壳兜底 |
 | 30 | KeyError: 'choices' | 消息回填顺序错（tool 在 assistant 前） | 顺序必须 assistant(tool_calls) → tool 结果 → assistant(final) |
+| 59 | 661块语料排名漂移(top1跑偏) | bge 检索查询没带官方任务前缀，偏离训练分布 | 查询前拼"为这个句子生成表示以用于检索相关文章：" |
 
 ## 5. 编码与终端
 
@@ -90,6 +92,8 @@
 | 54 | TypeError: slice indices | .find() 当 .replace() 用，find 返回下标 | 换内容用 replace(旧,新)；找位置才是 find |
 | 55 | 复制旧引擎进新函数全盘报错 | 没改签名/键名/文案（replanner 根本不在参数里） | 复制模板后逐项核对：参数/返回键/文案契约 |
 | 56 | 审计记错、guard 交给消毒员 | 语义相近名串门：申报(auto_confirm)≠裁决(allowed) | 用词表锚定角色语义，写前默念名字含义 |
+| 57 | dim=64 检索排名翻转 | bigram 挤 64 格生日悖论撞车，假共享 0.44>真共享 0.43 | 维度加宽 256+ 或换真 embedding |
+| 58 | 换 bge 后检索全错(bge 0/5) | retrieve 查询向量写死 hash_embed，维度错配 zip 静默截断 | 查询和块走同一 embed 回调（回调天然防写死） |
 
 ---
 
@@ -125,3 +129,5 @@
 - [x] 2026-08-30: 编辑器覆盖外部修改 ×3 | VS Code 缓冲区未感知磁盘变化 | 先 Revert File → #48
 | 57 | dim=64 检索排名翻转（查流式命中记忆块） | bigram 挤 64 格生日悖论撞车，假共享 0.44 > 真共享 0.43 | 维度加宽到 256+；或换真 embedding |
 | 58 | 换bge后检索全错(bge 0/5) | retrieve里查询向量写死hash_embed，与回调块向量维度错配，zip静默截断 | 查询和块都走同一个embed回调；回调注入天然防写死 |
+| 59 | 661块语料排名漂移(top1跑偏到Pydantic) | bge检索查询没带官方任务前缀，查询向量偏离训练分布 | 查询前拼'为这个句子生成表示以用于检索相关文章：' |
+| 60 | Pylance报错: Unable to resolve import(跨目录) | sys.path运行时挂路径，静态分析不执行 | pyrightconfig extraPaths + mypy_path 白名单 |
